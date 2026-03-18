@@ -265,16 +265,16 @@
                 </div>
 
                 <div class="flex flex-wrap justify-center gap-4">
-                    <button onclick="saveEntry()" class="group relative px-10 py-4 font-cinzel tracking-widest text-sm text-white transition-all duration-300 overflow-hidden rounded-full border border-white/20 bg-mystic-violet/20 hover:bg-mystic-violet/40 magical-glow-hover" id="mainActionBtn">
+                    <button onclick="saveEntry()" class="group relative px-6 py-3 sm:px-10 sm:py-4 font-cinzel tracking-widest text-sm text-white transition-all duration-300 overflow-hidden rounded-full border border-white/20 bg-mystic-violet/20 hover:bg-mystic-violet/40 magical-glow-hover" id="mainActionBtn">
                         <span id="btnActionText">REGISTRAR SUEÑO</span>
                     </button>
                     
                     <!-- IA Buttons -->
-                    <button onclick="aiInterpret()" class="flex items-center gap-2 px-8 py-4 font-cinzel tracking-widest text-sm text-white rounded-full border border-mystic-violet/40 bg-black/40 hover:bg-mystic-violet/20 transition-all magical-glow-hover" id="interpretBtn">
+                    <button onclick="aiInterpret()" class="flex items-center gap-2 px-5 py-3 sm:px-8 sm:py-4 font-cinzel tracking-widest text-sm text-white rounded-full border border-mystic-violet/40 bg-black/40 hover:bg-mystic-violet/20 transition-all magical-glow-hover" id="interpretBtn">
                         <span class="material-symbols-outlined text-[18px]">auto_fix_high</span>
                         INTERPRETAR CON IA
                     </button>
-                    <button onclick="generateSPEC()" class="hidden flex items-center gap-2 px-8 py-4 font-cinzel tracking-widest text-sm text-white rounded-full border border-mystic-amber/40 bg-black/40 hover:bg-mystic-amber/20 transition-all magical-glow-hover" id="visualizeBtn">
+                    <button onclick="generateSPEC()" class="hidden flex items-center gap-2 px-5 py-3 sm:px-8 sm:py-4 font-cinzel tracking-widest text-sm text-white rounded-full border border-mystic-amber/40 bg-black/40 hover:bg-mystic-amber/20 transition-all magical-glow-hover" id="visualizeBtn">
                         <span class="material-symbols-outlined text-[18px]">cyclone</span>
                         VISUALIZAR CON IA
                     </button>
@@ -311,8 +311,8 @@
         <!-- SPEC PROTOCOL MODAL -->
         <div id="specModal" class="modal-overlay p-6">
             <div class="absolute inset-0 bg-black/95 backdrop-blur-xl" onclick="toggleSpecModal()"></div>
-            <div class="relative glass-panel max-w-2xl w-full p-10 border-mystic-gold/30 animate-fade-in">
-                <h3 class="text-3xl font-cinzel text-mystic-gold mb-8 text-center tracking-widest uppercase">Protocolo SPEC</h3>
+            <div class="relative glass-panel max-w-2xl w-full p-5 sm:p-10 border-mystic-gold/30 animate-fade-in">
+                <h3 class="text-xl sm:text-3xl font-cinzel text-mystic-gold mb-8 text-center tracking-widest uppercase">Protocolo SPEC</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 font-garamond">
                     <div class="space-y-2 border-l-2 border-mystic-gold/20 pl-4 hover:border-mystic-gold transition-colors group">
                         <h4 class="text-mystic-gold font-cinzel text-xs uppercase tracking-widest group-hover:scale-105 origin-left transition-transform">Select (Seleccionar)</h4>
@@ -350,7 +350,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="p-10 space-y-8 custom-scrollbar max-h-[80vh] overflow-y-auto">
+                <div class="p-5 sm:p-10 space-y-8 custom-scrollbar max-h-[80vh] overflow-y-auto">
                     <div id="view-visual" class="w-full h-48 rounded-3xl overflow-hidden relative">
                         <div class="absolute inset-0 bg-gradient-to-t from-temple-dark to-transparent z-10 transition-all duration-700" id="visual-overlay"></div>
                         <div id="visual-bg" class="absolute inset-0 transition-all duration-1000"></div>

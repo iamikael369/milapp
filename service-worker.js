@@ -1,10 +1,18 @@
-const CACHE_NAME = 'milapp-v1';
+const CACHE_NAME = 'milapp-v2';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
+  '/pergaminos.html',
+  '/numerologia.html',
+  '/astrologia.html',
+  '/diario.html',
+  '/biblioteca.html',
+  '/billetera.html',
+  '/mapadesuenos.html',
+  '/hipnosis.html',
+  '/emilybooks.html',
   '/assets/css/style.css',
   '/assets/js/universo.js',
-  '/assets/js/modules/diario.js',
   '/assets/images/icons/icon-192.png',
   '/assets/images/icons/icon-512.png',
   '/assets/images/icons/apple-touch-icon.png',
@@ -38,15 +46,15 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type === 'opaque') {
-          return response;
+      const fetchPromise = fetch(event.request).then((response) => {
+        if (response && response.status === 200 && response.type !== 'opaque') {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         }
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         return response;
-      });
+      }).catch(() => cached);
+
+      return cached || fetchPromise;
     })
   );
 });

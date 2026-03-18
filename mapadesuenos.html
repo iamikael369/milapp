@@ -209,12 +209,12 @@
     <main class="min-h-screen flex flex-col items-center p-4 md:p-8 relative">
         <!-- HEADER -->
         <header class="w-full max-w-6xl flex justify-between items-center mb-8 sm:mb-16">
-            <div class="flex items-center gap-6">
-                <button onclick="goHome()" class="p-4 border border-white/10 rounded-full hover:bg-white/5 transition-all group">
+            <div class="flex items-center gap-3 sm:gap-6">
+                <button onclick="goHome()" class="p-3 sm:p-4 border border-white/10 rounded-full hover:bg-white/5 transition-all group">
                     <span class="material-symbols-outlined text-white/60 group-hover:text-white">home</span>
                 </button>
                 <div class="flex flex-col">
-                    <h1 class="text-3xl md:text-4xl font-cinzel tracking-[0.3em] uppercase text-white">Mapa de Sueños</h1>
+                    <h1 class="text-xl sm:text-3xl md:text-4xl font-cinzel tracking-[0.2em] sm:tracking-[0.3em] uppercase text-white">Mapa de Sueños</h1>
                     <span id="dream-header-greeting" class="text-[10px] font-cinzel tracking-[0.5em] text-temple-gold/60 uppercase">Vision Quest • Mila & Miguelo</span>
                 </div>
             </div>
@@ -280,12 +280,12 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex justify-center gap-6">
-                    <button id="invoke-btn" onclick="invokeDream()" class="px-10 py-4 bg-mystic-gold/10 border border-mystic-gold/40 rounded-full font-cinzel text-sm tracking-widest text-mystic-gold hover:bg-mystic-gold/20 transition-all magical-glow-hover flex items-center gap-3">
+                <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-6">
+                    <button id="invoke-btn" onclick="invokeDream()" class="px-6 py-3 sm:px-10 sm:py-4 bg-mystic-gold/10 border border-mystic-gold/40 rounded-full font-cinzel text-sm tracking-widest text-mystic-gold hover:bg-mystic-gold/20 transition-all magical-glow-hover flex items-center justify-center gap-3">
                         <span class="material-symbols-outlined">auto_fix_high</span>
                         INVOCAR VISIÓN
                     </button>
-                    <label class="px-10 py-4 bg-white/5 border border-white/20 rounded-full font-cinzel text-sm tracking-widest text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer flex items-center gap-3">
+                    <label class="px-6 py-3 sm:px-10 sm:py-4 bg-white/5 border border-white/20 rounded-full font-cinzel text-sm tracking-widest text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer flex items-center justify-center gap-3">
                         <span class="material-symbols-outlined text-sm">upload_file</span>
                         SUBIR RECUERDO
                         <input type="file" class="hidden" accept="image/*" onchange="uploadImage(this)">

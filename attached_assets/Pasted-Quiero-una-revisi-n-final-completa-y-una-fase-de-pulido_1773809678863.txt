@@ -1,0 +1,147 @@
+Quiero una revisión final completa y una fase de pulido total de MilApp para dejarla realmente lista, especialmente en teléfono, sin romper nada de lo que ya funciona.
+
+Contexto:
+MilApp es una app íntima, espiritual, elegante e histórica para Mila y Miguelo. No es una app comercial ni una red social. Su estética debe seguir sintiéndose como un refugio sagrado: cálido, bello, emocional, misterioso y usable.
+
+Reglas no negociables:
+- No reescribas el proyecto desde cero.
+- No conviertas la app en una UI genérica moderna tipo SaaS, dashboard o WhatsApp visualmente.
+- No uses frameworks.
+- Mantén HTML, Tailwind por CDN y JavaScript vanilla.
+- No rompas funcionalidades ya operativas.
+- Todo cambio debe ser fino, estratégico y compatible con lo existente.
+- Prioridad absoluta: calidad real de experiencia en teléfono.
+
+Objetivo:
+Haz una revisión final exhaustiva de TODO el proyecto y deja MilApp lo más terminada posible para uso real en:
+- teléfono
+- tablet
+- desktop
+
+Quiero que actúes como si Mila fuera a usar la app hoy mismo desde su móvil, varias veces al día.
+
+Tareas:
+
+1. Revisión visual final completa
+Revisa todos los módulos y detecta cualquier cosa que todavía se sienta:
+- desproporcionada
+- grande de más
+- apretada
+- mal alineada
+- incómoda
+- poco clara
+- poco elegante
+- molesta en móvil
+
+2. Revisión funcional final
+Comprueba en todos los módulos:
+- navegación
+- botones
+- inputs
+- modales
+- overlays
+- tutoriales
+- chats
+- scroll
+- estados vacíos
+- fallbacks
+- experiencia al recargar
+- experiencia táctil
+
+3. Revisión módulo por módulo
+Haz una última revisión de:
+- index.html
+- pergaminos.html
+- emilybooks.html
+- billetera.html
+- mapadesuenos.html
+- numerologia.html
+- astrologia.html
+- diario.html
+- biblioteca.html
+- hipnosis.html
+- cualquier otro módulo activo
+
+Para cada uno:
+- identifica lo que todavía necesita pulido
+- corrígelo
+- deja la experiencia más clara, más bella y más estable
+
+4. Revisión extrema mobile-first
+Quiero que pongas atención especial a:
+- altura real de pantalla en móvil
+- teclado virtual
+- safe-area en iPhone
+- elementos flotantes
+- tarjetas del home
+- legibilidad
+- botones
+- espaciado
+- densidad visual
+- jerarquía de contenido
+- velocidad y suavidad percibida
+
+5. Chats
+Haz una revisión final del chat instantáneo y de cualquier experiencia conversacional.
+Quiero que se sienta fluido, confiable y emocionalmente coherente.
+Corrige cualquier detalle pendiente:
+- duplicados
+- tamaños
+- scroll
+- estados
+- inputs
+- perfiles
+- fotos
+- burbujas o bloques
+- consistencia visual
+- persistencia
+
+6. Tutoriales y onboarding
+Revisa todos los tutoriales y la bienvenida.
+Quiero que:
+- sean claros
+- sean bellos
+- no sean invasivos
+- se entiendan perfecto
+- guíen bien a una primera usuaria real
+
+7. PWA e instalación
+Haz una verificación final de la experiencia de instalación:
+- manifest
+- service worker
+- botón de instalar
+- fallback Android
+- fallback Apple
+- experiencia de primera instalación
+
+8. Mejora inteligente con libertad controlada
+Tienes libertad para mejorar cualquier detalle que sume:
+- claridad
+- calma
+- fluidez
+- elegancia
+- sensación premium
+- facilidad de uso
+- coherencia emocional
+
+Pero solo si:
+- no rompe nada
+- no cambia el alma de MilApp
+- no vuelve genérica la app
+
+9. QA final real
+Quiero que al terminar hagas una especie de control de calidad final y me digas:
+- qué corregiste
+- qué quedó mucho mejor
+- qué riesgos siguen existiendo
+- qué cosas ya están listas para publicar
+- qué cosas dejarías para una fase futura
+
+Antes de implementar:
+Dime primero:
+1. qué archivos todavía necesitan ajustes
+2. qué problemas finales detectaste
+3. qué tipo de pulido harás
+4. cómo vas a validar que realmente quedó lista
+
+Luego sí, ejecuta esta fase final completa.
