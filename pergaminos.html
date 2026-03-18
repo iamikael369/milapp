@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- PWA -->
     <meta name="theme-color" content="#d4af37">
@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Pergaminos de Amor - Correspondencia de Luz</title>
 
     <!-- FUENTES -->
@@ -1649,6 +1650,16 @@
     </div>
 
     <script type="module">
+        MilApp.bootstrap({
+            module: 'pergaminos',
+            title: 'Pergaminos',
+            tutorial: [
+                'Este recinto alterna entre correspondencia ceremonial y conversación viva sin perder intimidad.',
+                'Si Firebase no está disponible, las cartas siguen guardándose localmente y el templo te lo comunica.',
+                'Las fotos, firmas y sellos continúan siendo personales: la reestructuración solo unifica la base técnica.'
+            ]
+        });
+
         const { initializeApp, getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, getDocs, writeBatch, limit } = window.firebaseModules;
 
         let db, auth, currentUser = localStorage.getItem('mila_pergamino_user'), letters = [];

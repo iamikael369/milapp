@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- PWA -->
     <meta name="theme-color" content="#d4af37">
@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Trance & Hipnosis</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -152,6 +153,16 @@
 
     <script src="assets/js/universo.js"></script>
     <script>
+        MilApp.bootstrap({
+            module: 'hipnosis',
+            title: 'Trance Quantum',
+            tutorial: [
+                'Hipnosis se mantiene simple y atmosférica, pero ahora comparte la misma infraestructura base del templo.',
+                'La fase siguiente reemplazará dependencias externas frágiles por una capa de medios más estable.',
+                'Instalar MilApp mejora la sensación de ritual continuo entre sesiones.'
+            ]
+        });
+
         const SESSIONS = [
             { title: "Yo Soy", src: "https://cdn.pixabay.com/download/audio/2022/10/25/audio_5b304c519d.mp3", color: "#a855f7" },
             { title: "Sueño Delta", src: "https://cdn.pixabay.com/download/audio/2022/03/09/audio_8b0665b93d.mp3?filename=soft-rain-ambient-111154.mp3", color: "#3b82f6" }, // Placeholder URL ambiental

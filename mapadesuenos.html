@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- PWA -->
     <meta name="theme-color" content="#d4af37">
@@ -12,7 +12,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Mapa de Sueños - Manifestación Colectiva</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -350,6 +351,16 @@
 
     <script src="assets/js/universo.js"></script>
     <script>
+        MilApp.bootstrap({
+            module: 'mapadesuenos',
+            title: 'Mapa de los Sueños',
+            tutorial: [
+                'Este plano sigue siendo libre y visual, pero ahora comparte onboarding y avisos con el resto del templo.',
+                'Los sueños siguen guardándose localmente mientras llega una capa unificada de sincronía.',
+                'Piensa este módulo como tablero ritual, no como gestor productivo.'
+            ]
+        });
+
         let dreamMap = JSON.parse(localStorage.getItem('mila_dream_map')) || [];
         let activeProfile = Universo.getActiveProfile();
         let currentVisibility = 'private';

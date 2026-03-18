@@ -2,7 +2,7 @@
 <html class="dark" lang="es">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Perfil de Luz | Mila</title>
     
     <!-- PWA -->
@@ -11,6 +11,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -488,6 +490,16 @@
 
 <script src="assets/js/universo.js"></script>
 <script>
+    MilApp.bootstrap({
+        module: 'numerologia',
+        title: 'Perfil de Luz',
+        tutorial: [
+            'Este módulo traduce identidad y ciclos en lenguaje numérico, sin abandonar el tono íntimo de MilApp.',
+            'La nueva base compartida aporta onboarding y avisos, pero no altera tus cálculos ni su estética.',
+            'Si la base de conocimiento falla, la siguiente fase añadirá un estado ritual explícito en lugar de solo consola.'
+        ]
+    });
+
     // --- DATOS Y ESTADO ---
     let KNOWLEDGE_BASE = {};
     const calc = {
