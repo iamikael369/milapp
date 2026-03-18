@@ -2284,16 +2284,15 @@
                 const avatarOther = document.getElementById('chat-avatar-other');
                 const partnerName = document.getElementById('chat-partner-name');
                 
-                const milaImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuCH_eyDjSf-a2r6NyiCXhxvNssoBkS0_yf2FqbOCf3roM50mslrh3zv5cL_cSbbKKbKIzFZSQqkohUN2U-XPxK4HNywok3_Z_EXIbaoBdt4_HZdhcA9Q6OfkdtWID_d-nlxTFMMuuJqO0qChAevoq30g5EJLLGi_6RQpTBStCDX3LG6SN06iEcofO2_B4fSQrTF2pI9VwAb_AzaLObkUHu-1DZ4Xycj6dL7bXDwKAOCcyWV6v2YO3NpbgMbbkXzmom9BXehWNDW0A";
-                const miguelImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuCqbIM32XZeRI7dV9-dM5VWJQu6MdyXg512y_9M070k0IE2UEV570y2uaHyDbJ4-Vq603wSidN_4bLxAXxbdCv31E9leqouLNpldEFU-mQHJmoRqRrTNsMG9qOt1wcbH60daHoJeyICzeDDVcAA7YSHqF34uzvjR9KGm170K_4Q6-p4fcNUozrph_2ReNFtHsD0T5aCQJ6-fAMWgTo4Gy0vzU1ch27AYSUgwnoi6Emh04b8HdFqPUmbdtN56c3F_cCr5Sy7vky28g";
-                
+                const _milaPhoto = profilePhotos.Mila || DEFAULT_PHOTOS.Mila;
+                const _migueloPhoto = profilePhotos.Miguelo || DEFAULT_PHOTOS.Miguelo;
                 if (currentUser === 'Mila') {
-                    if (avatarMe) avatarMe.style.backgroundImage = `url("${profilePhotos.Mila}")`;
-                    if (avatarOther) avatarOther.style.backgroundImage = `url("${profilePhotos.Miguelo}")`;
+                    if (avatarMe) avatarMe.style.backgroundImage = `url("${_milaPhoto}")`;
+                    if (avatarOther) avatarOther.style.backgroundImage = `url("${_migueloPhoto}")`;
                     if (partnerName) partnerName.innerText = "Miguel & Mila";
                 } else {
-                    if (avatarMe) avatarMe.style.backgroundImage = `url("${profilePhotos.Miguelo}")`;
-                    if (avatarOther) avatarOther.style.backgroundImage = `url("${profilePhotos.Mila}")`;
+                    if (avatarMe) avatarMe.style.backgroundImage = `url("${_migueloPhoto}")`;
+                    if (avatarOther) avatarOther.style.backgroundImage = `url("${_milaPhoto}")`;
                     if (partnerName) partnerName.innerText = "Mila & Miguel";
                 }
 
