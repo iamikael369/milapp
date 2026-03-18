@@ -405,3 +405,29 @@ body {
     background: rgba(212, 175, 55, 0.3);
     border-radius: 10px;
 }
+/* --- MOBILE TOUCH POLISH (PWA / iOS) --- */
+/* Ensure minimum 44px touch targets for interactive elements */
+button, a, [onclick], .portal-card, .session-card, .nav-pill {
+    min-height: 44px;
+}
+
+/* Smooth scrolling for iOS overflow containers */
+.custom-scrollbar,
+.overflow-y-auto,
+.overflow-auto,
+#scroll-container,
+.sheet-content,
+#musa-chat,
+.modal-overlay {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Glass card (shared across modules) */
+.glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}

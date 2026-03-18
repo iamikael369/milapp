@@ -118,7 +118,10 @@ print(f"--------------------------------------------------")
 # Asegurar que estamos en el directorio correcto (donde reside este script)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-with socketserver.TCPServer(("0.0.0.0", PORT), MilaHandler) as httpd:
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+with ReusableTCPServer(("0.0.0.0", PORT), MilaHandler) as httpd:
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

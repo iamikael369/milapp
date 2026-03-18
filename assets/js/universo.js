@@ -121,24 +121,57 @@ const Universo = {
   },
 
   // --- IA (Gemini - Local Server) ---
+  _aiAvailable: null,
+
   callGemini: async (prompt) => {
+    const FALLBACK = "\u2726 El oráculo descansa en este momento — su silencio también es sabiduría. Intenta más tarde cuando el servidor esté disponible. \u2726";
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: prompt }),
       });
-      const data = await response.json();
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "HTTP " + response.status);
+      }
+
+      const data = await response.json();
       if (data.error) throw new Error(data.details || data.error);
-      // El servidor devuelve la respuesta cruda de Gemini, asi que parseamos igual
+
+      Universo._aiAvailable = true;
       return (
         data.candidates?.[0]?.content?.parts?.[0]?.text ||
         "El universo guarda silencio..."
       );
     } catch (e) {
-      console.error("Error Universo IA:", e);
-      return "El universo está en silencio en este momento (Error de conexión con el Oráculo Local).";
+      Universo._aiAvailable = false;
+      Universo._disableAIButtons();
+      return FALLBACK;
+    }
+  },
+
+  _disableAIButtons: () => {
+    const tooltip = "El oráculo descansa — intenta más tarde";
+    document.querySelectorAll(
+      "[onclick*=\"callGemini\"],[onclick*=\"aiInterpret\"],[onclick*=\"aiGenerate\"],[onclick*=\"askAbundanceGuide\"],[onclick*=\"getInspiration\"]"
+    ).forEach((btn) => {
+      if (!btn.dataset.aiDisabled) {
+        btn.dataset.aiDisabled = "1";
+        btn.setAttribute("title", tooltip);
+        btn.style.opacity = "0.45";
+        btn.style.cursor = "not-allowed";
+        btn.style.pointerEvents = "none";
+      }
+    });
+    const interpretBtn = document.getElementById("interpretBtn");
+    if (interpretBtn && !interpretBtn.dataset.aiDisabled) {
+      interpretBtn.dataset.aiDisabled = "1";
+      interpretBtn.setAttribute("title", tooltip);
+      interpretBtn.style.opacity = "0.45";
+      interpretBtn.style.cursor = "not-allowed";
+      interpretBtn.style.pointerEvents = "none";
     }
   },
 

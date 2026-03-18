@@ -3,7 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#d4af37">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MilApp">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
+    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
     <title>Pergaminos de Amor - Correspondencia de Luz</title>
 
     <!-- FUENTES -->
@@ -44,6 +54,8 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="/config/firebase-config.js"></script>
 
     <!-- FIREBASE SDK -->
     <script type="module">
@@ -1716,10 +1728,26 @@
             });
         }
 
+        function showFirebaseOfflineNotice() {
+            const existing = document.getElementById('firebase-offline-notice');
+            if (existing) return;
+            const notice = document.createElement('div');
+            notice.id = 'firebase-offline-notice';
+            notice.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(20,15,10,0.92);border:1px solid rgba(139,90,43,0.4);color:#c5b49a;font-family:Cinzel,serif;font-size:11px;letter-spacing:0.08em;padding:10px 18px;border-radius:12px;z-index:9999;text-align:center;max-width:90vw;pointer-events:none;';
+            notice.innerText = 'El canal de correspondencia requiere configuración — por ahora tus cartas se guardan localmente';
+            document.body.appendChild(notice);
+            setTimeout(() => { if (notice.parentNode) notice.parentNode.removeChild(notice); }, 6000);
+        }
+
         async function setupFirebase() {
+            const cfg = (window.__firebase_config) || (window.__firebaseConfig) || {};
+            const hasCredentials = cfg.apiKey && cfg.apiKey.length > 0 && cfg.projectId && cfg.projectId.length > 0;
+            if (!hasCredentials) {
+                showFirebaseOfflineNotice();
+                return;
+            }
             try {
-                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-                const app = initializeApp(firebaseConfig);
+                const app = initializeApp(cfg);
                 auth = getAuth(app);
                 db = getFirestore(app);
 
@@ -1794,7 +1822,11 @@
                         }
                     });
                 } catch (e) { console.error('Error profiles snapshot:', e); }
-            } catch (e) { console.error("Error Firebase Global:", e); }
+            } catch (e) {
+                console.error("Error Firebase Global:", e);
+                db = null; auth = null;
+                showFirebaseOfflineNotice();
+            }
         }
 
         window.toggleTheme = () => {
