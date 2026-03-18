@@ -1,0 +1,81 @@
+Quiero que trabajes sobre este proyecto llamado MilApp.
+
+Contexto:
+MilApp es un refugio digital íntimo, espiritual, histórico y privado para Mila y Miguelo. No es una app comercial ni una red social. Su identidad visual y emocional es sagrada y no debe romperse.
+
+Reglas no negociables:
+- No reescribas el proyecto desde cero.
+- No conviertas la app en React, Vue, Angular ni ningún framework.
+- Mantén HTML, CSS/Tailwind CDN y JavaScript vanilla.
+- No transformes la UI en algo tipo WhatsApp, SaaS, dashboard o red social.
+- Conserva la estética de pergamino, luz de vela, archivo del siglo XVIII, diario secreto y correspondencia íntima.
+- No rompas los módulos que ya funcionan.
+- Todo cambio debe ser incremental, reversible y compatible con lo existente.
+
+Objetivo de HOY:
+Quiero una primera versión publicada en Replit que Mila pueda usar hoy mismo desde su teléfono como app web instalada (PWA).
+
+Prioridades de trabajo:
+1. Analiza el proyecto completo sin reestructurarlo agresivamente.
+2. Haz que corra correctamente en Replit.
+3. Corrige rutas de archivos, assets e imports si están rotos.
+4. Identifica cualquier dependencia incompatible con una publicación estática.
+5. Prepara una versión funcional para publicar hoy con el plan gratuito.
+6. Convierte MilApp en PWA instalable.
+7. Optimiza lo básico para móvil.
+
+Tareas específicas:
+- Mantén la estructura general del proyecto.
+- Crea o corrige:
+  - manifest.webmanifest
+  - service-worker.js
+  - icon-192.png
+  - icon-512.png
+  - apple-touch-icon.png
+- Añade el manifest y meta tags PWA en las páginas necesarias.
+- Registra el service worker correctamente.
+- Configura cache offline básico para:
+  - index.html
+  - archivos CSS
+  - archivos JS
+  - imágenes esenciales
+  - assets importantes del shell
+- Mantén la navegación y apariencia de MilApp.
+
+Muy importante:
+El proyecto actual usa llamadas a /api/generate y también variables globales tipo __firebase_config, __app_id y __initial_auth_token.
+Quiero que:
+- detectes qué partes dependen de backend
+- no las dejes rotas
+- para la versión de hoy, si una función no puede operar en una publicación estática, la reemplaces temporalmente con una degradación elegante:
+  - mensaje claro
+  - botón desactivado con texto espiritual
+  - o fallback local
+- no muestres errores técnicos al usuario final
+
+Firebase:
+- No dejes la configuración vacía.
+- Extrae la configuración Firebase cliente a un archivo claro y reutilizable, por ejemplo config/firebase-config.js
+- Usa una inicialización estable y compatible con Replit.
+- No expongas secretos de backend.
+- Si hay claves sensibles reales, indícame cuáles debo poner en Secrets.
+
+Importante para Pergaminos:
+- Conserva el modo antiguo clásico
+- conserva cartas normales y cartas en botella
+- conserva guardado local
+- no elimines animaciones rituales
+- no rompas el diseño actual
+
+Antes de hacer cambios grandes:
+- dime qué archivos tocarás
+- qué cambiarás
+- por qué no rompe el proyecto
+
+Meta final de hoy:
+Entregarme una versión que:
+- se publique en Replit
+- se abra bien en móvil
+- se pueda instalar como PWA
+- mantenga la esencia de MilApp
+- y deje el proyecto listo para seguir evolucionando mañana

@@ -1,0 +1,57 @@
+Sí, procede con la Fase 1 completa, pero quiero máxima seguridad y cambios mínimos.
+
+Reglas estrictas:
+- No reescribas el proyecto.
+- No cambies la identidad visual ni la atmósfera.
+- No conviertas ningún módulo a otro framework.
+- No hagas refactor masivo.
+- No rompas nada que ya funcione.
+- Si alguna mejora implica riesgo, primero detente y explícala.
+
+Quiero que en esta Fase 1 hagas exactamente esto:
+
+1. Seguridad de API
+- Quita la dependencia de API.md para la Gemini API key.
+- Usa un Secret de Replit llamado GEMINI_API_KEY.
+- Ajusta server.py para leer la key desde variable de entorno.
+- Si la key no existe, devuelve un error claro para desarrollo pero no rompas el frontend.
+
+2. Numerología
+- Elimina la llamada directa a Gemini desde frontend.
+- Haz que numerologia.html use el mismo patrón seguro que los demás módulos, pasando por /api/generate.
+- No cambies el look del módulo.
+
+3. Firebase
+- Crea una forma estable de inicializar Firebase en Replit.
+- Si no hay configuración real todavía, deja un fallback elegante y visible:
+  - que el módulo siga funcionando localmente
+  - que muestre un aviso sereno/espiritual, no técnico, indicando que la sincronía sagrada aún no está enlazada
+- No dejes errores silenciosos.
+
+4. Endpoint faltante
+- Implementa /api/firebase-config en server.py si es necesario para compatibilidad con el proyecto actual.
+- Si decides no usar ese endpoint, adapta el módulo afectado de forma segura.
+- Explícame cuál camino elegiste y por qué.
+
+5. PWA
+- Crea:
+  - manifest.webmanifest
+  - service-worker.js
+  - icon-192.png
+  - icon-512.png
+  - apple-touch-icon.png
+- Agrega los enlaces y meta tags necesarios en las páginas adecuadas.
+- La app debe poder instalarse como web app.
+
+6. Publicación usable hoy
+- Deja el proyecto listo para usar hoy mismo en teléfono.
+- Prioriza que index.html y los módulos principales carguen bien.
+- Si alguna función avanzada no puede quedar completa hoy, déjala degradada con elegancia, nunca rota.
+
+Muy importante:
+Antes de editar, quiero que me digas exactamente:
+- qué archivos vas a tocar
+- qué vas a cambiar en cada uno
+- por qué no rompe el sistema actual
+
+Luego sí ejecuta la Fase 1.

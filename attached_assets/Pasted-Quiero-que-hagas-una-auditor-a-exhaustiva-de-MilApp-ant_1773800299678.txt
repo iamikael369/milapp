@@ -1,0 +1,127 @@
+Quiero que hagas una auditoría exhaustiva de MilApp antes de modificar más cosas.
+
+Contexto:
+MilApp es una app privada, íntima y espiritual para Mila y Miguelo. No es una app comercial ni una red social. Debes respetar su identidad visual, emocional y ritual.
+
+Reglas no negociables:
+- No conviertas la app en un producto SaaS, dashboard o chat genérico.
+- No reescribas el proyecto desde cero.
+- No cambies su alma visual ni su atmósfera.
+- Mantén HTML, CSS/Tailwind CDN y JavaScript vanilla siempre que sea posible.
+- Toda recomendación debe priorizar estabilidad, evolución progresiva y compatibilidad móvil.
+
+Tu tarea ahora es SOLO analizar profundamente el proyecto.
+
+Quiero una revisión exhaustiva de estos puntos:
+
+1. Estructura general del proyecto
+- Qué archivos existen
+- Qué módulos están implementados
+- Qué partes están duplicadas
+- Qué puede unificarse sin romper nada
+- Qué tan mantenible es la base actual
+
+2. Revisión funcional completa
+Analiza cada módulo y dime:
+- qué funciona bien
+- qué está incompleto
+- qué puede romperse
+- qué experiencia tiene el usuario
+- qué tan intuitivo es
+- qué cosas faltan para que se sienta terminado
+
+3. Responsive / dispositivos
+Evalúa cómo se comporta el proyecto en:
+- teléfono
+- tablet
+- desktop
+
+Indica:
+- problemas de layout
+- botones pequeños
+- overlays rotos
+- scrolls incómodos
+- elementos que se salen de pantalla
+- áreas que deben optimizarse para experiencia móvil real
+
+4. Revisión de assets y rutas
+- Detecta archivos faltantes
+- detecta imágenes o recursos rotos
+- detecta rutas incorrectas
+- detecta dependencias no resueltas
+- detecta referencias duplicadas o innecesarias
+
+5. Revisión técnica de Firebase
+Quiero que revises profundamente:
+- cómo se está inicializando Firebase
+- si la configuración actual es correcta
+- qué módulos usan Firebase
+- qué riesgos hay
+- qué cosas dependen del entorno anterior
+- cómo debe quedar organizado en Replit
+- si hay problemas con auth, firestore o realtime updates
+
+6. Revisión exhaustiva de la API
+Esto es muy importante.
+
+Quiero que localices todas las partes del proyecto que usan:
+- fetch
+- /api/*
+- generate
+- Gemini
+- funciones que dependan de backend
+- variables globales como __firebase_config, __app_id, __initial_auth_token o similares
+
+Para cada una quiero que me expliques:
+- dónde está
+- para qué sirve
+- si actualmente funciona en Replit
+- por qué sí o por qué no
+- qué necesita para funcionar bien
+- si debe ir a un backend/server route/function
+- si hay riesgo de exponer claves
+- cuál sería la forma correcta de implementarlo en Replit sin romper la app
+
+7. Seguridad y arquitectura
+- Señala riesgos de seguridad
+- qué datos no deben quedar expuestos en frontend
+- qué debe ir en secrets
+- qué lógica debería pasar a backend y cuál no
+- cómo separar cliente y servidor sin perder simplicidad
+
+8. PWA y publicación
+Analiza si el proyecto ya está realmente listo para:
+- publicarse
+- instalarse como app web
+- usarse en teléfono hoy mismo
+
+Dime exactamente:
+- qué le falta
+- qué ya está bien
+- qué hay que corregir para que sea estable como PWA
+
+9. Prioridades reales
+Quiero un plan por prioridad:
+- crítico
+- importante
+- deseable
+
+Y luego un plan por fases:
+- Fase 1: dejarla estable hoy
+- Fase 2: corregir API/backend
+- Fase 3: mejorar móvil
+- Fase 4: unificar arquitectura
+- Fase 5: evolución de módulos
+
+Formato de respuesta:
+Quiero que me respondas con:
+A. Diagnóstico general
+B. Problemas encontrados
+C. Revisión específica de API/backend
+D. Riesgos
+E. Recomendaciones
+F. Plan por fases
+
+Muy importante:
+No hagas cambios todavía.
+Primero quiero solo la auditoría completa.
