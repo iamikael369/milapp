@@ -6,7 +6,7 @@ import urllib.request
 import urllib.error
 
 # Configuración
-PORT = 8000
+PORT = 5000
 API_KEY_FILE = "API.md"
 
 import re
@@ -118,7 +118,7 @@ print(f"--------------------------------------------------")
 # Asegurar que estamos en el directorio correcto (donde reside este script)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-with socketserver.TCPServer(("", PORT), MilaHandler) as httpd:
+with socketserver.TCPServer(("0.0.0.0", PORT), MilaHandler) as httpd:
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
