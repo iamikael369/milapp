@@ -1,4 +1,4 @@
-const CACHE_NAME = 'milapp-v3';
+const CACHE_NAME = 'milapp-v4';
 const SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -12,7 +12,9 @@ const SHELL_ASSETS = [
   '/hipnosis.html',
   '/emilybooks.html',
   '/assets/css/style.css',
+  '/assets/css/milapp-shell.css',
   '/assets/js/universo.js',
+  '/assets/js/milapp-shell.js',
   '/assets/images/icons/icon-192.png',
   '/assets/images/icons/icon-512.png',
   '/assets/images/icons/apple-touch-icon.png',

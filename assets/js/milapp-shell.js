@@ -94,6 +94,10 @@
     return ensureContainer("milapp-floating-stack");
   }
 
+  function isStandalone() {
+    return window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+  }
+
   function removeFloatingChip(type) {
     const existing = document.querySelector(`.milapp-floating-chip[data-chip="${type}"]`);
     if (existing) existing.remove();
@@ -141,6 +145,11 @@
 
   function renderInstallChip() {
     if (!document.body) return;
+    if (isStandalone()) {
+      removeFloatingChip("install");
+      state.installChipVisible = false;
+      return;
+    }
     renderFloatingChip({
       type: "install",
       icon: state.installPrompt ? "download" : "phone_iphone",
