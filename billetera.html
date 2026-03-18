@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Billetera de Luz | Mila</title>
+    <!-- Tailwind & Google Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'temple-dark': '#050a14',
+                        'temple-gold': '#d4af37',
+                        'temple-accent': '#c5a059',
+                        'wealth-green': '#10b981',
+                        'gold-light': '#f3d673',
+                        'gold-dark': '#b8860b',
+                        'universe-dark': '#050a0f',
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                        garamond: ['EB Garamond', 'serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        dancing: ['Dancing Script', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow-pulse': 'glowPulse 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glowPulse: {
+                            '0%, 100%': { filter: 'drop-shadow(0 0 10px rgba(16,185,129,0.3))' },
+                            '50%': { filter: 'drop-shadow(0 0 25px rgba(16,185,129,0.6))' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --temple-dark: #050a14;
+            --temple-gold: #d4af37;
+        }
+
+        body {
+            background-color: var(--temple-dark);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Background */
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #0f172a 0%, #050a14 100%);
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 10, 20, 0.8) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 50px -15px rgba(16, 185, 129, 0.2);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.2); border-radius: 10px; }
+
+        .nav-pill.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--temple-gold);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* REALISTIC CHECK DESIGN */
+        .check-texture {
+            background: radial-gradient(circle at 50% 50%, rgba(243, 214, 115, 0.05) 0%, transparent 70%), linear-gradient(45deg, #f3f4f6 25%, transparent 25%), linear-gradient(-45deg, #f3f4f6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f3f4f6 75%), linear-gradient(-45deg, transparent 75%, #f3f4f6 75%);
+            background-size: 100% 100%, 4px 4px, 4px 4px, 4px 4px, 4px 4px;
+            background-color: #fff;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #b8860b;
+        }
+        .check-texture::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuC05ltfzhqKvgM10-7KSp6ZCmwBHZSF9bj22V7aWae8ZjByBonk_WxKasK536fn2bXozEZ3Nymf992L9SMBrXkzO7kt2oeEinDclnK6VIhvmGCzwiUNTc1cE2raCKrZMjnVS7BIJRZnXXk--KpCr8N3Xd3VHk2b9i_dAM8ihPnp74i0EOXKNrHZNLh0sXTScwX25S08Jmr_SgMNxvcTvHR0tf73zBgztAa5MbsGyXP1ofDN4ctR53Q1W1B2h04tESpQ5OpOXxFjJw);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            font-family: "Cinzel", serif;
+            font-size: 4rem;
+            color: rgba(184, 134, 11, 0.04);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+            z-index: 0;
+        }
+
+        @keyframes liquidGold {
+            0% { stroke-dashoffset: 1000; opacity: 0; }
+            10% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+        .animate-liquid-gold {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: liquidGold 2.5s ease-out forwards;
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(5, 10, 20, 0.85);
+            backdrop-filter: blur(8px); display: none; opacity: 0;
+            z-index: 50; transition: opacity 0.4s ease;
+            align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .light-mode {
+            --temple-dark: #2e1065;
+            background: radial-gradient(circle at 50% 50%, #2e1065 0%, #1a1538 100%);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-20 fade-in text-white">
+    <!-- Ambient Backdrop -->
+    <div class="cosmic-bg" id="star-field"></div>
+    
+    <div class="max-w-xl mx-auto px-6 pt-12">
+        <!-- Header -->
+        <header class="flex justify-between items-start mb-10">
+            <div>
+                <h1 class="font-cinzel text-2xl tracking-[0.2em] text-white uppercase">Billetera de Luz</h1>
+                <p class="font-playfair italic text-slate-400 text-sm mt-1">Tu flujo de abundancia infinita</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="resetWallet()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-red-400 transition-all">
+                    <span class="material-symbols-rounded text-sm">refresh</span>
+                </button>
+                <button onclick="window.location.href = 'index.html'" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-300 hover:text-white transition-all">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Balance Card -->
+        <div class="balance-card rounded-[2.5rem] p-8 mb-10 relative overflow-hidden group">
+            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-wealth-green/5 blur-3xl rounded-full"></div>
+            <div class="relative z-10">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="font-cinzel text-[10px] tracking-[0.3em] text-wealth-green uppercase font-bold">Balance Disponible</span>
+                    <div class="w-8 h-8 rounded-full bg-wealth-green/10 flex items-center justify-center text-wealth-green animate-glow-pulse">
+                        <span class="material-symbols-rounded text-sm">auto_awesome</span>
+                    </div>
+                </div>
+                <div class="flex items-baseline gap-2 mb-8">
+                    <span class="text-wealth-green font-cinzel text-lg opacity-50">$</span>
+                    <h2 class="text-5xl font-cinzel tracking-tighter text-white" id="display-balance">0.00</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="glass-panel rounded-2xl p-4 border-l-2 border-l-wealth-green/30">
+                        <p class="text-[9px] font-cinzel tracking-widest text-slate-400 uppercase mb-1">Ingresos</p>
+                        <p class="text-lg font-cinzel text-wealth-green" id="display-in">+ 0.00</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-4 border-l-2 border-l-temple-gold/30">
+                        <p class="text-[9px] font-cinzel tracking-widest text-slate-400 uppercase mb-1">Egresos</p>
+                        <p class="text-lg font-cinzel text-temple-gold" id="display-out">- 0.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex gap-2 mb-8 bg-white/5 p-1.5 rounded-full border border-white/5">
+            <button id="tab-wallet" onclick="switchTab('wallet')" class="nav-pill active flex-1 py-2.5">Billetera</button>
+            <button id="tab-checks" onclick="switchTab('checks')" class="nav-pill flex-1 py-2.5">Cheques de Poder</button>
+            <button id="tab-guide" onclick="switchTab('guide')" class="nav-pill flex-1 py-2.5">Guía Alquimia</button>
+        </div>
+
+        <!-- View: Wallet -->
+        <div id="view-wallet" class="space-y-6">
+            <div class="flex justify-between items-center px-2">
+                <h3 class="font-cinzel text-[10px] tracking-[0.3em] text-slate-500 uppercase">Historial Energético</h3>
+                <div class="flex gap-4">
+                    <button onclick="openTxModal('deposit')" class="text-[9px] font-cinzel tracking-widest text-wealth-green uppercase hover:underline">Recibir</button>
+                    <button onclick="openTxModal('withdraw')" class="text-[9px] font-cinzel tracking-widest text-temple-gold uppercase hover:underline">Circular</button>
+                </div>
+            </div>
+            
+            <div id="tx-list" class="space-y-3 max-h-[45vh] overflow-y-auto custom-scrollbar pr-2">
+                <!-- Los items se inyectan vía JS -->
+            </div>
+
+            <!-- Decreta Section -->
+            <div id="decree-container" class="hidden glass-panel rounded-3xl p-6 text-center border-t border-wealth-green/20 animate-fade-in">
+                <p class="font-cinzel text-[10px] tracking-[0.3em] text-wealth-green uppercase mb-3">Decreto de Abundancia</p>
+                <p id="decree-text" class="font-playfair italic text-white text-lg leading-relaxed">...</p>
+            </div>
+            
+            <button onclick="generateDailyDecree()" id="btn-decree"
+                class="w-full py-4 border border-wealth-green/20 rounded-full text-[10px] font-cinzel tracking-widest uppercase text-wealth-green hover:bg-wealth-green/5 transition-all flex items-center justify-center gap-3">
+                <span class="material-symbols-rounded text-sm">auto_awesome</span> Invocar Decreto de Hoy
+            </button>
+        </div>
+
+        <!-- View: Checks -->
+        <div id="view-checks" class="hidden space-y-8 animate-fade-in">
+            <div class="text-center py-6">
+                <p class="font-playfair italic text-slate-400 mb-8 max-w-xs mx-auto">"Escribe tu intención y permite que el universo se encargue de la entrega."</p>
+                <button onclick="createNewCheck()" 
+                    class="px-10 py-4 rounded-full bg-temple-gold text-temple-dark font-cinzel tracking-widest uppercase text-xs shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:bg-white transition-all transform hover:-translate-y-1">
+                    Escribir Nuevo Cheque
+                </button>
+            </div>
+            <div id="checks-list" class="grid grid-cols-1 gap-8">
+                <!-- Cheques inyectados -->
+            </div>
+        </div>
+
+        <!-- View: Alquimia Guide -->
+        <div id="view-guide" class="hidden space-y-8 animate-fade-in">
+            <div class="glass-panel rounded-[2rem] p-10 text-center border-t-4 border-temple-gold/40">
+                <div class="w-20 h-20 rounded-full bg-temple-gold/10 flex items-center justify-center text-temple-gold mx-auto mb-6">
+                    <span class="material-symbols-rounded text-4xl">lightbulb</span>
+                </div>
+                <h3 class="font-cinzel text-2xl text-white mb-3">Alquimia de Vida</h3>
+                <p class="font-garamond text-slate-400 text-lg mb-8 leading-relaxed">Permite que la Guía Espiritual analice tu flujo energético y te brinde sabiduría sobre tu prosperidad.</p>
+                <button onclick="askAbundanceGuide()" id="guide-btn"
+                    class="w-full py-4 bg-gradient-to-r from-temple-gold to-temple-accent rounded-full text-temple-dark font-cinzel text-xs tracking-widest uppercase shadow-xl hover:brightness-110 transition-all flex items-center justify-center gap-3">
+                    <span class="material-symbols-rounded">psychology</span> Pedir Consejo al Oráculo
+                </button>
+            </div>
+            <div id="ai-advice-result"
+                class="hidden glass-panel p-8 rounded-[2rem] text-sm text-slate-200 leading-relaxed font-garamond italic text-justify border border-white/5">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TRANSACCIÓN -->
+    <div id="tx-modal" class="modal-overlay">
+        <div class="glass-panel p-8 rounded-[2.5rem] w-full max-w-sm m-4 border-t-2 border-t-wealth-green/20">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="font-cinzel text-lg text-white" id="tx-title">Registrar</h3>
+                <button onclick="closeTxModal()" class="text-slate-500 hover:text-white"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <form id="tx-form" class="space-y-6">
+                <div class="relative">
+                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-wealth-green text-xl font-cinzel opacity-50">$</span>
+                    <input type="number" id="tx-amount" step="0.01"
+                        class="w-full bg-white/5 border border-white/10 rounded-2xl py-6 pl-12 pr-6 text-3xl text-white font-cinzel focus:outline-none focus:border-wealth-green/50 transition-all"
+                        placeholder="0.00" required>
+                </div>
+                <input type="text" id="tx-desc"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-wealth-green/30"
+                    placeholder="¿Cuál es el concepto?" required>
+                
+                <div class="space-y-3">
+                    <p class="text-[9px] font-cinzel tracking-widest text-slate-500 uppercase px-1">Emoción Asociada</p>
+                    <div class="flex flex-wrap gap-2" id="tx-emotions"></div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-5 bg-wealth-green text-temple-dark font-cinzel font-bold text-xs uppercase tracking-[0.2em] rounded-full shadow-lg shadow-wealth-green/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
+                    Confirmar Energía
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CHEQUE -->
+    <div id="check-modal" class="modal-overlay">
+        <div class="glass-panel p-6 rounded-[2rem] w-full max-w-2xl m-4 border-t-2 border-t-temple-gold/20">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-cinzel text-temple-gold text-sm tracking-widest uppercase">Orden de Abundancia</h3>
+                <button onclick="closeCheckModal()" class="text-slate-500 hover:text-white transition-colors">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            
+            <div id="check-target" class="p-1 rounded-sm overflow-hidden bg-white shadow-2xl mb-8">
+                <!-- REALISTIC CHECK CANVAS AREA -->
+                <div class="check-texture p-6 sm:p-10 text-stone-800 relative min-h-[300px]" id="check-canvas-area">
+                    <div class="watermark">ABUNDANCIA</div>
+                    
+                    <!-- Check Header -->
+                    <div class="relative z-10 flex justify-between items-start border-b-2 border-emerald-900/20 pb-4 mb-8">
+                        <div>
+                            <h2 class="font-cinzel font-bold text-lg tracking-wider text-emerald-900">BANCO DEL UNIVERSO</h2>
+                            <p class="text-[8px] uppercase tracking-widest text-stone-500">Sucursal: El Campo Cuántico</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="flex items-center gap-2 border-2 border-stone-800 px-3 py-1 bg-white/50">
+                                <span class="text-xs font-bold">$</span>
+                                <input type="text" id="chk-num-amount" class="bg-transparent border-none p-0 w-24 text-right font-dancing text-xl focus:ring-0 text-emerald-900" placeholder="∞">
+                            </div>
+                            <p class="text-[8px] mt-1 uppercase text-stone-400 font-bold">Serie: LUX-2026</p>
+                        </div>
+                    </div>
+
+                    <!-- Check Body -->
+                    <div class="relative z-10 space-y-6">
+                        <!-- Pay To -->
+                        <div class="flex items-baseline gap-3">
+                            <span class="font-cinzel text-[9px] font-bold whitespace-nowrap text-stone-600 uppercase">Páguese a la orden de:</span>
+                            <div class="flex-grow border-b border-stone-400">
+                                <input type="text" id="chk-name" class="w-full bg-transparent border-none p-0 font-dancing text-2xl text-emerald-900 focus:ring-0 leading-tight" placeholder="Tu Nombre">
+                            </div>
+                        </div>
+
+                        <!-- Amount Words -->
+                        <div class="flex items-baseline gap-3">
+                            <span class="font-cinzel text-[9px] font-bold whitespace-nowrap text-stone-600 uppercase">La cantidad de:</span>
+                            <div class="flex-grow border-b border-stone-400">
+                                <input type="text" id="chk-text-amount" class="w-full bg-transparent border-none p-0 font-dancing text-2xl text-emerald-900 focus:ring-0 italic leading-tight" placeholder="Toda la abundancia del cosmos">
+                            </div>
+                        </div>
+
+                        <!-- Concept -->
+                        <div class="flex items-baseline gap-3">
+                            <span class="font-cinzel text-[9px] font-bold whitespace-nowrap text-stone-600 uppercase">En concepto de:</span>
+                            <div class="flex-grow border-b border-stone-400 relative">
+                                <input type="text" id="chk-memo" class="w-full bg-transparent border-none p-0 font-dancing text-xl text-emerald-800 focus:ring-0 leading-tight pr-8" placeholder="Agradecimiento infinito...">
+                                <button onclick="elevateMemo(this)" class="absolute right-0 bottom-1 text-gold-dark hover:scale-110 transition-transform" title="Elevar con IA">
+                                    <span class="material-symbols-rounded text-sm">auto_awesome</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="flex justify-between items-end pt-4">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex gap-2 items-baseline">
+                                    <span class="text-[8px] font-bold text-stone-500 uppercase">Fecha:</span>
+                                    <input type="text" id="chk-date-display" class="bg-transparent border-none p-0 font-dancing text-lg text-stone-800 w-32 outline-none focus:ring-0" readonly>
+                                </div>
+                                <div class="text-[8px] text-stone-400 tracking-tighter">
+                                    ⑆ 0001234567 ⑈ 987654321 ⑆ 111
+                                </div>
+                            </div>
+                            <div class="text-center relative">
+                                <!-- Liquid Gold Signature SVG -->
+                                <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-12 pointer-events-none opacity-0 transition-opacity duration-500" id="signature-container">
+                                    <svg class="w-full h-full" viewBox="0 0 200 60">
+                                        <path class="fill-none stroke-[3] stroke-gold-dark" d="M20,45 Q50,15 80,40 T140,25 T180,45 M60,20 L60,50 M120,20 L120,50" id="gold-path" stroke-linecap="round"></path>
+                                    </svg>
+                                </div>
+                                <div class="w-48 border-t-2 border-stone-800 pt-1">
+                                    <p class="font-cinzel text-[9px] font-bold uppercase tracking-[0.2em] text-stone-700">Firma Autorizada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="saveCheck()" id="emitir-btn"
+                class="w-full py-5 bg-temple-gold text-temple-dark font-cinzel font-bold text-xs uppercase tracking-[0.2em] rounded-full shadow-lg shadow-temple-gold/20 hover:scale-[1.02] active:scale-95 transition-all">
+                Emitir al Cosmos y Guardar
+            </button>
+        </div>
+    </div>
+
+    <!-- COSMIC SUCCESS MESSAGE -->
+    <div id="cosmic-success" class="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none hidden bg-black/40 backdrop-blur-sm transition-opacity duration-1000 opacity-0">
+        <div class="text-center">
+            <h2 class="text-6xl font-cinzel text-temple-gold mb-4 tracking-[0.3em] drop-shadow-2xl">RECIBIDO</h2>
+            <p class="font-playfair italic text-white/80 text-xl tracking-widest">Tu intención ha sido grabada en el tejido del Universo</p>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="assets/js/universo.js"></script>
+    <script>
+        let wallet = JSON.parse(localStorage.getItem('mila_wallet')) || { balance: 0, txs: [], checks: [] };
+
+        function init() {
+            // Sincronizar tema desde URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const theme = urlParams.get('theme');
+            if (theme === 'light') document.body.classList.add('light-mode');
+
+            initStars();
+            renderWallet();
+            // Inyectar estrellas cada cierto tiempo para mantener el efecto
+            setInterval(createStar, 3000);
+        }
+
+        // Ambient Background Stars
+        function initStars() {
+            const field = document.getElementById('star-field');
+            for(let i=0; i<80; i++) { createStar(true); }
+        }
+
+        function createStar(initial = false) {
+            const field = document.getElementById('star-field');
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 1;
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const duration = Math.random() * 3 + 2;
+            
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.setProperty('--duration', `${duration}s`);
+            
+            field.appendChild(star);
+            if(!initial) { setTimeout(() => star.remove(), duration * 1000); }
+        }
+
+        function renderWallet() {
+            let bal = 0, income = 0, expense = 0;
+            if (wallet.txs) {
+                wallet.txs.forEach(t => {
+                    if (t.type === 'deposit') { bal += t.amount; income += t.amount; }
+                    else { bal -= t.amount; expense += t.amount; }
+                });
+            }
+            
+            const balEl = document.getElementById('display-balance');
+            const prevBal = parseFloat(balEl.innerText) || 0;
+            animateNumber(balEl, prevBal, bal);
+            
+            document.getElementById('display-in').innerText = `+ ${income.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('display-out').innerText = `- ${expense.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+
+            const list = document.getElementById('tx-list');
+            list.innerHTML = '';
+            
+            if (!wallet.txs || wallet.txs.length === 0) {
+                list.innerHTML = `<div class="glass-panel rounded-3xl p-10 text-center">
+                    <p class="font-garamond italic text-slate-500 text-lg">Aún no hay flujos de energía registrados.</p>
+                </div>`;
+            } else {
+                wallet.txs.slice(0, 20).forEach((t, index) => {
+                    const isIncome = t.type === 'deposit';
+                    const colorClass = isIncome ? 'text-wealth-green' : 'text-temple-gold';
+                    const icon = isIncome ? 'south_west' : 'north_east';
+                    const bgClass = isIncome ? 'bg-wealth-green/5' : 'bg-temple-gold/5';
+                    
+                    const item = document.createElement('div');
+                    item.className = 'glass-panel rounded-2xl p-4 flex justify-between items-center group hover:bg-white/5 transition-all text-white border-l-2 border-l-transparent hover:border-l-' + (isIncome ? 'wealth-green' : 'temple-gold');
+                    item.style.animation = `fadeIn 0.5s ease-out ${index * 0.05}s forwards`;
+                    item.style.opacity = '0';
+                    
+                    item.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full ${bgClass} flex items-center justify-center ${colorClass} group-hover:scale-110 transition-transform">
+                                <span class="material-symbols-rounded text-sm">${icon}</span>
+                            </div>
+                            <div>
+                                <p class="text-sm font-cinzel tracking-wide">${t.desc}</p>
+                                <p class="text-[9px] text-slate-500 uppercase tracking-widest">${t.emotion || 'Gratitud'} • ${new Date(t.date).toLocaleDateString()}</p>
+                            </div>
+                        </div>
+                        <span class="${colorClass} font-cinzel text-sm font-bold tracking-tight">
+                            ${isIncome ? '+' : '-'}${t.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                        </span>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+        }
+
+        function animateNumber(el, start, end) {
+            let current = start;
+            const duration = 1000;
+            const frameTime = 16;
+            const frames = duration / frameTime;
+            const step = (end - start) / frames;
+            
+            function update() {
+                current += step;
+                if ((step > 0 && current >= end) || (step < 0 && current <= end)) {
+                    el.innerText = end.toLocaleString(undefined, {minimumFractionDigits: 2});
+                    return;
+                }
+                el.innerText = current.toLocaleString(undefined, {minimumFractionDigits: 2});
+                requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        let currentTxType = 'deposit';
+        let currentEmotion = 'Gratitud';
+
+        function openTxModal(type) {
+            currentTxType = type;
+            document.getElementById('tx-title').innerText = type === 'deposit' ? 'Recibir Abundancia' : 'Circular Energía';
+            document.getElementById('tx-modal').classList.add('active');
+            
+            const container = document.getElementById('tx-emotions');
+            container.innerHTML = '';
+            
+            const emotions = type === 'deposit' ? 
+                ['🙏 Gratitud', '😲 Sorpresa', '💼 Valor', '🎁 Regalo', '✨ Milagro'] : 
+                ['🙌 Confianza', '🌱 Semilla', '🍎 Esencial', '🎉 Gozo', '🤍 Amor'];
+            
+            emotions.forEach(e => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel tracking-widest uppercase text-slate-400 hover:text-white hover:bg-white/5 transition-all';
+                btn.innerText = e;
+                btn.onclick = () => {
+                    currentEmotion = e;
+                    document.querySelectorAll('#tx-emotions button').forEach(b => {
+                        b.classList.remove('border-wealth-green', 'text-wealth-green');
+                        b.classList.add('border-white/10', 'text-slate-400');
+                    });
+                    btn.classList.remove('border-white/10', 'text-slate-400');
+                    btn.classList.add('border-wealth-green', 'text-wealth-green');
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function closeTxModal() {
+            document.getElementById('tx-modal').classList.remove('active');
+            document.getElementById('tx-form').reset();
+        }
+
+        document.getElementById('tx-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('tx-amount').value);
+            const desc = document.getElementById('tx-desc').value;
+            if (!amount) return;
+            
+            if (!wallet.txs) wallet.txs = [];
+            wallet.txs.unshift({
+                id: Date.now(),
+                date: new Date(),
+                type: currentTxType,
+                amount: amount,
+                desc: desc || (currentTxType === 'deposit' ? 'Ingreso' : 'Egreso'),
+                emotion: currentEmotion
+            });
+            
+            localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+            closeTxModal();
+            renderWallet();
+        });
+
+        function createNewCheck() {
+            document.getElementById('check-modal').classList.add('active');
+            const today = new Date();
+            document.getElementById('chk-date-display').value = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            
+            const activeProfile = Universo.getActiveProfile();
+            if (activeProfile) document.getElementById('chk-name').value = activeProfile.name;
+        }
+
+        function closeCheckModal() {
+            document.getElementById('check-modal').classList.remove('active');
+        }
+
+        function saveCheck() {
+            const emitBtn = document.getElementById('emitir-btn');
+            const data = {
+                id: Date.now(),
+                date: document.getElementById('chk-date-display').value,
+                name: document.getElementById('chk-name').value,
+                amountNum: document.getElementById('chk-num-amount').value,
+                amountTxt: document.getElementById('chk-text-amount').value,
+                memo: document.getElementById('chk-memo').value
+            };
+
+            if (!data.amountNum || !data.name) return alert("El Universo necesita más detalles para procesar tu orden.");
+
+            // Secuencia de Emisión Realista
+            emitBtn.disabled = true;
+            emitBtn.classList.add('opacity-50', 'pointer-events-none');
+            
+            // 1. Animación de Firma
+            const signatureContainer = document.getElementById('signature-container');
+            const goldPath = document.getElementById('gold-path');
+            signatureContainer.classList.remove('opacity-0');
+            goldPath.classList.add('animate-liquid-gold');
+
+            // 2. Captura y Guardado (tras la firma)
+            setTimeout(() => {
+                const element = document.getElementById('check-canvas-area');
+                html2canvas(element, { 
+                    backgroundColor: null, 
+                    scale: 3,
+                    useCORS: true,
+                    logging: false
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    if (!wallet.checks) wallet.checks = [];
+                    wallet.checks.unshift({ ...data, image: imgData });
+                    localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+                    
+                    // 3. Efecto de Salida y Éxito
+                    element.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    element.style.transform = 'translateY(-200px) scale(0.5)';
+                    element.style.opacity = '0';
+                    element.style.filter = 'brightness(3) blur(10px)';
+
+                    setTimeout(() => {
+                        // Mostrar mensaje de éxito cósmico
+                        const successMsg = document.getElementById('cosmic-success');
+                        successMsg.classList.remove('hidden');
+                        setTimeout(() => successMsg.style.opacity = '1', 50);
+
+                        setTimeout(() => {
+                            successMsg.style.opacity = '0';
+                            setTimeout(() => successMsg.classList.add('hidden'), 1000);
+                            
+                            closeCheckModal();
+                            // Resetear estado del modal para futuras aperturas
+                            element.style = ''; 
+                            signatureContainer.classList.add('opacity-0');
+                            goldPath.classList.remove('animate-liquid-gold');
+                            emitBtn.disabled = false;
+                            emitBtn.classList.remove('opacity-50', 'pointer-events-none');
+                            
+                            if (!document.getElementById('view-checks').classList.contains('hidden')) renderChecksList();
+                            switchTab('checks');
+                        }, 3000);
+                    }, 500);
+                });
+            }, 2800); // Duración de la animación de firma
+        }
+
+        function renderChecksList() {
+            const container = document.getElementById('checks-list');
+            container.innerHTML = '';
+            
+            if (!wallet.checks || wallet.checks.length === 0) {
+                container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center border-dashed border-2 border-white/5">
+                    <p class="font-garamond italic text-slate-500 text-lg">Tus órdenes cósmicas aparecerán aquí.</p>
+                </div>`;
+                return;
+            }
+
+            wallet.checks.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'glass-panel rounded-3xl p-2 relative group hover:scale-[1.01] transition-all duration-500';
+                item.innerHTML = `
+                    <div class="rounded-2xl overflow-hidden shadow-xl border border-white/5">
+                        <img src="${c.image}" class="w-full h-auto" alt="Cheque de Abundancia">
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-3xl flex justify-between items-center text-white">
+                        <div>
+                            <p class="font-cinzel text-[9px] tracking-[0.2em] text-gold-light uppercase">${c.amountNum} Unidades</p>
+                            <p class="font-inter text-[8px] opacity-60">Emitido el ${new Date(c.id).toLocaleDateString()}</p>
+                        </div>
+                        <button onclick="deleteCheck(${c.id})" class="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                            <span class="material-symbols-rounded text-sm">delete</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteCheck(id) {
+            if (confirm("¿Deseas disolver esta orden energética del tejido cósmico?")) {
+                wallet.checks = wallet.checks.filter(c => c.id !== id);
+                localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+                renderChecksList();
+            }
+        }
+
+        async function elevateMemo(btn) {
+            const memoInput = document.getElementById('chk-memo');
+            const val = memoInput.value;
+            if (!val) return;
+            
+            const icon = btn.querySelector('.material-symbols-rounded');
+            icon.classList.add('animate-spin');
+            
+            const prompt = `Como Guía Espiritual, refina esta intención para un cheque de abundancia de forma poética, poderosa y breve (máximo 10 palabras): "${val}"`;
+            try {
+                const res = await Universo.callGemini(prompt);
+                memoInput.value = res.replace(/[\\"]+/g, '').trim();
+            } catch(e) { console.error(e); }
+            icon.classList.remove('animate-spin');
+        }
+
+        async function generateDailyDecree() {
+            const btn = document.getElementById('btn-decree');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-rounded animate-spin">cyclone</span> Sintonizando...';
+            
+            let bal = 0;
+            if (wallet.txs) wallet.txs.forEach(t => t.type === 'deposit' ? bal += t.amount : bal -= t.amount);
+            
+            const prompt = `Genera un decreto de abundancia místico y poderoso de una sola oración para hoy. Contexto: El alma tiene ${bal} unidades de abundancia.`;
+            try {
+                const text = await Universo.callGemini(prompt);
+                document.getElementById('decree-text').innerText = text.replace(/[\\"]+/g, '');
+                document.getElementById('decree-container').classList.remove('hidden');
+            } catch(e) { console.error(e); }
+            
+            btn.innerHTML = originalContent;
+        }
+
+        async function askAbundanceGuide() {
+            const btn = document.getElementById('guide-btn');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-rounded animate-spin">cyclone</span> Canalizando...';
+            
+            const emotions = wallet.txs ? wallet.txs.slice(0, 10).map(t => t.emotion) : ['Gratitud'];
+            const prompt = `Como Guía de Alquimia, brinda un consejo místico breve (máximo 40 palabras) sobre la prosperidad basado en este patrón emocional reciente: ${emotions.join(', ')}.`;
+            
+            try {
+                const text = await Universo.callGemini(prompt);
+                const resultArea = document.getElementById('ai-advice-result');
+                resultArea.classList.remove('hidden');
+                resultArea.scrollIntoView({ behavior: 'smooth' });
+                
+                // Efecto de escritura simple
+                resultArea.innerText = '';
+                let i = 0;
+                const typing = setInterval(() => {
+                    resultArea.innerText += text[i];
+                    i++;
+                    if (i >= text.length) clearInterval(typing);
+                }, 15);
+            } catch(e) { console.error(e); }
+            
+            btn.innerHTML = originalContent;
+        }
+
+        function switchTab(t) {
+            document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+            document.getElementById(`tab-${t}`).classList.add('active');
+            
+            ['wallet', 'checks', 'guide'].forEach(id => {
+                document.getElementById(`view-${id}`).classList.add('hidden');
+            });
+            
+            const view = document.getElementById(`view-${t}`);
+            view.classList.remove('hidden');
+            
+            if (t === 'wallet') renderWallet();
+            if (t === 'checks') renderChecksList();
+        }
+
+        function resetWallet() {
+            if (confirm("¿Deseas reiniciar tu flujo energético? Esto borrará todo el historial.")) {
+                localStorage.removeItem('mila_wallet');
+                location.reload();
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

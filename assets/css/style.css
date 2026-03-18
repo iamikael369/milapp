@@ -1,0 +1,407 @@
+/* --- PALETA DE LUZ Y SOMBRA (THEMING) --- */
+:root {
+    /* MODO NOCHE PROFUNDA (Default) */
+    --bg-main: #050a14;
+    --bg-grad-1: #1a1538;
+    --bg-grad-2: #0f1c3a;
+    --text-main: #eaeef7;
+    --text-muted: #9ca3af;
+    --glass: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.12);
+    --dock-bg: rgba(8, 12, 24, 0.85);
+    --gold: #d4af37;
+    --gold-light: #fbeea8;
+    --star-color: 255, 255, 255;
+    --avatar-border: rgba(212, 175, 55, 0.2);
+    --gift-bg: linear-gradient(160deg, #181828 0%, #0a0a12 100%);
+}
+
+[data-theme="light"] {
+    /* MODO OCASO */
+    --bg-main: #2e1065;
+    --bg-grad-1: #db2777;
+    --bg-grad-2: #ea580c;
+    --text-main: #fff1f2;
+    --text-muted: #fbcfe8;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 200, 150, 0.2);
+    --glass-highlight: rgba(255, 220, 200, 0.15);
+    --dock-bg: rgba(40, 10, 60, 0.85);
+    --gold: #fbbf24;
+    --gold-light: #fef3c7;
+    --star-color: 255, 240, 200;
+    --avatar-border: rgba(251, 191, 36, 0.4);
+    --gift-bg: linear-gradient(160deg, #4c1d95 0%, #be185d 100%);
+}
+
+body {
+    background-color: var(--bg-main);
+    background-image:
+        radial-gradient(circle at 50% 100%, var(--bg-grad-1) 0%, transparent 70%),
+        radial-gradient(circle at 100% 0%, var(--bg-grad-2) 0%, transparent 60%);
+    color: var(--text-main);
+    font-family: 'Lato', sans-serif;
+    height: 100dvh;
+    overflow: hidden;
+    transition: background 1.5s ease, color 1.5s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.font-cinzel {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+}
+
+.font-vibes {
+    font-family: 'Great Vibes', cursive;
+}
+
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
+/* --- CANVAS ESTRELLADO --- */
+#star-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* --- ESTRELLAS FUGACES --- */
+#shooting-star-container {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.shooting-star {
+    position: absolute;
+    height: 3px;
+    width: 150px;
+    border-radius: 999px;
+    filter: drop-shadow(0 0 8px rgba(var(--star-color), 1));
+    opacity: 0;
+}
+
+/* Variaciones de dirección */
+.shooting-star.left-to-right {
+    background: linear-gradient(90deg, rgba(var(--star-color), 1), transparent);
+    animation: shoot-ltr 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.shooting-star.right-to-left {
+    background: linear-gradient(-90deg, rgba(var(--star-color), 1), transparent);
+    animation: shoot-rtl 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes shoot-ltr {
+    0% {
+        transform: translateX(0) scale(0.5);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateX(50px) scale(1);
+    }
+
+    100% {
+        transform: translateX(120vw) scale(1);
+        opacity: 0;
+    }
+}
+
+@keyframes shoot-rtl {
+    0% {
+        transform: translateX(0) scale(0.5);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateX(-50px) scale(1);
+    }
+
+    100% {
+        transform: translateX(-120vw) scale(1);
+        opacity: 0;
+    }
+}
+
+/* --- MENSAJES SUBLIMINALES --- */
+#subliminal-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+}
+
+.subliminal-text {
+    position: absolute;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.9);
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+}
+
+.subliminal-text.active {
+    opacity: 1;
+}
+
+/* --- TARJETAS PORTAL --- */
+.portal-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    /* Para igualar alturas en grid */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.portal-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, var(--glass-highlight) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.portal-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--gold);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.portal-card:active {
+    transform: scale(0.98);
+}
+
+.portal-card:active::after {
+    opacity: 1;
+}
+
+.gold-text {
+    color: var(--gold-light);
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+}
+
+/* --- SELLO DE LACRE (Notificación Romántica) --- */
+.wax-seal-indicator {
+    width: 14px;
+    height: 14px;
+    background: radial-gradient(circle at 30% 30%, #e11d48, #881337);
+    border: 1px solid rgba(251, 191, 36, 0.6);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(225, 29, 72, 0.8);
+    animation: seal-breathe 2.5s infinite ease-in-out;
+}
+
+@keyframes seal-breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+    }
+}
+
+/* --- IFRAME VIEWER (FULLSCREEN FIX) --- */
+#module-viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 20;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+}
+
+#module-viewer.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- MODAL DE BIENVENIDA --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 20, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gift-card {
+    background: var(--gift-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    max-width: 85%;
+    width: 380px;
+    border-radius: 24px;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    color: var(--text-main);
+}
+
+.modal-overlay.show .gift-card {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.gift-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background: linear-gradient(45deg, transparent, var(--gold), transparent);
+    border-radius: 24px;
+    animation: shimmer 4s infinite linear;
+    opacity: 0.5;
+}
+
+@keyframes shimmer {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+/* --- WIDGET REPRODUCTOR FLOTANTE --- */
+#music-widget {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: auto;
+    max-width: 90vw;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    padding: 8px 16px 8px 8px;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: width 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    user-select: none;
+    touch-action: none;
+}
+
+#music-widget:hover {
+    border-color: var(--gold);
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.drag-handle {
+    width: 24px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+    color: var(--gold);
+}
+
+.widget-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.visualizer-mini {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 16px;
+    width: 24px;
+}
+
+.v-bar {
+    width: 4px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: bounce 1s infinite ease-in-out;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        height: 4px;
+        opacity: 0.5;
+    }
+
+    50% {
+        height: 16px;
+        opacity: 1;
+    }
+}
+
+/* Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+}

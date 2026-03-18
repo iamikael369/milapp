@@ -1,0 +1,48 @@
+{
+  "numerologia": {
+    "numeros": {
+      "1": "El Pionero. Representa el inicio, la independencia y la originalidad. Es la energía del líder que traza su propio camino. Su vibración impulsa a la acción y a la autosuficiencia. En desequilibrio, puede tender al egoísmo o al autoritarismo.",
+      "2": "El Mediador. Simboliza la dualidad, la cooperación y la diplomacia. Es una energía sensible, intuitiva y busca la armonía en las relaciones. Su fuerza reside en la unión y el soporte. En sombra, puede ser excesivamente dependiente o indeciso.",
+      "3": "El Comunicador. Representa la alegría de vivir, la creatividad y la expresión social. Es el número de los artistas y optimistas. Su vibración atrae la expansión a través de las palabras y el arte. En baja frecuencia, puede ser superficial o disperso.",
+      "4": "El Constructor. Simboliza el orden, la estructura y el trabajo metódico. Representa la estabilidad y los cimientos sólidos. Es la energía de la perseverancia y la disciplina. En sombra, puede ser rígido, testarudo o excesivamente serio.",
+      "5": "El Aventurero. Representa la libertad, el cambio y la adaptabilidad. Es una energía dinámica que busca experiencias constantes y expansión sensorial. Su don es la versatilidad. En desequilibrio, puede caer en la irresponsabilidad o la impaciencia.",
+      "6": "El Amoroso. Simboliza la responsabilidad familiar, el hogar y el servicio desinteresado. Es la energía de la sanación y el equilibrio emocional. Busca la belleza y la justicia. En sombra, puede ser entrometido o propenso al sacrificio excesivo.",
+      "7": "El Buscador. Representa la introspección, el análisis y la espiritualidad. Es el número de los sabios y solitarios que buscan la verdad profunda. Su vibración es intelectual y mística. En baja frecuencia, puede ser frío, cínico o aislado.",
+      "8": "El Estratega. Simboliza el poder material, la autoridad y la justicia. Representa el equilibrio entre lo espiritual y lo terrenal a través del logro. Es la energía de la abundancia. En sombra, puede ser despiadado o excesivamente ambicioso.",
+      "9": "El Humanitario. Representa el amor universal, la compasión y el cierre de ciclos. Es una energía sabia que abarca todas las lecciones anteriores. Su don es la entrega. En desequilibrio, puede sufrir por heridas del pasado o falta de realismo.",
+      "11": "Maestro Iluminador. Trae una intuición altamente desarrollada y una visión espiritual superior. Su misión es inspirar a otros. Es un canal de luz entre planos. Requiere gran equilibrio para no caer en la ansiedad o el nerviosismo.",
+      "22": "Maestro Constructor. Posee la capacidad de manifestar grandes ideales en la realidad física para el bien común. Es el visionario práctico. Su desafío es no abrumarse por la magnitud de sus propias metas.",
+      "33": "Maestro Guía. Representa el amor crístico y la protección absoluta. Su vibración es la del maestro de maestros, dedicado al servicio incondicional y la sanación de la humanidad a través del amor puro."
+    }
+  },
+  "astrologia": {
+    "signos": {
+      "Aries": "El Iniciador. Fuego cardinal. Representa el coraje, la impulsividad y el inicio de la primavera. Es la energía del 'Yo soy', el guerrero que no teme a lo desconocido.",
+      "Tauro": "El Estabilizador. Tierra fija. Simboliza el placer sensorial, la persistencia y la conexión con la naturaleza. Valora la seguridad, la lealtad y la belleza física.",
+      "Géminis": "El Comunicador. Aire mutable. Representa la curiosidad intelectual, la dualidad y el intercambio de ideas. Es la mente inquieta que busca conectar mundos distintos.",
+      "Cáncer": "El Protector. Agua cardinal. Simboliza el refugio, la memoria emocional y la conexión con la madre o el hogar. Es la energía nutritiva que cuida desde el corazón.",
+      "Leo": "El Creador. Fuego fijo. Representa el brillo propio, la generosidad y la expresión del corazón. Es el centro del zodiaco que busca ser visto y amado por su luz.",
+      "Virgo": "El Analista. Tierra mutable. Simboliza el orden, el discernimiento y el servicio práctico. Busca la perfección a través de la mejora constante y el cuidado del detalle.",
+      "Libra": "El Equilibrador. Aire cardinal. Representa la justicia, las relaciones y la búsqueda de la belleza estética y social. Es el espejo que busca la armonía con el otro.",
+      "Escorpio": "El Alquimista. Agua fija. Simboliza la profundidad, el misterio y el poder de la transformación. Es la energía que no teme a las sombras para renacer victoriosa.",
+      "Sagitario": "El Explorador. Fuego mutable. Representa la búsqueda de la verdad, la filosofía y el optimismo. Es la flecha que apunta siempre al horizonte en busca de sentido.",
+      "Capricornio": "El Maestro. Tierra cardinal. Simboliza la ambición, la disciplina y el tiempo. Es el escalador que sabe que el éxito llega con esfuerzo, paciencia y estructura.",
+      "Acuario": "El Revolucionario. Aire fijo. Representa el futuro, la originalidad y la conciencia colectiva. Es el visionario que rompe estructuras para traer lo nuevo.",
+      "Piscis": "El Místico. Agua mutable. Simboliza la disolución, la compasión universal y el mundo de los sueños. Es el océano de conciencia donde todo está conectado."
+    },
+    "planetas": {
+      "Sol": "Tu Esencia Radiante. Representa tu centro, tu vitalidad y tu identidad consciente. Es el motor de tu voluntad y la luz que guía tu propósito en esta vida.",
+      "Luna": "Tu Mundo Emocional. Rige tus necesidades instintivas, tu intuición y cómo te nutres emocionalmente. Representa tu niño interior y tu sentido de seguridad.",
+      "Mercurio": "Tu Aliento Mental. Gobierna tus procesos de pensamiento, tu comunicación y cómo percibes la información. Es el puente entre tu mundo interno y el externo.",
+      "Venus": "Tu Fuerza de Atracción. Rige lo que valoras, cómo amas y tu sentido de la armonía. Representa tu capacidad de disfrutar y de crear vínculos sagrados.",
+      "Marte": "Tu Guerrero Interior. Gobierna tu acción, tu deseo y tu impulso competitivo. Es la energía que utilizas para defender tus ideales y conquistar tus metas.",
+      "Júpiter": "Tu Expansión Divina. Representa la fe, la abundancia y el crecimiento espiritual. Es donde buscas el sentido de la vida y dónde encuentras tus mayores bendiciones.",
+      "Saturno": "Tu Gran Maestro. Rige el tiempo, el karma y las estructuras. Aunque trae limitaciones, su propósito es forjar tu madurez y otorgarte sabiduría eterna.",
+      "Urano": "Tu Chispa de Genio. Gobierna el despertar, el cambio súbito y la originalidad. Es la energía que te impulsa a romper moldes y a ser auténticamente libre.",
+      "Neptuno": "Tu Sueño Místico. Representa la inspiración espiritual, la disolución de límites y la compasión infinita. Es el canal hacia el arte y la conexión con lo invisible.",
+      "Plutón": "Tu Poder de Muerte y Vida. Gobierna los procesos de transformación profunda, el poder oculto y la regeneración. Es donde debes morir a lo viejo para renacer en poder.",
+      "Quirón": "Tu Sanador Herido. Representa esa parte de ti que siente dolor crónico o insuficiencia, pero que a través de su sanación se convierte en tu mayor don para otros.",
+      "Nodo Norte": "Tu Propósito del Alma. Marca la dirección hacia la cual debes evolucionar en esta encarnación para equilibrar tu karma y alcanzar tu máxima realización."
+    }
+  }
+}

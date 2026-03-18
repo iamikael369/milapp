@@ -1,0 +1,2914 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pergaminos de Amor - Correspondencia de Luz</title>
+
+    <!-- FUENTES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Pinyon+Script&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8b0000", "primary-light": "#a52a2a",
+                        "gold": "#b8860b", "gold-light": "#daa520",
+                        "parchment": "#f4ecd8", "parchment-dark": "#e8dec2",
+                        "ink": "#3e2723", "background-dark": "#1a0f0a", "candlelight": "#ffb74d"
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "serif-title": ["Cinzel", "serif"],
+                        "script": ["Dancing Script", "cursive"],
+                        "chat": ["Inter", "sans-serif"]
+                    },
+                    boxShadow: {
+                        "elegant": "0 4px 15px rgba(184, 134, 11, 0.15)",
+                        "inner-elegant": "inset 0 2px 10px rgba(184, 134, 11, 0.1)"
+                    }
+                },
+            },
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- FIREBASE SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            updateDoc,
+            doc,
+            onSnapshot,
+            query,
+            orderBy,
+            serverTimestamp,
+            deleteDoc,
+            getDocs,
+            writeBatch,
+            limit
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        window.firebaseModules = { initializeApp, getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, getDocs, writeBatch, limit };
+    </script>
+
+    <style>
+        /* --- SISTEMA DE DISEÑO --- */
+        :root {
+            /* Colores Base (Modo Día) */
+            --desk-bg: #e6dace;
+            --header-bg: rgba(243, 229, 201, 0.96);
+
+            /* El papel y la tinta siempre mantienen contraste de lectura */
+            --paper-texture: #f3e5c9;
+            --ink-color: #2c1a16;
+
+            /* Acentos */
+            --gold-main: #8b7331;
+            --gold-light: #d4af37;
+            --seal-red: radial-gradient(circle at 30% 30%, #a61b1b, #680c0c);
+        }
+
+        [data-theme="dark"] {
+            /* Modo Noche (Luz de Vela) */
+            --desk-bg: #0c0906;
+            --header-bg: rgba(20, 15, 10, 0.95);
+            --paper-texture: #c5b49a;
+            --ink-color: #1a120b;
+
+            /* Colores Modern Chat */
+            --chat-bg: #1a0f0a;
+            --chat-bubble-me: linear-gradient(135deg, #2c1810, #3e2723);
+            --chat-bubble-other: rgba(255, 255, 255, 0.1);
+        }
+
+        :root {
+            /* Colores Modern Chat (Modo Día) */
+            --chat-bg: #f4ecd8;
+            --chat-bubble-me: linear-gradient(135deg, #8b0000, #a52a2a);
+            --chat-bubble-other: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            background-color: var(--desk-bg);
+            color: var(--ink-color);
+            font-family: 'EB Garamond', serif;
+            transition: background 0.8s ease;
+            overflow-x: hidden;
+            min-height: 100dvh;
+            /* Ruido sutil de fondo */
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        /* TIPOGRAFÍAS */
+        .font-dancing {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .font-garamond {
+            font-family: 'EB Garamond', serif;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .font-vibes {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .font-pinyon {
+            font-family: 'Pinyon Script', cursive;
+        }
+
+        .metallic-gold {
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold-main));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+        }
+
+        header {
+            background: var(--header-bg);
+            border-bottom: 1px double rgba(139, 90, 43, 0.3);
+            backdrop-filter: blur(12px);
+            z-index: 50;
+            transition: background 0.5s ease;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        /* Título estilo pergaminos1: Great Vibes grande con gradiente dorado */
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            line-height: 1.1;
+            background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold-main) 60%, var(--gold-light) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+            letter-spacing: 0.02em;
+        }
+
+        @media (min-width: 640px) {
+            .main-title {
+                font-size: 3.2rem;
+            }
+        }
+
+        /* Sello de cera lateral (igual que pergaminos1) */
+        .deco-seal {
+            width: 28px;
+            height: 28px;
+            background: var(--seal-red);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 2px 3px 8px rgba(0,0,0,0.35), inset 0 0 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .deco-seal::after {
+            content: '❦';
+            color: rgba(255,220,200,0.25);
+            font-size: 0.8rem;
+        }
+
+        /* ARCHIVO (Scroll Container) */
+        #scroll-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100dvh;
+            padding: 110px 15px 320px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        @media (min-width: 768px) {
+            #scroll-container {
+                gap: 70px;
+                padding: 140px 20px 320px 20px;
+            }
+        }
+
+        /* ====== BORDES DENTADOS (STITCH) ====== */
+        .deckled-edges {
+            clip-path: polygon(
+                0% 2%, 2% 0%, 5% 1.5%, 9% 0.5%, 13% 2%, 17% 0.5%, 22% 1.5%,
+                27% 0%, 32% 2%, 37% 0.5%, 42% 1.5%, 47% 0%, 52% 2%, 57% 0.5%,
+                62% 1.5%, 67% 0%, 73% 2%, 79% 0.5%, 85% 1.5%, 91% 0%, 96% 1.5%, 100% 0%,
+                99% 4%, 100% 8%, 98.5% 13%, 100% 18%, 98.5% 23%, 100% 28%,
+                98.5% 34%, 100% 40%, 98.5% 46%, 100% 52%, 98.5% 58%, 100% 64%,
+                98.5% 70%, 100% 76%, 98.5% 82%, 100% 88%, 98.5% 93%, 100% 100%,
+                96% 98.5%, 91% 100%, 85% 98%, 79% 100%, 73% 98.5%, 67% 100%,
+                62% 98%, 57% 100%, 52% 98.5%, 47% 100%, 42% 98%, 37% 100%,
+                32% 98.5%, 27% 100%, 22% 98%, 17% 100%, 13% 98.5%, 9% 100%,
+                5% 98%, 2% 100%, 0% 100%,
+                1.5% 93%, 0% 88%, 1.5% 82%, 0% 76%, 1.5% 70%, 0% 64%,
+                1.5% 58%, 0% 52%, 1.5% 46%, 0% 40%, 1.5% 34%, 0% 28%,
+                1.5% 23%, 0% 18%, 1.5% 13%, 0% 8%, 1.5% 4%
+            );
+        }
+
+        /* ====== ANIMACIONES RITUALES (STITCH) ====== */
+        @keyframes unroll {
+            0% { transform: scaleY(0.01) rotateX(45deg); opacity: 0; transform-origin: top; }
+            30% { transform: scaleY(0.01) rotateX(0deg); opacity: 1; transform-origin: top; }
+            100% { transform: scaleY(1) rotateX(0deg); opacity: 1; transform-origin: top; }
+        }
+
+        @keyframes roll-up {
+            0% { transform: scaleY(1); opacity: 1; transform-origin: top; }
+            100% { transform: scaleY(0.01); opacity: 0.2; transform-origin: top; }
+        }
+
+        /* Etiqueta para carta cerrada */
+        .epistle-rolled-info {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #e6d5b0;
+            padding: 8px 15px;
+            border: 1px dashed #8b6030;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            color: #5d4037;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .letter-roll-anim .epistle-rolled-info {
+            opacity: 1;
+        }
+
+        /* Sello visible en roll-up */
+        .letter-roll-anim .epistle-footer {
+            opacity: 1 !important;
+            transform: none !important;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            position: absolute !important;
+            bottom: 10px !important;
+            right: 10px !important;
+        }
+
+        .letter-roll-anim .footer-left,
+        .letter-roll-anim .epistle-header,
+        .letter-roll-anim .epistle-body,
+        .letter-roll-anim .card-actions,
+        .letter-roll-anim .bottle-delivery-info {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        @keyframes burnout {
+            0% { transform: scale(1); filter: brightness(1) sepia(0); opacity: 1; }
+            30% { transform: scale(1.05); filter: brightness(1.2) sepia(0.5) hue-rotate(-20deg); }
+            100% { transform: scale(0.8); filter: brightness(0) grayscale(1); opacity: 0; }
+        }
+
+        .burn-anim {
+            animation: burnout 1.5s forwards !important;
+            pointer-events: none;
+        }
+
+        @keyframes sail-across {
+            0% { transform: translate(-20vw, 15vh) rotate(-2deg); opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translate(110vw, -15vh) rotate(3deg); opacity: 0; }
+        }
+
+        @keyframes crack {
+            0% { transform: scale(1); filter: none; }
+            100% { transform: scale(1.2) rotate(15deg); opacity: 0; }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes waves {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        .ship-path-anim {
+            animation: sail-across 12s linear forwards !important;
+        }
+
+        .letter-roll-anim .epistle-content-wrap {
+            animation: roll-up 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
+
+        .letter-unroll-anim .epistle-content-wrap {
+            animation: unroll 2s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+        }
+
+        /* Estilos para estado enrollado */
+        .epistle-card.is-rolled {
+            /* Altura mayor y borde para que el pergamino enrollado sea visible */
+            min-height: 110px !important;
+            height: 110px !important;
+            padding: 14px !important;
+            background: linear-gradient(to bottom, var(--paper-texture), #f4e5c8);
+            border-radius: 30px;
+            border: 1px solid rgba(139,90,43,0.25);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .epistle-card.is-rolled .epistle-content-wrap {
+            display: none !important;
+        }
+
+        .epistle-card.is-rolled .epistle-rolled-info {
+            opacity: 1 !important;
+            position: static !important;
+            transform: none !important;
+        }
+
+        .epistle-card.is-rolled .epistle-footer {
+            position: absolute !important;
+            right: 5px !important;
+            bottom: auto !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            opacity: 1 !important;
+            margin: 0 !important;
+        }
+
+        .epistle-card.is-rolled .footer-left {
+            display: none !important;
+        }
+
+        .seal-break-anim {
+            animation: crack 0.5s ease-out forwards !important;
+        }
+
+        /* Stars Container for Bottle Mode */
+        .stars-container {
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050510 100%);
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .stars-container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(white, rgba(255, 255, 255, 0.2) 2px, transparent 40px);
+            background-size: 100px 100px;
+            opacity: 0.3;
+            animation: twinkle 5s infinite;
+        }
+
+        .wave-path {
+            animation: waves 4s ease-in-out infinite;
+        }
+
+        /* Overlay Backgrounds */
+        #transport-overlay.bottle-bg {
+            background: #050510 !important;
+            background-image: none !important;
+        }
+
+        #transport-overlay.bottle-bg .stars-container {
+            opacity: 1;
+        }
+
+        #transport-overlay.bottle-bg .transport-horizon,
+        #transport-overlay.bottle-bg .transport-caption p {
+            color: #b4974d !important;
+        }
+
+        .epistle-card {
+            background-color: var(--paper-texture);
+            color: var(--ink-color);
+            margin: 0 auto;
+            width: 100%;
+            padding: 30px 20px;
+            position: relative;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0,0,0,0.1);
+            transform-origin: top center;
+            opacity: 0;
+            transform: perspective(1000px) rotateX(-5deg) translateY(20px);
+            transition: opacity 0.3s ease, box-shadow 0.3s ease;
+            /* Textura modo DIA */
+            background-image: url('assets/images/parchment-texture.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply;
+        }
+
+        /* Textura modo NOCHE (pergamino oscuro, cálido) */
+        [data-theme="dark"] .epistle-card {
+            background-image: url('assets/images/parchment-texture-dark.jpg');
+            background-blend-mode: overlay;
+            box-shadow: 0 8px 50px rgba(0,0,0,0.5), 0 0 30px rgba(180,130,40,0.08);
+        }
+
+        @media (min-width: 768px) {
+            .epistle-card {
+                width: 88%;
+                padding: 60px 55px;
+            }
+        }
+
+        /* Cuando la carta es visible: la animación unfold */
+        .epistle-card.epistle-visible {
+            animation: unfold 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Alias legacy */
+        .epistle-visible {
+            opacity: 1;
+        }
+
+        .epistle-header {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            opacity: 0.8;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 90, 43, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .epistle-body {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            text-align: justify;
+            white-space: pre-wrap;
+            transition: opacity 0.3s;
+        }
+
+        .epistle-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            margin-top: 30px;
+            border-top: 1px solid rgba(139, 90, 43, 0.1);
+            padding-top: 15px;
+        }
+
+        .epistle-signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+
+        .wax-seal {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--seal-red);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 220, 200, 0.5);
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .wax-seal:hover {
+            transform: scale(1.05);
+        }
+
+        .wax-seal svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .ornament-sep {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.3;
+            margin: -10px 0;
+            color: var(--gold-main);
+        }
+
+        .ornament-sep::before,
+        .ornament-sep::after {
+            content: "";
+            height: 1px;
+            width: 40px;
+            background: var(--gold-main);
+            margin: 0 10px;
+        }
+
+        /* ESCRITORIO */
+        #writing-desk {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--header-bg);
+            padding: 15px;
+            border-top: 1px solid rgba(139, 90, 43, 0.3);
+            box-shadow: 0 -15px 60px rgba(0, 0, 0, 0.4);
+            z-index: 60;
+            transform: translateY(92%);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @media (min-width: 768px) {
+            #writing-desk {
+                padding: 25px;
+                transform: translateY(94%);
+            }
+        }
+
+        #writing-desk.active {
+            transform: translateY(0);
+        }
+
+        .desk-handle {
+            position: absolute;
+            top: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--header-bg);
+            padding: 6px 20px;
+            border-radius: 12px 12px 0 0;
+            color: var(--gold-main);
+            cursor: pointer;
+            border: 1px solid rgba(139, 90, 43, 0.3);
+            border-bottom: none;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ink-area {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--ink-color);
+            font-size: 1.4rem;
+            resize: none;
+            outline: none;
+            min-height: 100px;
+            line-height: 1.5;
+            padding: 10px;
+        }
+
+        .paper-input,
+        .paper-select {
+            background: rgba(139, 90, 43, 0.05);
+            border: none;
+            border-bottom: 1px solid rgba(139, 90, 43, 0.3);
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            color: var(--ink-color);
+            padding: 8px;
+            outline: none;
+            transition: all 0.3s;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* En dark mode inputs más visibles */
+        [data-theme="dark"] .paper-input,
+        [data-theme="dark"] .paper-select {
+            background: rgba(0, 0, 0, 0.2);
+            color: #dcdcdc;
+            /* Texto inputs un poco más claro para legibilidad en escritorio oscuro */
+        }
+
+        .gold-btn {
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold-main));
+            color: #2c1a16;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: rgba(139, 90, 43, 0.1);
+            color: var(--gold-main);
+            transition: all 0.3s;
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* MODALES */
+        #profile-modal,
+        #soul-chat-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: rgba(10, 5, 3, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            display: none;
+        }
+
+        /* ESTILOS CHAT ALMICO (REDISEÑO TOTAL - ESTILO PERGAMINO PURO) */
+        .parchment-modal-content {
+            background-color: var(--paper-texture);
+            width: 90%;
+            max-width: 500px;
+            height: 85vh;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(139, 90, 43, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg width='150' height='150' viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23f)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* Doblez de papel */
+        .parchment-modal-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-width: 0 40px 40px 0;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.1) #f3e5c9;
+            box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.1);
+            display: none;
+            /* Opcional, desactivado por limpieza */
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px double rgba(139, 90, 43, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-msg {
+            margin-bottom: 20px;
+            padding: 0 15px;
+            font-size: 1.2rem;
+            max-width: 100%;
+            font-family: 'Dancing Script', cursive;
+            line-height: 1.6;
+            color: var(--ink-color);
+            position: relative;
+        }
+
+        /* Mensaje Usuario (Derecha) */
+        .chat-msg.user {
+            text-align: right;
+            margin-left: 20%;
+        }
+
+        /* Mensaje Guía (Izquierda) */
+        .chat-msg.guide {
+            text-align: left;
+            margin-right: 20%;
+            font-family: 'EB Garamond', serif;
+            /* Diferente caligrafía para la voz del alma */
+            font-style: italic;
+            color: #5d4037;
+        }
+
+        /* Separador sutil */
+        .chat-msg::after {
+            content: "";
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: rgba(139, 90, 43, 0.2);
+            margin-top: 10px;
+        }
+
+        .chat-msg.user::after {
+            margin-left: auto;
+        }
+
+        /* ACCIONES DE CARTA */
+
+        /* ACCIONES DE CARTA */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .epistle-card:hover .card-actions {
+            opacity: 1;
+        }
+
+        .action-icon {
+            cursor: pointer;
+            font-size: 16px;
+            padding: 6px;
+            border-radius: 50%;
+            color: var(--ink-color);
+            border: 1px solid rgba(139, 90, 43, 0.2);
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .action-icon:hover {
+            background: var(--gold-main);
+            color: white;
+            border-color: var(--gold-main);
+        }
+
+        .loader-quill {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gold-main);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ANIMACIÓN DE TRANSPORTE — Estilo Cinematográfico Pulido (como pergaminos1) */
+        #transport-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: var(--paper-texture);
+            background-image: url('assets/images/parchment-texture.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: multiply;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] #transport-overlay {
+            background-image: url('assets/images/parchment-texture-dark.jpg');
+            background-blend-mode: overlay;
+        }
+
+        #transport-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* El vehículo que atraviesa la pantalla en diagonal (abajo-izq a arriba-der) */
+        .transport-vehicle {
+            position: absolute;
+            bottom: 10%;
+            left: -300px;
+            animation: vehicleDiagonal 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.15));
+            will-change: transform, opacity;
+        }
+
+        @keyframes vehicleDiagonal {
+            0%   { transform: translate(-200px, 200px) rotate(-10deg); opacity: 0; }
+            15%  { opacity: 1; }
+            45%  { transform: translate(calc(50vw - 100px), 50px) rotate(2deg); opacity: 1; }
+            85%  { opacity: 1; }
+            100% { transform: translate(calc(100vw + 300px), -200px) rotate(8deg); opacity: 0; }
+        }
+
+        .transport-vehicle.active-transport {
+            animation: sail-across 12s linear forwards !important;
+        }
+
+        /* El pergamino que lleva el vehículo */
+        .transport-scroll {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-8deg);
+            background: var(--paper-texture);
+            width: 60px;
+            height: 36px;
+            border-radius: 3px 3px 6px 6px;
+            box-shadow: 1px 2px 6px rgba(0,0,0,0.3);
+            background-image: url('assets/images/parchment-texture.jpg');
+            background-size: cover;
+            border: 1px solid rgba(139,90,43,0.3);
+        }
+
+        /* Texto central de la animación */
+        .transport-caption {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Línea del horizonte / decoración */
+        .transport-horizon {
+            position: absolute;
+            bottom: 30%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(139,90,43,0.25), transparent);
+        }
+
+        /* --- OVERLAY TUTORIAL (SCROLL FIX) --- */
+        #tutorial-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transform: none;
+            display: none;
+            /* Controlado por JS */
+            padding: 20px;
+            overflow-y: auto;
+            /* IMPORTANTE: Permite scroll si la pantalla es pequeña */
+        }
+
+        .tutorial-card-container {
+            max-height: 90vh;
+            /* Límite de altura */
+            overflow-y: auto;
+            /* Scroll interno si es necesario */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tutorial-content {
+            width: 100%;
+            max-width: 450px;
+            margin: auto;
+        }
+
+        /* ====== MODO BOTELLA ====== */
+        .bottle-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #1a4a6e, #0d2b42);
+            border: 1px solid rgba(100,180,255,0.25);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            color: rgba(150,210,255,0.9);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .bottle-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bottle-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+                rgba(10,30,60,0.08) 0%,
+                rgba(30,80,140,0.06) 50%,
+                rgba(10,30,60,0.08) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bottle-delivery-info {
+            background: rgba(10,30,60,0.07);
+            border: 1px solid rgba(100,160,220,0.2);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            color: #2c4a6e;
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+        #bottle-toggle-btn.active {
+            background: linear-gradient(135deg, #1a3a5c, #0d2030);
+            color: rgba(150,210,255,0.9);
+            border-color: rgba(100,180,255,0.4);
+        }
+
+        /* Contador regresivo de botella */
+        .bottle-countdown {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: #5a7a9a;
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* === MODERN CHAT STYLES (GLASSMORPISM) === */
+        #modern-chat-container {
+            display: none;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 120px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: messagePop 0.4s ease-out;
+        }
+
+        @keyframes messagePop {
+            0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .chat-message.me {
+            align-self: flex-end;
+            background: linear-gradient(135deg, rgba(139, 90, 43, 0.15), rgba(139, 90, 43, 0.25));
+            border: 1px solid rgba(139, 90, 43, 0.3);
+            border-bottom-right-radius: 4px;
+            color: var(--ink-color);
+        }
+
+        .chat-message.other {
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom-left-radius: 4px;
+            color: var(--ink-color);
+        }
+
+        .chat-message .message-meta {
+            font-size: 0.65rem;
+            opacity: 0.5;
+            margin-top: 6px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+        }
+
+        .chat-message.me .message-meta { text-align: right; }
+
+        /* COMPOSER MODERNO */
+        #chat-composer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 760px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 90, 43, 0.2);
+            border-radius: 24px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+        /* === NOTIFICATION TOASTER === */
+        #notification-toaster {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 5000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                       toastOut 0.5s ease forwards 4.5s;
+            pointer-events: auto;
+            max-width: 300px;
+        }
+
+        @keyframes toastIn {
+            0% { transform: translateX(100%) scale(0.7); opacity: 0; }
+            100% { transform: translateX(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes toastOut {
+            0% { transform: translateX(0) scale(1); opacity: 1; }
+            100% { transform: translateX(100%) scale(0.7); opacity: 0; }
+        }
+
+        /* Notificación Moderna (para chat) */
+        .toast-modern {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--ink-color);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Notificación Clásica (para pergaminos) */
+        .toast-classic {
+            background: #f3e5c9;
+            background-image: var(--paper-texture);
+            border: 1px solid #8b6030;
+            color: #5d4037;
+            font-family: 'Cinzel', serif;
+            border-radius: 4px; /* Más rectangular como un sobre */
+            box-shadow: 3px 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(184, 134, 11, 0.3);
+            border-radius: 20px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 183, 77, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(184, 134, 11, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header
+        class="fixed top-0 left-0 right-0 px-3 md:px-6 py-2 flex justify-between items-center h-16 md:h-24 shadow-sm">
+        <!-- Botón Home -->
+        <button onclick="goHome()" class="theme-toggle">
+            <span class="material-symbols-rounded text-lg">arrow_back</span>
+        </button>
+
+        <!-- Título Central -->
+        <div class="text-center flex flex-col items-center">
+            <div class="title-container">
+                <div class="deco-seal hidden sm:block"></div>
+                <h1 class="main-title metallic-gold">Pergaminos de Amor</h1>
+                <div class="deco-seal hidden sm:block"></div>
+            </div>
+            <p class="font-cinzel text-[7px] md:text-[9px] tracking-[0.3em] opacity-50 uppercase mt-1">Correspondencia
+                de Luz</p>
+        </div>
+
+        <!-- Botones Acción -->
+        <div class="flex items-center gap-2">
+            <button onclick="openSoulChat()" class="theme-toggle text-purple-800/70" title="Conexión Álmica">
+                <span class="material-symbols-rounded text-lg">psychology</span>
+            </button>
+            <!-- Botón Emily Book Recuperado -->
+            <button onclick="toggleEmilyBook()" class="theme-toggle text-amber-800/70" title="Emily Book">
+                <span class="material-symbols-rounded text-lg">auto_stories</span>
+            </button>
+            <!-- Botón para alternar modo de chat -->
+            <button onclick="toggleChatMode()" class="theme-toggle text-amber-800/70" title="Cambiar Modo de Conversación">
+                <span class="material-symbols-rounded text-lg">forum</span>
+            </button>
+            <button onclick="toggleTheme()" class="theme-toggle" title="Luz de Vela">
+                <span class="material-symbols-rounded text-lg" id="theme-icon">dark_mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ÁREA DE LECTURA -->
+    <div id="scroll-container"></div>
+
+    <!-- ESCRITORIO DE REDACCIÓN -->
+    <div id="writing-desk">
+        <div class="desk-handle" onclick="toggleDesk()">
+            <span class="material-symbols-rounded text-base">edit_square</span>
+            <span class="uppercase tracking-widest text-[9px]">Trazar Epístola</span>
+        </div>
+
+        <!-- FILA CONFIGURACIÓN -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3 px-1 border-b border-[#8d6e63]/15 pb-3">
+            <div>
+                <label class="font-cinzel text-[7px] block mb-1 opacity-50 uppercase tracking-tighter">Lugar</label>
+                <input type="text" id="input-location" class="paper-input w-full" placeholder="Ej: Santa Fe">
+            </div>
+            <div>
+                <label class="font-cinzel text-[7px] block mb-1 opacity-50 uppercase tracking-tighter">Fecha</label>
+                <input type="text" id="fake-date" class="paper-input w-full">
+            </div>
+            <div>
+                <label class="font-cinzel text-[7px] block mb-1 opacity-50 uppercase tracking-tighter">Pluma /
+                    Estilo</label>
+                <select id="style-select" onchange="updateEra()" class="paper-select w-full">
+                    <option value="modern">Moderno (Actual)</option>
+                    <option value="bolivar">Español Siglo 18 (Bolívar)</option>
+                    <option value="bronte">Inglés Siglo 18 (Brontë)</option>
+                    <option value="french">Francés Romántico</option>
+                </select>
+            </div>
+            <div>
+                <label
+                    class="font-cinzel text-[7px] block mb-1 opacity-50 uppercase tracking-tighter">Tipografía</label>
+                <select id="font-select" onchange="applyFontPreview()" class="paper-select w-full">
+                    <option value="font-dancing">Dancing Script</option>
+                    <option value="font-garamond">Garamond</option>
+                    <option value="font-pinyon">Pinyon Script</option>
+                    <option value="font-vibes">Great Vibes</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- REDACCIÓN -->
+        <div class="relative bg-black/5 rounded border border-[#8d6e63]/10 p-2 shadow-inner">
+            <textarea id="letter-input" class="ink-area font-dancing custom-scrollbar"
+                placeholder="Escribe lo que dicta el corazón..."></textarea>
+
+            <div id="refine-overlay"
+                class="absolute inset-0 bg-[var(--paper-bg)] z-10 hidden flex flex-col items-center justify-center p-6 text-center rounded">
+                <div class="loader-quill mb-4"></div>
+                <p class="font-cinzel text-xs text-amber-800 animate-pulse">La pluma está perfeccionando los trazos...
+                </p>
+            </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
+            <div class="flex gap-2 items-center w-full sm:w-auto justify-between sm:justify-start">
+                <button onclick="refineStyle()" id="btn-refine"
+                    class="text-[#8d6e63] hover:text-amber-700 text-[9px] font-bold tracking-[0.2em] flex items-center gap-1 border border-[#8d6e63]/30 px-3 py-2 rounded hover:bg-[#8d6e63]/10 transition">
+                    <span class="material-symbols-rounded text-base">auto_awesome</span> REFINAR
+                </button>
+                <select id="header-format" class="paper-select text-[9px] uppercase tracking-tighter w-32 md:w-auto">
+                    <!-- Dinámico -->
+                </select>
+            </div>
+
+            <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+                <div class="flex flex-col items-end">
+                    <label class="font-cinzel text-[7px] opacity-40 uppercase">Firma</label>
+                    <input type="text" id="signature-input"
+                        class="bg-transparent font-hand text-xl metallic-gold text-right outline-none w-32"
+                        placeholder="Tu nombre...">
+                </div>
+                <!-- Botón Modo Botella -->
+                <button onclick="toggleBottleMode()" id="bottle-toggle-btn"
+                    class="text-[#5a7a9a] hover:text-blue-600 text-[9px] font-bold tracking-[0.15em] flex items-center gap-1 border border-[#5a7a9a]/30 px-3 py-2 rounded hover:bg-[#5a7a9a]/10 transition"
+                    title="Mensaje en la Botella">
+                    <span class="material-symbols-rounded text-base">water</span>
+                    BOTELLA
+                </button>
+                <button onclick="sendLetter()" id="btn-send" class="gold-btn flex items-center gap-2">
+                    <span class="material-symbols-rounded text-lg">send</span> LACRAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PERFIL -->
+    <div id="profile-modal" class="fixed inset-0 z-[5000] bg-black/60 backdrop-blur-md flex items-center justify-center">
+        <div class="bg-parchment p-8 md:p-10 rounded-2xl shadow-2xl text-center max-w-sm w-[90%] border border-gold/30 relative overflow-hidden text-ink">
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary via-gold to-primary"></div>
+            
+            <h2 class="font-cinzel text-xl md:text-2xl mb-8 tracking-wider">¿Quién sostiene la pluma?</h2>
+            
+            <div class="flex flex-col gap-6">
+                <!-- Perfil Miguelo -->
+                <div class="group relative">
+                    <button onclick="selectProfile('Miguelo')" class="w-full p-4 border border-gold/40 rounded-xl hover:bg-gold/10 transition-all flex items-center gap-4 text-left shadow-sm hover:shadow-md">
+                        <div id="modal-avatar-miguel" class="size-16 rounded-full border-2 border-gold shadow-md bg-cover bg-center shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCqbIM32XZeRI7dV9-dM5VWJQu6MdyXg512y_9M070k0IE2UEV570y2uaHyDbJ4-Vq603wSidN_4bLxAXxbdCv31E9leqouLNpldEFU-mQHJmoRqRrTNsMG9qOt1wcbH60daHoJeyICzeDDVcAA7YSHqF34uzvjR9KGm170K_4Q6-p4fcNUozrph_2ReNFtHsD0T5aCQJ6-fAMWgTo4Gy0vzU1ch27AYSUgwnoi6Emh04b8HdFqPUmbdtN56c3F_cCr5Sy7vky28g");'></div>
+                        <div class="flex flex-col">
+                            <span class="font-cinzel text-sm font-bold tracking-widest">MIGUELO</span>
+                            <span class="text-[10px] opacity-60 uppercase tracking-tighter">Esencia de Tauro</span>
+                        </div>
+                    </button>
+                    <button onclick="changePhoto('Miguelo')" class="absolute right-2 top-2 size-8 rounded-full bg-white/80 border border-gold/30 text-gold hover:bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm" title="Cambiar foto">
+                        <span class="material-symbols-rounded text-lg">photo_camera</span>
+                    </button>
+                </div>
+
+                <!-- Perfil Mila -->
+                <div class="group relative">
+                    <button onclick="selectProfile('Mila')" class="w-full p-4 border border-gold/40 rounded-xl hover:bg-gold/10 transition-all flex items-center gap-4 text-left shadow-sm hover:shadow-md">
+                        <div id="modal-avatar-mila" class="size-16 rounded-full border-2 border-gold shadow-md bg-cover bg-center shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCH_eyDjSf-a2r6NyiCXhxvNssoBkS0_yf2FqbOCf3roM50mslrh3zv5cL_cSbbKKbKIzFZSQqkohUN2U-XPxK4HNywok3_Z_EXIbaoBdt4_HZdhcA9Q6OfkdtWID_d-nlxTFMMuuJqO0qChAevoq30g5EJLLGi_6RQpTBStCDX3LG6SN06iEcofO2_B4fSQrTF2pI9VwAb_AzaLObkUHu-1DZ4Xycj6dL7bXDwKAOCcyWV6v2YO3NpbgMbbkXzmom9BXehWNDW0A");'></div>
+                        <div class="flex flex-col">
+                            <span class="font-cinzel text-sm font-bold tracking-widest">MILA</span>
+                            <span class="text-[10px] opacity-60 uppercase tracking-tighter">Esencia de Sagitario</span>
+                        </div>
+                    </button>
+                    <button onclick="changePhoto('Mila')" class="absolute right-2 top-2 size-8 rounded-full bg-white/80 border border-gold/30 text-gold hover:bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm" title="Cambiar foto">
+                        <span class="material-symbols-rounded text-lg">photo_camera</span>
+                    </button>
+                </div>
+            </div>
+            
+            <input type="file" id="photo-input" class="hidden" accept="image/*">
+            <p class="mt-8 text-[9px] font-cinzel opacity-40 uppercase tracking-[0.2em]">Mila Universe • 2026</p>
+        </div>
+    </div>
+    </div>
+
+    <!-- MODAL CHAT ALMICO (Rediseñado) -->
+    <div id="soul-chat-modal">
+        <div class="parchment-modal-content">
+            <div class="chat-header">
+                <div>
+                    <h3 class="font-cinzel text-amber-900 text-lg font-bold">Vínculo Espiritual</h3>
+                    <p class="text-[9px] text-amber-800/60 uppercase tracking-widest">Diálogo Eterno</p>
+                </div>
+                <button onclick="closeSoulChat()" class="text-amber-800/50 hover:text-amber-900"><span
+                        class="material-symbols-rounded">close</span></button>
+            </div>
+            <div id="soul-chat-history" class="flex-1 overflow-y-auto p-6 flex flex-col gap-4 custom-scrollbar">
+                <div class="chat-msg guide">
+                    Bienvenido al espacio etéreo. Aquí, el tiempo se detiene y las almas conversan. ¿Qué inquietud
+                    habita en tu corazón hoy?
+                </div>
+            </div>
+            <div class="p-4 bg-[rgba(139,90,43,0.05)] border-t border-[rgba(139,90,43,0.2)] flex gap-2 items-end">
+                <span class="material-symbols-rounded text-2xl text-amber-800/40 mb-2">edit</span>
+                <textarea id="soul-chat-input" rows="1"
+                    class="flex-1 bg-transparent border-b border-amber-800/30 px-2 py-2 text-base text-[var(--ink-color)] outline-none font-dancing placeholder-amber-800/30 resize-none overflow-hidden"
+                    placeholder="Escribe al alma..."></textarea>
+                <button onclick="sendSoulMessage()" class="text-amber-800 hover:text-amber-600 transition mb-1">
+                    <span class="material-symbols-rounded text-3xl">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- AUDIO PARA EFECTO DE ESCRITURA -->
+
+    <!-- MODERN CHAT CONTAINER -->
+    <div id="modern-chat-container" class="relative z-10 flex h-screen w-full flex-col group/design-root overflow-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="flex flex-1 justify-center">
+                <div class="layout-content-container flex flex-col w-full flex-1 max-w-5xl mx-auto border-x border-gold/20 shadow-2xl bg-parchment/40 dark:bg-black/20 backdrop-blur-sm">
+                    <!-- Chat Header -->
+                    <div class="flex items-center justify-between p-4 px-8 border-b border-solid border-gold/30 bg-parchment-dark/60 dark:bg-black/40 backdrop-blur-md z-10 shrink-0 shadow-sm">
+                        <div class="flex items-center gap-5">
+                            <div class="relative flex -space-x-4">
+                                <div id="chat-avatar-other" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-gold shadow-md z-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCH_eyDjSf-a2r6NyiCXhxvNssoBkS0_yf2FqbOCf3roM50mslrh3zv5cL_cSbbKKbKIzFZSQqkohUN2U-XPxK4HNywok3_Z_EXIbaoBdt4_HZdhcA9Q6OfkdtWID_d-nlxTFMMuuJqO0qChAevoq30g5EJLLGi_6RQpTBStCDX3LG6SN06iEcofO2_B4fSQrTF2pI9VwAb_AzaLObkUHu-1DZ4Xycj6dL7bXDwKAOCcyWV6v2YO3NpbgMbbkXzmom9BXehWNDW0A");'></div>
+                                <div id="chat-avatar-me" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-gold shadow-md" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCqbIM32XZeRI7dV9-dM5VWJQu6MdyXg512y_9M070k0IE2UEV570y2uaHyDbJ4-Vq603wSidN_4bLxAXxbdCv31E9leqouLNpldEFU-mQHJmoRqRrTNsMG9qOt1wcbH60daHoJeyICzeDDVcAA7YSHqF34uzvjR9KGm170K_4Q6-p4fcNUozrph_2ReNFtHsD0T5aCQJ6-fAMWgTo4Gy0vzU1ch27AYSUgwnoi6Emh04b8HdFqPUmbdtN56c3F_cCr5Sy7vky28g");'></div>
+                                <span class="absolute bottom-0 left-8 size-3 bg-green-600 border-2 border-parchment rounded-full z-20"></span>
+                            </div>
+                            <div class="flex flex-col justify-center gap-0">
+                                <p class="text-ink dark:text-parchment text-lg font-bold leading-tight tracking-wide serif-font" id="chat-partner-name">Mila & Miguelo</p>
+                                <p class="text-primary/80 dark:text-candlelight text-xs font-medium leading-normal italic" id="chat-status">En línea</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button class="flex items-center justify-center size-10 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 dark:hover:bg-white/10 text-ink/70 dark:text-parchment/80 transition-all shadow-sm">
+                                <span class="material-symbols-rounded text-[22px]">search</span>
+                            </button>
+                            <div class="w-px h-8 bg-gold/30 mx-2"></div>
+                            <button onclick="startCall('voice')" class="flex items-center justify-center gap-2 rounded-full h-11 px-5 bg-parchment/80 border border-gold/50 hover:bg-gold/10 dark:bg-white/5 text-ink dark:text-parchment text-sm font-semibold transition-all shadow-sm chat-font tracking-wide">
+                                <span class="material-symbols-rounded text-[20px] text-gold">call</span>
+                                <span class="hidden sm:inline">VOICE</span>
+                            </button>
+                            <button onclick="startCall('video')" class="flex items-center justify-center gap-2 rounded-full h-11 px-5 bg-gradient-to-r from-primary to-primary-light text-white text-sm font-semibold shadow-elegant hover:opacity-90 transition-all border border-primary-light chat-font tracking-wide">
+                                <span class="material-symbols-rounded text-[20px]">videocam</span>
+                                <span class="hidden sm:inline">VISION</span>
+                            </button>
+                            <div class="w-px h-8 bg-gold/30 mx-2"></div>
+                            <button onclick="toggleChatMode()" class="flex items-center justify-center size-10 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 text-ink/70 dark:text-parchment/80 transition-all shadow-sm" title="Volver a Pergaminos">
+                                <span class="material-symbols-rounded text-[22px]">history_edu</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Messages Area -->
+                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 z-10 custom-scrollbar relative">
+                        <!-- Los mensajes se cargarán dinámicamente -->
+                    </div>
+
+                    <!-- Modern Composer -->
+                    <div class="p-4 md:p-6 bg-parchment-dark/80 dark:bg-black/60 backdrop-blur-md border-t border-solid border-gold/30 z-10 shrink-0 shadow-[0_-4px_15px_rgba(184,134,11,0.05)]">
+                        <div class="flex items-end gap-3 max-w-4xl mx-auto">
+                            <div class="flex items-center gap-2 pb-1.5">
+                                <button class="flex items-center justify-center size-11 rounded-full bg-parchment/60 border border-gold/30 hover:bg-gold/10 text-ink/70 dark:text-parchment transition-all shadow-sm">
+                                    <span class="material-symbols-rounded text-[24px]">attach_file</span>
+                                </button>
+                                <button class="flex items-center justify-center size-11 rounded-full bg-parchment/60 border border-gold/30 hover:bg-gold/10 text-ink/70 dark:text-parchment transition-all shadow-sm hidden sm:flex">
+                                    <span class="material-symbols-rounded text-[24px]">workspace_premium</span>
+                                </button>
+                            </div>
+                            <div class="flex-1 bg-parchment/80 dark:bg-[#2a1a14] border border-gold/40 rounded-3xl flex items-center min-h-[56px] px-3 py-1.5 relative shadow-inner-elegant focus-within:border-gold focus-within:ring-1 focus-within:ring-gold/30 transition-all">
+                                <button onclick="toggleEmojiPicker()" class="flex items-center justify-center size-10 rounded-full hover:bg-gold/10 text-ink/60 dark:text-parchment/60 transition-colors shrink-0">
+                                    <span class="material-symbols-rounded text-[24px]">sentiment_satisfied</span>
+                                </button>
+                                <textarea id="chat-input" class="flex-1 bg-transparent border-none focus:ring-0 text-ink dark:text-parchment placeholder:text-ink/40 dark:placeholder:text-parchment/40 resize-none max-h-32 py-3.5 px-3 text-[15px] leading-tight custom-scrollbar chat-font" placeholder="Escribe lo que dicta el corazón..." rows="1"></textarea>
+                            </div>
+                            <div class="flex items-center gap-3 pb-1.5">
+                                <button id="voice-rec-btn" onmousedown="startVoiceRecord()" onmouseup="stopVoiceRecord()" ontouchstart="startVoiceRecord()" ontouchend="stopVoiceRecord()" class="flex items-center justify-center size-14 rounded-full bg-gradient-to-br from-primary to-primary-light text-white shadow-elegant hover:scale-105 active:scale-95 shrink-0 border border-gold/30 transition-all">
+                                    <span class="material-symbols-rounded text-[28px]">mic</span>
+                                </button>
+                                <button id="send-chat-btn" onclick="sendChatMessage()" class="flex items-center justify-center size-14 rounded-full bg-gradient-to-br from-gold to-gold-light text-ink shadow-elegant hover:scale-105 active:scale-95 shrink-0 border border-parchment hidden">
+                                    <span class="material-symbols-rounded text-[28px]">send</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="notification-toaster"></div>
+    </div>
+
+    <audio id="scribble-sound"
+        src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_07659d575d.mp3?filename=writing-on-paper-6988.mp3"></audio>
+
+    <!-- OVERLAY MODO BOTELLA (confirmación de envío diferido) -->
+    <div id="bottle-overlay" style="position:fixed;inset:0;z-index:900;background:rgba(5,15,30,0.92);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px;">
+        <div style="background:linear-gradient(160deg,#0d1f35,#081525);border:1px solid rgba(100,180,255,0.2);border-radius:16px;max-width:440px;width:100%;padding:40px 32px;text-align:center;box-shadow:0 0 60px rgba(30,80,160,0.3);">
+            <div style="font-size:3rem;margin-bottom:16px;">🫙</div>
+            <h3 class="font-cinzel" style="font-size:1.1rem;color:rgba(180,220,255,0.95);letter-spacing:0.15em;margin-bottom:8px;text-transform:uppercase;">Mensaje en la Botella</h3>
+            <p class="font-dancing" style="color:rgba(150,200,255,0.7);font-size:1.1rem;margin-bottom:24px;line-height:1.6;">El universo decidirá cuándo llega esta carta.<br>Viajaá por corrientes ocultas hasta una fecha de sincronía...</p>
+            <div id="bottle-date-preview" style="background:rgba(20,50,90,0.6);border:1px solid rgba(100,180,255,0.15);border-radius:8px;padding:16px;margin-bottom:24px;">
+                <div class="font-cinzel" style="font-size:0.6rem;color:rgba(100,160,220,0.7);letter-spacing:0.2em;margin-bottom:4px;text-transform:uppercase;">Llegada Prevista</div>
+                <div id="bottle-arrival-text" class="font-vibes" style="font-size:1.8rem;color:rgba(200,230,255,0.95);"></div>
+                <div id="bottle-days-left" style="font-size:0.65rem;color:rgba(120,180,240,0.6);font-family:'Cinzel',serif;margin-top:4px;"></div>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:center;">
+                <button onclick="cancelBottleModal()" style="padding:10px 24px;border:1px solid rgba(100,180,255,0.2);border-radius:6px;background:transparent;color:rgba(120,180,240,0.7);font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.1em;cursor:pointer;">CANCELAR</button>
+                <button onclick="confirmBottleSend()" style="padding:10px 24px;background:linear-gradient(135deg,#1a4a7a,#0d2b50);border:1px solid rgba(100,180,255,0.3);border-radius:6px;color:rgba(170,220,255,0.95);font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.1em;cursor:pointer;">🫙 LANZAR AL MAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANIMACIÓN DE TRANSPORTE — Cinematográfica -->
+    <div id="transport-overlay">
+        <!-- Fondo de Estrellas (Modo Botella) -->
+        <div class="stars-container"></div>
+
+        <!-- Línea horizonte -->
+        <div class="transport-horizon"></div>
+
+        <!-- Olas (Modo Botella) -->
+        <div id="transport-waves" class="absolute bottom-0 w-full h-1/4 opacity-0 pointer-events-none transition-opacity duration-1000">
+            <svg class="w-full h-full wave-path" preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,85.3C672,75,768,85,864,96C960,107,1056,117,1152,106.7C1248,96,1344,64,1392,48L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="#b4974d"></path>
+            </svg>
+        </div>
+
+        <!-- Vehículo (cambia entre barco y carruaje por JS) -->
+        <div id="transport-vehicle-wrap" class="transport-vehicle">
+            <!-- Emoji del barco solicitado -->
+            <div class="ship-emoji absolute -top-10 left-1/2 -translate-x-1/2 text-4xl" style="filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));">🚢</div>
+            
+            <!-- SVG Barco (default) -->
+            <div id="transport-svg-ship" style="position:relative;">
+                <svg width="200" height="130" viewBox="0 0 200 130" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(2px 4px 8px rgba(0,0,0,0.3));">
+                    <!-- Casco -->
+                    <path d="M20 85 Q100 115 180 85 L165 100 Q100 128 35 100 Z" fill="#6b3a1f" stroke="#3d1f0a" stroke-width="1.5"/>
+                    <!-- Quilla -->
+                    <path d="M35 100 Q100 120 165 100" fill="none" stroke="#3d1f0a" stroke-width="2"/>
+                    <!-- Mástil -->
+                    <line x1="100" y1="85" x2="100" y2="20" stroke="#5c3010" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Vela principal -->
+                    <path d="M100 22 L137 50 L100 78 Z" fill="#f3e5c9" fill-opacity="0.92" stroke="#c4a46b" stroke-width="1"/>
+                    <!-- Vela pequeña -->
+                    <path d="M100 25 L72 42 L100 56 Z" fill="#e8d5b0" fill-opacity="0.85" stroke="#c4a46b" stroke-width="0.8"/>
+                    <!-- Banderín -->
+                    <path d="M100 20 L115 27 L100 34" fill="#8b1c1c" stroke="#5a0c0c" stroke-width="0.8"/>
+                    <!-- Scroll atado al mástil -->
+                    <rect x="105" y="40" width="22" height="14" rx="2" fill="#f5e4c0" stroke="#b8943a" stroke-width="1" transform="rotate(-5 105 40)"/>
+                    <line x1="105" y1="43" x2="127" y2="41" stroke="#b8943a" stroke-width="0.7" opacity="0.6"/>
+                    <line x1="105" y1="47" x2="127" y2="45" stroke="#b8943a" stroke-width="0.7" opacity="0.6"/>
+                </svg>
+            </div>
+            <!-- SVG Carruaje (alternativo) -->
+            <div id="transport-svg-carriage" style="position:relative;display:none;">
+                <svg width="220" height="130" viewBox="0 0 220 130" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(2px 4px 8px rgba(0,0,0,0.3));">
+                    <!-- Carrocería -->
+                    <rect x="60" y="30" width="100" height="65" rx="8" fill="#2c1a0e" stroke="#6b3d1a" stroke-width="2"/>
+                    <!-- Ventanas -->
+                    <rect x="70" y="42" width="28" height="28" rx="4" fill="#1a3340" stroke="#6b3d1a" stroke-width="1.5"/>
+                    <rect x="122" y="42" width="28" height="28" rx="4" fill="#1a3340" stroke="#6b3d1a" stroke-width="1.5"/>
+                    <!-- Puerta central -->
+                    <rect x="95" y="50" width="30" height="45" rx="3" fill="#1e100a" stroke="#8b6020" stroke-width="1.5"/>
+                    <!-- Manija -->
+                    <circle cx="110" cy="72" r="3" fill="#c89030" stroke="#a07020" stroke-width="1"/>
+                    <!-- Marco superior dorado -->
+                    <path d="M60 38 Q110 22 160 38" fill="none" stroke="#c49a20" stroke-width="2"/>
+                    <!-- Pescante (conductor) -->
+                    <rect x="30" y="48" width="34" height="20" rx="3" fill="#1a0e06" stroke="#6b3d1a" stroke-width="1.5"/>
+                    <!-- Conductor -->
+                    <circle cx="47" cy="42" r="8" fill="#8b5e3c" stroke="#5a3820" stroke-width="1"/>
+                    <rect x="40" y="48" width="14" height="16" rx="2" fill="#2c1a0e" stroke="#5a3820" stroke-width="1"/>
+                    <!-- Látigo -->
+                    <path d="M55 38 Q70 28 75 24" fill="none" stroke="#5a3820" stroke-width="1.5" stroke-linecap="round"/>
+                    <!-- Eje -->
+                    <line x1="55" y1="95" x2="175" y2="95" stroke="#3d2010" stroke-width="3"/>
+                    <!-- Ruedas -->
+                    <circle cx="70" cy="100" r="22" fill="none" stroke="#4a2810" stroke-width="5"/>
+                    <circle cx="70" cy="100" r="10" fill="none" stroke="#4a2810" stroke-width="3"/>
+                    <circle cx="160" cy="100" r="22" fill="none" stroke="#4a2810" stroke-width="5"/>
+                    <circle cx="160" cy="100" r="10" fill="none" stroke="#4a2810" stroke-width="3"/>
+                    <!-- Rayos de rueda -->
+                    <line x1="70" y1="78" x2="70" y2="122" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="48" y1="100" x2="92" y2="100" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="55" y1="85" x2="85" y2="115" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="55" y1="115" x2="85" y2="85" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="160" y1="78" x2="160" y2="122" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="138" y1="100" x2="182" y2="100" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="145" y1="85" x2="175" y2="115" stroke="#4a2810" stroke-width="2"/>
+                    <line x1="145" y1="115" x2="175" y2="85" stroke="#4a2810" stroke-width="2"/>
+                    <!-- Scroll en el carruaje -->
+                    <rect x="168" y="36" width="20" height="13" rx="2" fill="#f5e4c0" stroke="#b8943a" stroke-width="1" transform="rotate(8 168 36)"/>
+                    <!-- Caballo(s) bosquejados -->
+                    <path d="M10 75 Q22 60 35 68 Q40 70 38 78 Q32 86 20 88 Q10 88 8 82 Z" fill="#4a2810" stroke="#2c1005" stroke-width="1.5"/>
+                    <line x1="35" y1="68" x2="32" y2="55" stroke="#2c1005" stroke-width="2"/> <!-- cuello -->
+                    <ellipse cx="32" cy="52" rx="6" ry="5" fill="#4a2810" stroke="#2c1005" stroke-width="1.5"/> <!-- cabeza -->
+                    <!-- Patas caballo -->
+                    <line x1="15" y1="88" x2="12" y2="108" stroke="#2c1005" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="22" y1="89" x2="20" y2="110" stroke="#2c1005" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="29" y1="88" x2="32" y2="108" stroke="#2c1005" stroke-width="2" stroke-linecap="round"/>
+                    <!-- Riendas -->
+                    <path d="M38 66 Q45 62 50 58 Q52 56 54 52" fill="none" stroke="#8b6030" stroke-width="1" stroke-dasharray="2 1"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Sello que se cierra (Final Seal) -->
+        <div id="final-seal" class="opacity-0 transition-opacity duration-500 fixed inset-0 flex items-center justify-center pointer-events-none z-[1100]">
+            <div class="wax-seal-red w-32 h-32 rounded-full shadow-2xl flex items-center justify-center text-4xl">
+                <!-- Se llenará con el sello zodiacal del usuario -->
+            </div>
+        </div>
+
+        <!-- Caption poético central -->
+        <div class="transport-caption">
+            <p id="transport-caption-text" class="font-vibes text-4xl md:text-5xl" style="color:var(--ink-color); text-shadow:none;">La carta viaja a través del tiempo...</p>
+            <p class="font-serif text-[10px] uppercase tracking-[0.4em] mt-3 opacity-60" style="color:var(--ink-color);">Cruzando océanos de tinta</p>
+        </div>
+    </div>
+
+    <!-- Sello que se rompe (Opening Ritual) -->
+    <div id="opening-ritual" class="fixed inset-0 z-[2000] bg-black/40 backdrop-blur-sm hidden flex items-center justify-center">
+        <div id="opening-seal-container" class="cursor-pointer group">
+            <div id="opening-seal-node" class="wax-seal-red w-40 h-40 rounded-full shadow-2xl flex items-center justify-center text-5xl transition-transform duration-300 group-hover:scale-105">
+                <!-- Se llena dinámicamente -->
+            </div>
+            <p class="font-cinzel text-white text-[10px] tracking-[0.5em] uppercase text-center mt-8 opacity-60 animate-pulse">Toca para romper el lacre</p>
+        </div>
+    </div>
+
+
+    <!-- TUTORIAL (CARTA DE BIENVENIDA) -->
+    <!-- Estructura mejorada para permitir scroll -->
+    <div id="tutorial-overlay">
+        <div class="tutorial-card-container">
+            <div class="epistle-card tutorial-content relative" style="opacity: 1; transform: none; display: block;">
+                <button onclick="closeTutorial()"
+                    class="absolute top-2 right-2 text-amber-900/50 hover:text-amber-900 z-10"><span
+                        class="material-symbols-rounded">close</span></button>
+                <div class="epistle-header text-[var(--ink-color)]">
+                    En algún lugar del tiempo,<br>
+                    para mi eterna Mila.
+                </div>
+                <div class="epistle-body font-dancing text-lg md:text-xl leading-relaxed text-[var(--ink-color)]">
+                    Hola Mi Mila preciosa,<br><br>
+                    Aquí te dejo esta herramienta para que nos comuniquemos con cartas a la antigua, con ese estilo que
+                    sé que te encanta.<br><br>
+                    Si en algún momento no estoy disponible o en línea, puedes hablar con la <strong>Conexión
+                        Álmica</strong> (el botón <span
+                        class="material-symbols-rounded text-sm align-middle text-purple-800">psychology</span>). Ya
+                    está programada para actuar como yo, por si te sientes sola o necesitas alguien con quien
+                    hablar.<br><br>
+                    Te veo.
+                </div>
+                <div class="epistle-footer mt-8">
+                    <div class="footer-left">
+                        <span class="epistle-signature metallic-gold">Tuyo, Miguelo.</span>
+                    </div>
+                    <div class="footer-right">
+                        <button onclick="closeTutorial()"
+                            class="gold-btn flex items-center gap-2 shadow-xl hover:scale-105 transition-transform"
+                            style="white-space: nowrap;">
+                            <span>RECIBIR CORRESPONDENCIA</span> <span class="material-symbols-rounded">favorite</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Decoración Lacre -->
+                <div class="wax-seal" style="bottom: -15px; right: -15px;">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONEXIÓN (LLAMADAS/VIDEO) -->
+    <div id="call-overlay" class="fixed inset-0 z-[6000] bg-black/80 backdrop-blur-xl hidden flex-col items-center justify-center p-10 text-center">
+        <div class="relative mb-12">
+            <div id="call-avatar" class="size-40 rounded-full border-4 border-gold shadow-2xl bg-cover bg-center relative z-10 animate-pulse-slow"></div>
+            <div class="absolute inset-0 size-40 rounded-full bg-gold/20 animate-ping"></div>
+        </div>
+        <h3 id="call-name" class="font-cinzel text-3xl text-gold mb-2 tracking-widest uppercase">Mila</h3>
+        <p id="call-status-text" class="text-parchment/60 font-chat text-sm italic mb-12">Conectando esencia...</p>
+        
+        <div class="flex gap-8">
+            <button onclick="endCall()" class="size-16 rounded-full bg-red-600/20 border border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center shadow-lg">
+                <span class="material-symbols-rounded text-3xl">call_end</span>
+            </button>
+            <div id="call-video-preview" class="hidden size-16 rounded-full bg-gold/10 border border-gold/50 text-gold flex items-center justify-center">
+                <span class="material-symbols-rounded text-3xl">videocam</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        const { initializeApp, getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, getDocs, writeBatch, limit } = window.firebaseModules;
+
+        let db, auth, currentUser = localStorage.getItem('mila_pergamino_user'), letters = [];
+        // Perfiles con fotos persistentes
+        let profilePhotos = JSON.parse(localStorage.getItem('mila_profile_photos')) || {
+            'Mila': "https://lh3.googleusercontent.com/aida-public/AB6AXuCH_eyDjSf-a2r6NyiCXhxvNssoBkS0_yf2FqbOCf3roM50mslrh3zv5cL_cSbbKKbKIzFZSQqkohUN2U-XPxK4HNywok3_Z_EXIbaoBdt4_HZdhcA9Q6OfkdtWID_d-nlxTFMMuuJqO0qChAevoq30g5EJLLGi_6RQpTBStCDX3LG6SN06iEcofO2_B4fSQrTF2pI9VwAb_AzaLObkUHu-1DZ4Xycj6dL7bXDwKAOCcyWV6v2YO3NpbgMbbkXzmom9BXehWNDW0A",
+            'Miguelo': "https://lh3.googleusercontent.com/aida-public/AB6AXuCqbIM32XZeRI7dV9-dM5VWJQu6MdyXg512y_9M070k0IE2UEV570y2uaHyDbJ4-Vq603wSidN_4bLxAXxbdCv31E9leqouLNpldEFU-mQHJmoRqRrTNsMG9qOt1wcbH60daHoJeyICzeDDVcAA7YSHqF34uzvjR9KGm170K_4Q6-p4fcNUozrph_2ReNFtHsD0T5aCQJ6-fAMWgTo4Gy0vzU1ch27AYSUgwnoi6Emh04b8HdFqPUmbdtN56c3F_cCr5Sy7vky28g"
+        };
+        // Estado de cartas enrolladas (clave por id de firebase/local)
+        let rolledState = {};
+        // Modo de conversación: false = pergaminos clásicos, true = chat moderno
+        let chatMode = localStorage.getItem('mila_pergaminos_mode') === 'chat';
+        // Arreglo de mensajes del modo chat
+        let messages = [];
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mila-universe';
+
+        // --- ICONOS ZODIACALES SVG ---
+        const SVG_TAURUS = `<svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>`;
+        const SVG_SAGITTARIUS = `<svg viewBox="0 0 24 24"><path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2M12 4C7.59 4 4 7.59 4 12C4 16.41 7.59 20 12 20C16.41 20 20 16.41 20 12C20 7.59 16.41 4 12 4M16.59 9.17L19.17 11.75L15.65 15.26L14.23 13.85L16.34 11.75H11C9.62 11.75 8.35 12.31 7.46 13.19C6.58 14.08 6.09 15.28 6.09 16.54L6 17H4C4 15.13 4.75 13.43 5.96 12.21C7.17 11 8.95 10.25 10.9 10.25H16.34L14.23 8.14L15.65 6.73L19.17 10.24L16.59 9.17Z"/></svg>`;
+
+        // --- INICIO ---
+        window.init = async function () {
+            const savedTheme = localStorage.getItem('mila_pergamino_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-icon').innerText = savedTheme === 'dark' ? 'light_mode' : 'dark_mode';
+
+            // Cargar contenido Emily Book
+            document.getElementById('emily-book-content').value = localStorage.getItem('mila_emily_book_content') || '';
+
+            // Cargar fotos guardadas
+            window.updateAvatars();
+
+            // Cargar estado local de pergaminos y cartas enrolladas
+            loadLocalState();
+            // Cargar mensajes de chat locales
+            loadLocalMessages();
+
+            if (!currentUser) {
+                document.getElementById('profile-modal').style.display = 'flex';
+            } else {
+                document.getElementById('profile-modal').style.display = 'none';
+                setupFirebase();
+            }
+            updateEra();
+            
+            // Asegurar que el trato y firma se carguen si ya existe un usuario
+            if (currentUser) {
+                updateSalutations();
+                updateSignatureDefault();
+            }
+
+            // Si hay cartas locales cargadas y no estamos en modo chat, dibujarlas
+            if (letters.length > 0 && !chatMode) {
+                renderAllLetters();
+            }
+
+            // Aplicar modo (clásico o chat) según configuración
+            window.applyMode();
+
+            // Listener para cambio de foto
+            document.getElementById('photo-input').addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    const base64 = event.target.result;
+                    const userToUpdate = e.target.dataset.for;
+                    profilePhotos[userToUpdate] = base64;
+                    localStorage.setItem('mila_profile_photos', JSON.stringify(profilePhotos));
+                    window.updateAvatars();
+                    // Opcional: Guardar en Firebase para que el otro usuario lo vea
+                    if (db) {
+                        try {
+                            const configRef = doc(db, 'artifacts', appId, 'public', 'config', 'profiles');
+                            await updateDoc(configRef, { [userToUpdate]: base64 }).catch(async () => {
+                                // Si no existe, intentar crear con setDoc o similar si fuera necesario, 
+                                // pero asumimos que update o un diseño simple basta aquí.
+                            });
+                        } catch (err) {}
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function setupFirebase() {
+            try {
+                const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Limit the number of letters fetched to avoid performance issues with very long histories
+                const q = query(
+                    collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_v6'),
+                    orderBy('timestamp'),
+                    limit(100)
+                );
+                onSnapshot(q, (snapshot) => {
+                    const cloudLetters = [];
+                    snapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        data.firebaseId = docSnap.id;
+                        cloudLetters.push(data);
+                        if (data.receiver === currentUser && (!data.readBy || !data.readBy[currentUser])) {
+                            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'pergaminos_v6', docSnap.id);
+                            updateDoc(docRef, { [`readBy.${currentUser}`]: true });
+                        }
+                    });
+                    
+                    const oldLength = letters.length;
+                    
+                    // Filtrar cartas locales que ya están en la nube (por texto)
+                    const localOnly = letters.filter(l => 
+                        l.firebaseId.startsWith('local-') && 
+                        !cloudLetters.some(cl => cl.textOriginal === l.textOriginal && cl.sender === l.sender)
+                    );
+                    
+                    letters = [...cloudLetters, ...localOnly];
+                    
+                    renderAllLetters(letters.length > oldLength);
+                    saveLocalState();
+                });
+
+                // Escuchar mensajes de chat modernos
+                try {
+                    const qChat = query(
+                        collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'),
+                        orderBy('timestamp'),
+                        limit(200)
+                    );
+                    onSnapshot(qChat, (snap) => {
+                        const cloudMsgs = [];
+                        snap.forEach((docSnap) => {
+                            const data = docSnap.data();
+                            data.firebaseId = docSnap.id;
+                            cloudMsgs.push(data);
+                        });
+                        messages = cloudMsgs;
+                        saveLocalMessages();
+                        if (chatMode) renderChatMessages();
+                    });
+                } catch (e) { console.error('Error chat snapshot:', e); }
+
+                // Escuchar cambios en perfiles (fotos)
+                try {
+                    const profilesRef = doc(db, 'artifacts', appId, 'public', 'config', 'profiles');
+                    onSnapshot(profilesRef, (snap) => {
+                        if (snap.exists()) {
+                            const data = snap.data();
+                            if (data.Mila) profilePhotos.Mila = data.Mila;
+                            if (data.Miguelo) profilePhotos.Miguelo = data.Miguelo;
+                            localStorage.setItem('mila_profile_photos', JSON.stringify(profilePhotos));
+                            if (window.updateAvatars) window.updateAvatars();
+                        }
+                    });
+                } catch (e) { console.error('Error profiles snapshot:', e); }
+            } catch (e) { console.error("Error Firebase Global:", e); }
+        }
+
+        window.toggleTheme = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('mila_pergamino_theme', newTheme);
+            document.getElementById('theme-icon').innerText = newTheme === 'dark' ? 'light_mode' : 'dark_mode';
+        };
+
+        window.updateAvatars = () => {
+            const mAvatarMila = document.getElementById('modal-avatar-mila');
+            const mAvatarMiguel = document.getElementById('modal-avatar-miguel');
+            const cAvatarMe = document.getElementById('chat-avatar-me');
+            const cAvatarOther = document.getElementById('chat-avatar-other');
+
+            if (mAvatarMila) mAvatarMila.style.backgroundImage = `url("${profilePhotos.Mila}")`;
+            if (mAvatarMiguel) mAvatarMiguel.style.backgroundImage = `url("${profilePhotos.Miguelo}")`;
+            
+            // Si estamos en init y ya hay usuario seleccionado, actualizar chat header
+            if (currentUser) {
+                const isMila = currentUser === 'Mila';
+                if (cAvatarMe) cAvatarMe.style.backgroundImage = `url("${isMila ? profilePhotos.Mila : profilePhotos.Miguelo}")`;
+                if (cAvatarOther) cAvatarOther.style.backgroundImage = `url("${isMila ? profilePhotos.Miguelo : profilePhotos.Mila}")`;
+            }
+        };
+
+        window.changePhoto = (user) => {
+            const input = document.getElementById('photo-input');
+            input.dataset.for = user;
+            input.click();
+        };
+
+        window.toggleEmilyBook = () => {
+            window.location.href = 'emilybooks.html';
+        };
+
+        // --- MULTIMEDIA FUNCTIONS ---
+        window.startCall = (type) => {
+            const partner = currentUser === 'Mila' ? 'Miguelo' : 'Mila';
+            const overlay = document.getElementById('call-overlay');
+            const avatar = document.getElementById('call-avatar');
+            const nameEl = document.getElementById('call-name');
+            const videoPreview = document.getElementById('call-video-preview');
+            
+            nameEl.innerText = partner;
+            avatar.style.backgroundImage = `url("${profilePhotos[partner]}")`;
+            videoPreview.classList.toggle('hidden', type !== 'video');
+            
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        };
+
+        window.endCall = () => {
+            const overlay = document.getElementById('call-overlay');
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+        };
+
+        window.toggleEmojiPicker = () => {
+            const picker = document.getElementById('emoji-picker');
+            if (picker) {
+                picker.classList.toggle('hidden');
+            } else {
+                const container = document.querySelector('.layout-content-container');
+                const div = document.createElement('div');
+                div.id = 'emoji-picker';
+                div.className = 'absolute bottom-24 left-10 p-4 bg-parchment-dark border border-gold/30 rounded-2xl shadow-2xl z-50 grid grid-cols-6 gap-2 w-64 backdrop-blur-md';
+                const emojis = ['🌹', '✨', '❤️', '🔥', '📜', '🖋️', '♉', '♐', '🌙', '🎻', '📖', '🕯️', '🕊️', '💍', '🥂', '🎭', '🏰', '🗺️'];
+                emojis.forEach(e => {
+                    const btn = document.createElement('button');
+                    btn.innerText = e;
+                    btn.className = 'text-2xl hover:scale-125 transition-transform p-1';
+                    btn.onclick = () => {
+                        const input = document.getElementById('chat-input');
+                        input.value += e;
+                        input.focus();
+                        div.classList.add('hidden');
+                        updateComposerButtons();
+                    };
+                    div.appendChild(btn);
+                });
+                container.appendChild(div);
+            }
+        };
+
+        let mediaRecorder;
+        let audioChunks = [];
+        window.startVoiceRecord = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/ogg; codecs=opus' });
+                    const reader = new FileReader();
+                    reader.onloadend = async () => {
+                        const base64Audio = reader.result;
+                        sendAudioMessage(base64Audio);
+                    };
+                    reader.readAsDataURL(audioBlob);
+                };
+                mediaRecorder.start();
+                document.getElementById('voice-rec-btn').classList.add('animate-pulse', 'scale-110', 'from-red-600', 'to-red-400');
+            } catch (err) {
+                console.error("No se pudo iniciar la grabación:", err);
+                alert("Por favor, permite el acceso al micrófono para enviar notas de voz.");
+            }
+        };
+
+        window.stopVoiceRecord = () => {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                document.getElementById('voice-rec-btn').classList.remove('animate-pulse', 'scale-110', 'from-red-600', 'to-red-400');
+            }
+        };
+
+        async function sendAudioMessage(base64) {
+            const msg = {
+                sender: currentUser || 'Anónimo',
+                type: 'audio',
+                text: '[Nota de voz]',
+                audioData: base64,
+                timestamp: Date.now()
+            };
+            if (db) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'), { ...msg, timestamp: serverTimestamp() });
+            } else {
+                messages.push(msg);
+                renderChatMessage(msg);
+            }
+        }
+
+        function updateComposerButtons() {
+            const input = document.getElementById('chat-input');
+            const voiceBtn = document.getElementById('voice-rec-btn');
+            const sendBtn = document.getElementById('send-chat-btn');
+            if (input.value.trim().length > 0) {
+                voiceBtn.classList.add('hidden');
+                sendBtn.classList.remove('hidden');
+            } else {
+                voiceBtn.classList.remove('hidden');
+                sendBtn.classList.add('hidden');
+            }
+        }
+
+        window.selectProfile = (name) => {
+            currentUser = name;
+            localStorage.setItem('mila_pergamino_user', name);
+            document.getElementById('profile-modal').style.display = 'none';
+            updateSignatureDefault();
+            updateSalutations();
+            setupFirebase();
+            window.checkTutorial();
+        };
+
+        function updateSalutations() {
+            const select = document.getElementById('header-format');
+            select.innerHTML = '';
+            const opts = currentUser === 'Mila'
+                ? [["A mi amado Miguelo,", "Amado"], ["Mi caballero eterno,", "Caballero"], ["Dueño de mis suspiros,", "Dueño"], ["Señor de mi vida,", "Señor"]]
+                : [["A mi adorada Mila,", "Adorada"], ["Mi única y eterna luz,", "Luz"], ["Querida alma mía,", "Alma"], ["Distinguida señora de mi corazón,", "Señora"]];
+
+            opts.forEach(o => {
+                const el = document.createElement('option');
+                el.value = o[0]; el.innerText = "Trato: " + o[1];
+                select.appendChild(el);
+            });
+        }
+
+        function updateSignatureDefault() {
+            document.getElementById('signature-input').value = currentUser === 'Miguelo' ? 'Tuyo, Miguelo.' : 'Con amor, Mila.';
+        }
+
+        const MONTHS_ES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        window.updateEra = () => {
+            const style = document.getElementById('style-select').value;
+            const dateInput = document.getElementById('fake-date');
+            let d = new Date(), day = d.getDate(), month = MONTHS_ES[d.getMonth()], year = d.getFullYear();
+
+            if (style !== 'modern') {
+                if (style === 'bolivar') year = 1815 + Math.floor(Math.random() * 15);
+                if (style === 'bronte') year = 1845 + Math.floor(Math.random() * 10);
+                if (style === 'french') year = 1870 + Math.floor(Math.random() * 25);
+                day = 1 + Math.floor(Math.random() * 28);
+                month = MONTHS_ES[Math.floor(Math.random() * 12)];
+            }
+            dateInput.value = `${day} de ${month} de ${year}`;
+        };
+
+        window.applyFontPreview = () => {
+            const font = document.getElementById('font-select').value;
+            document.getElementById('letter-input').className = `ink-area custom-scrollbar ${font}`;
+        };
+
+        function renderAllLetters(snapshotChange = false) {
+            const container = document.getElementById('scroll-container');
+            container.innerHTML = '';
+            
+            if (letters.length === 0) {
+                container.innerHTML = '<div class="text-center py-40 opacity-20"><p class="font-dancing text-4xl">La historia espera ser escrita...</p></div>';
+                return;
+            }
+
+            // Ordenamos: primero las que tienen timestamp (nube), luego por fecha local
+            const sorted = [...letters].sort((a, b) => {
+                const tA = a.timestamp ? (a.timestamp.seconds * 1000) : (a.localTimestamp || Date.now());
+                const tB = b.timestamp ? (b.timestamp.seconds * 1000) : (b.localTimestamp || Date.now());
+                return tA - tB;
+            });
+
+            sorted.forEach((l, i) => {
+                const isNew = snapshotChange && (i === sorted.length - 1);
+                renderLetter(l, isNew);
+            });
+            
+            // Scroll al final solo si no estamos en medio de un ritual
+            if (!document.getElementById('opening-ritual').classList.contains('flex')) {
+                setTimeout(() => {
+                    const last = container.lastElementChild;
+                    if (last) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 300);
+            }
+        }
+
+        window.toggleLetterRoll = (id) => {
+            const epistle = document.getElementById(`card-${id}`);
+            if (!epistle) return;
+
+            if (epistle.classList.contains('letter-unroll-anim') || epistle.classList.contains('epistle-visible')) {
+                // Si está abierta, cerrar
+                epistle.classList.remove('letter-unroll-anim', 'epistle-visible');
+                epistle.classList.add('letter-roll-anim');
+                setTimeout(() => {
+                        if (epistle.classList.contains('letter-roll-anim')) {
+                            epistle.classList.add('is-rolled');
+                            // registrar estado enrollado
+                            rolledState[id] = true;
+                            saveLocalState();
+                        }
+                    }, 1400);
+            } else {
+                // Si está cerrada, abrir
+                epistle.classList.remove('letter-roll-anim', 'is-rolled');
+                void epistle.offsetWidth; // reflow
+                epistle.classList.add('letter-unroll-anim');
+                // registrar estado desenrollado
+                rolledState[id] = false;
+                saveLocalState();
+            }
+        };
+
+        function renderLetter(data, isNew = false) {
+            const container = document.getElementById('scroll-container');
+            
+            // Detección de duplicados básica (por ID de Firebase o ID local)
+            if (data.firebaseId && document.getElementById(`card-${data.firebaseId}`)) return;
+
+            const sealContent = data.sender === 'Mila' ? SVG_SAGITTARIUS : SVG_TAURUS;
+            const displayText = data.textStyled || data.textOriginal;
+
+            // --- LÓGICA BOTELLA ---
+            const isBottle = !!data.isBottle;
+            const deliveryDate = data.bottleDelivery ? new Date(data.bottleDelivery) : null;
+            const now = new Date();
+            const hasArrived = !isBottle || !deliveryDate || (now >= deliveryDate);
+            const isMine = data.sender === currentUser;
+
+            // Si es botella, no ha llegado, y soy el receptor → mostrar sobre sellado
+            if (isBottle && !hasArrived && !isMine) {
+                const d = deliveryDate;
+                const MONTHS_FULL = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+                const dateStr = `${d.getDate()} de ${MONTHS_FULL[d.getMonth()]} de ${d.getFullYear()}`;
+                const daysLeft = Math.ceil((deliveryDate - now) / 86400000);
+                const timeLeft = daysLeft < 30 ? `${daysLeft} días` : daysLeft < 365 ? `${Math.round(daysLeft/30)} meses` : `${(daysLeft/365).toFixed(1)} años`;
+
+                const placeholder = document.createElement('div');
+                placeholder.id = `card-${data.firebaseId}`;
+                placeholder.style.cssText = 'text-align:center;padding:40px 20px;opacity:0;transition:opacity 1s ease;';
+                placeholder.innerHTML = `
+                    <div style="font-size:3rem;margin-bottom:12px;">🫙</div>
+                    <div class="bottle-badge" style="margin:0 auto 12px;">Mensaje en la Botella</div>
+                    <p class="font-dancing" style="font-size:1.3rem;color:var(--gold-main);margin-bottom:8px;">Una carta navega hacia ti...</p>
+                    <div class="bottle-delivery-info">
+                        Llegada prevista: <strong>${dateStr}</strong><br>
+                        <span class="bottle-countdown">En ${timeLeft}</span>
+                    </div>`;
+                container.appendChild(placeholder);
+                setTimeout(() => placeholder.style.opacity = '1', 50);
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'epistle-wrapper';
+            const rot = (Math.random() * 2 - 1);
+            wrapper.style.transform = `rotate(${rot}deg)`;
+
+            const epistle = document.createElement('div');
+            epistle.className = 'epistle-card deckled-edges' + (isBottle ? ' bottle-card' : '');
+            epistle.id = `card-${data.firebaseId}`;
+            epistle.dataset.original = data.textOriginal || data.textStyled;
+            epistle.dataset.styled = data.textStyled;
+            epistle.dataset.showing = 'styled';
+
+            let bottleInfoHtml = '';
+            if (isBottle && isMine && deliveryDate && !hasArrived) {
+                const d = deliveryDate;
+                const MONTHS_FULL = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+                const dateStr = `${d.getDate()} de ${MONTHS_FULL[d.getMonth()]} de ${d.getFullYear()}`;
+                const daysLeft = Math.ceil((deliveryDate - now) / 86400000);
+                bottleInfoHtml = `<div class="bottle-delivery-info">Esta carta llegará el <strong>${dateStr}</strong><br><span class="bottle-countdown">En ${daysLeft} días</span></div>`;
+            }
+
+            epistle.innerHTML = `
+                <div class="epistle-rolled-info">Carta de ${data.sender} - ${data.dateFormatted}</div>
+                <div class="epistle-content-wrap">
+                    ${isBottle ? '<div style="margin-bottom:12px;"><span class="bottle-badge">🫙 Mensaje en la Botella</span></div>' : ''}
+                    <div class="epistle-header">
+                        En la ciudad de ${data.location || 'la lejanía'}, <br>
+                        a los ${data.dateFormatted}. <br>
+                        ${data.salutation}
+                    </div>
+                    <div class="epistle-body ${data.fontFamily || 'font-dancing'}" id="body-${data.firebaseId}">${displayText}</div>
+                    ${bottleInfoHtml}
+                    <div class="card-actions justify-center">
+                        <button class="action-icon" title="Original" onclick="toggleLetterVersion('${data.firebaseId}')"><span class="material-symbols-rounded">visibility</span></button>
+                        <button class="action-icon" title="Traducir" onclick="openRestyleModal('${data.firebaseId}')"><span class="material-symbols-rounded">auto_fix</span></button>
+                        <button class="action-icon" title="Imagen PNG" onclick="exportLetterPNG('${data.firebaseId}')"><span class="material-symbols-rounded">image</span></button>
+                        <button class="action-icon" title="Documento PDF" onclick="exportLetterPDF('${data.firebaseId}')"><span class="material-symbols-rounded">picture_as_pdf</span></button>
+                        <button class="action-icon text-red-800/60 hover:text-red-600" title="Quemar" onclick="burnLetter('${data.firebaseId}')"><span class="material-symbols-rounded">local_fire_department</span></button>
+                    </div>
+                    <div class="epistle-footer">
+                        <div class="footer-left"><span class="epistle-signature metallic-gold">${data.customSignature}</span></div>
+                    </div>
+                </div>
+                <div class="epistle-footer" style="padding:0; margin-top:0; border:none; background:transparent;">
+                    <div class="footer-right"><div class="wax-seal" title="Abrir/Cerrar" onclick="toggleLetterRoll('${data.firebaseId}')">${sealContent}</div></div>
+                </div>
+            `;
+            // Aplicar estado enrolado previo si existe
+            if (rolledState[data.firebaseId]) {
+                epistle.classList.add('is-rolled');
+            } else if (isNew) {
+                // Cartas nuevas se muestran con animación (unfold) pero por defecto son visibles
+                epistle.classList.add('epistle-visible');
+            } else {
+                // Cartas viejas ya abiertas se muestran directamente
+                epistle.style.opacity = '1';
+                epistle.style.transform = 'none';
+                epistle.classList.add('epistle-visible'); // Para que tengan el estado de abiertas
+            }
+
+            wrapper.appendChild(epistle);
+            container.appendChild(wrapper);
+
+            // Si es nueva y no es mía, ritual de apertura
+            if (isNew && !isMine) {
+                triggerOpeningRitual(epistle, sealContent);
+            }
+        }
+
+        // --- PERSISTENCIA LOCAL Y MODO CHAT ---
+        function saveLocalState() {
+            try {
+                localStorage.setItem('mila_pergaminos_letters', JSON.stringify(letters));
+                localStorage.setItem('mila_pergaminos_rolled_state', JSON.stringify(rolledState));
+            } catch (e) { }
+        }
+
+        function loadLocalState() {
+            try {
+                const storedLetters = localStorage.getItem('mila_pergaminos_letters');
+                if (storedLetters) {
+                    letters = JSON.parse(storedLetters);
+                }
+                const storedRolled = localStorage.getItem('mila_pergaminos_rolled_state');
+                if (storedRolled) {
+                    rolledState = JSON.parse(storedRolled);
+                }
+            } catch (e) { }
+        }
+
+        function saveLocalMessages() {
+            try {
+                localStorage.setItem('mila_pergaminos_chat', JSON.stringify(messages));
+            } catch (e) { }
+        }
+
+        function loadLocalMessages() {
+            try {
+                const stored = localStorage.getItem('mila_pergaminos_chat');
+                if (stored) messages = JSON.parse(stored);
+            } catch (e) { }
+        }
+
+        window.applyMode = function() {
+            const chatContainer = document.getElementById('modern-chat-container');
+            const scrollContainer = document.getElementById('scroll-container');
+            const writingDesk = document.getElementById('writing-desk');
+            
+            if (chatMode) {
+                if (chatContainer) chatContainer.style.display = 'flex';
+                if (scrollContainer) scrollContainer.style.display = 'none';
+                if (writingDesk) writingDesk.style.display = 'none';
+                
+                // Configurar avatares y nombres
+                const avatarMe = document.getElementById('chat-avatar-me');
+                const avatarOther = document.getElementById('chat-avatar-other');
+                const partnerName = document.getElementById('chat-partner-name');
+                
+                const milaImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuCH_eyDjSf-a2r6NyiCXhxvNssoBkS0_yf2FqbOCf3roM50mslrh3zv5cL_cSbbKKbKIzFZSQqkohUN2U-XPxK4HNywok3_Z_EXIbaoBdt4_HZdhcA9Q6OfkdtWID_d-nlxTFMMuuJqO0qChAevoq30g5EJLLGi_6RQpTBStCDX3LG6SN06iEcofO2_B4fSQrTF2pI9VwAb_AzaLObkUHu-1DZ4Xycj6dL7bXDwKAOCcyWV6v2YO3NpbgMbbkXzmom9BXehWNDW0A";
+                const miguelImg = "https://lh3.googleusercontent.com/aida-public/AB6AXuCqbIM32XZeRI7dV9-dM5VWJQu6MdyXg512y_9M070k0IE2UEV570y2uaHyDbJ4-Vq603wSidN_4bLxAXxbdCv31E9leqouLNpldEFU-mQHJmoRqRrTNsMG9qOt1wcbH60daHoJeyICzeDDVcAA7YSHqF34uzvjR9KGm170K_4Q6-p4fcNUozrph_2ReNFtHsD0T5aCQJ6-fAMWgTo4Gy0vzU1ch27AYSUgwnoi6Emh04b8HdFqPUmbdtN56c3F_cCr5Sy7vky28g";
+                
+                if (currentUser === 'Mila') {
+                    if (avatarMe) avatarMe.style.backgroundImage = `url("${profilePhotos.Mila}")`;
+                    if (avatarOther) avatarOther.style.backgroundImage = `url("${profilePhotos.Miguelo}")`;
+                    if (partnerName) partnerName.innerText = "Miguel & Mila";
+                } else {
+                    if (avatarMe) avatarMe.style.backgroundImage = `url("${profilePhotos.Miguelo}")`;
+                    if (avatarOther) avatarOther.style.backgroundImage = `url("${profilePhotos.Mila}")`;
+                    if (partnerName) partnerName.innerText = "Mila & Miguel";
+                }
+
+                renderChatMessages();
+                setupChatListeners();
+            } else {
+                if (chatContainer) chatContainer.style.display = 'none';
+                if (scrollContainer) scrollContainer.style.display = '';
+                if (writingDesk) writingDesk.style.display = '';
+            }
+        }
+
+        window.toggleChatMode = function() {
+            chatMode = !chatMode;
+            localStorage.setItem('mila_pergaminos_mode', chatMode ? 'chat' : 'classic');
+            window.applyMode();
+        }
+
+        function renderChatMessages() {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+            container.innerHTML = '';
+            messages.forEach(m => {
+                renderChatMessage(m);
+            });
+        }
+
+        function renderChatMessage(msg) {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+            const isMe = msg.sender === currentUser;
+            const div = document.createElement('div');
+            
+            const timeStr = new Date(msg.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            
+                if (isMe) {
+                    div.className = "flex flex-col gap-1 items-end max-w-[85%] self-end";
+                    if (msg.type === 'audio') {
+                        div.innerHTML = `
+                            <div class="rounded-2xl rounded-br-none p-4 bg-gradient-to-br from-[#2c1810] to-ink shadow-elegant border border-gold/40 w-full max-w-[300px] flex items-center gap-4">
+                                <button onclick="playChatAudio(this, '${msg.audioData}')" class="size-10 rounded-full bg-gold flex items-center justify-center shrink-0 text-ink shadow-sm hover:scale-105 transition-transform">
+                                    <span class="material-symbols-rounded text-[24px]">play_arrow</span>
+                                </button>
+                                <div class="flex-1 flex flex-col gap-1">
+                                    <div class="flex items-center gap-1 w-full h-8 px-1">
+                                        <div class="h-2 w-1.5 rounded-full bg-gold/40"></div><div class="h-4 w-1.5 rounded-full bg-gold/60"></div><div class="h-6 w-1.5 rounded-full bg-gold/80"></div><div class="h-8 w-1.5 rounded-full bg-gold"></div><div class="h-5 w-1.5 rounded-full bg-gold/80"></div><div class="h-3 w-1.5 rounded-full bg-gold/60"></div><div class="h-2 w-1.5 rounded-full bg-gold/40"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1.5 mr-2 mt-1">
+                                <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold">done_all</span>
+                            </div>
+                        `;
+                    } else {
+                        div.innerHTML = `
+                            <p class="text-white text-[15px] font-normal leading-relaxed rounded-2xl rounded-br-none px-5 py-3 bg-gradient-to-br from-[#2c1810] to-ink shadow-elegant border border-gold/40 chat-font">${msg.text}</p>
+                            <div class="flex items-center gap-1.5 mr-2 mt-1">
+                                <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold">done_all</span>
+                            </div>
+                        `;
+                    }
+                } else {
+                    const otherUser = msg.sender === 'Mila' ? 'Mila' : 'Miguelo';
+                    const otherImg = profilePhotos[otherUser];
+
+                    div.className = "flex items-end gap-3 max-w-[85%] self-start";
+                    if (msg.type === 'audio') {
+                        div.innerHTML = `
+                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 shrink-0 mb-1 border-2 border-gold/50 shadow-sm" style='background-image: url("${otherImg}");'></div>
+                            <div class="flex flex-col gap-1 items-start w-full max-w-[300px]">
+                                <div class="rounded-2xl rounded-bl-none p-4 bg-parchment-dark/70 dark:bg-white/10 shadow-elegant border border-gold/30 w-full flex items-center gap-4">
+                                    <button onclick="playChatAudio(this, '${msg.audioData}')" class="size-10 rounded-full bg-gold flex items-center justify-center shrink-0 text-ink shadow-sm hover:scale-105 transition-transform">
+                                        <span class="material-symbols-rounded text-[24px]">play_arrow</span>
+                                    </button>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-1 w-full h-8 px-1">
+                                            <div class="h-2 w-1.5 rounded-full bg-primary/40"></div><div class="h-4 w-1.5 rounded-full bg-primary/60"></div><div class="h-6 w-1.5 rounded-full bg-primary/80"></div><div class="h-8 w-1.5 rounded-full bg-primary"></div><div class="h-5 w-1.5 rounded-full bg-primary/80"></div><div class="h-3 w-1.5 rounded-full bg-primary/60"></div><div class="h-2 w-1.5 rounded-full bg-primary/40"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium ml-2 mt-1">${timeStr}</span>
+                            </div>
+                        `;
+                    } else {
+                        div.innerHTML = `
+                            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 shrink-0 mb-1 border-2 border-gold/50 shadow-sm" style='background-image: url("${otherImg}");'></div>
+                            <div class="flex flex-col gap-1 items-start">
+                                <p class="text-ink dark:text-parchment text-[15px] font-normal leading-relaxed rounded-2xl rounded-bl-none px-5 py-3 bg-parchment-dark/70 dark:bg-white/10 shadow-elegant border border-gold/30 chat-font">${msg.text}</p>
+                                <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium ml-2 mt-1">${timeStr}</span>
+                            </div>
+                        `;
+                    }
+                }
+                
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+
+            window.playChatAudio = (btn, base64) => {
+                const audio = new Audio(base64);
+                const icon = btn.querySelector('span');
+                icon.innerText = 'pause';
+                audio.play();
+                audio.onended = () => { icon.innerText = 'play_arrow'; };
+            };
+
+        window.sendChatMessage = async function () {
+            const input = document.getElementById('chat-input');
+            if (!input) return;
+            const text = input.value.trim();
+            if (!text) return;
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+            const msg = {
+                sender: currentUser || 'Anónimo',
+                text: text,
+                date: dateStr,
+                timestamp: Date.now(),
+                fontFamily: document.getElementById('font-select')?.value || 'font-dancing'
+            };
+            messages.push(msg);
+            renderChatMessage(msg);
+            input.value = '';
+            input.style.height = 'auto';
+            updateComposerButtons();
+            saveLocalMessages();
+            if (db) {
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'), { ...msg, timestamp: serverTimestamp() });
+                } catch (e) { console.error('Error enviando chat:', e); }
+            }
+        };
+
+        function setupChatListeners() {
+            const input = document.getElementById('chat-input');
+            if (!input) return;
+            if (!input.dataset.listenerAdded) {
+                input.addEventListener('input', function () {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                    updateComposerButtons();
+                });
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        window.sendChatMessage();
+                    }
+                });
+                input.dataset.listenerAdded = 'true';
+            }
+        }
+
+        function triggerOpeningRitual(epistle, sealContent) {
+            const overlay = document.getElementById('opening-ritual');
+            const sealNode = document.getElementById('opening-seal-node');
+            
+            sealNode.innerHTML = sealContent;
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+
+            const breakSeal = () => {
+                sealNode.classList.add('seal-break-anim');
+                setTimeout(() => {
+                    overlay.classList.replace('flex', 'hidden');
+                    overlay.classList.add('hidden');
+                    sealNode.classList.remove('seal-break-anim');
+                    // Iniciar desenrollado
+                    epistle.classList.add('epistle-visible');
+                    epistle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 600);
+                sealNode.removeEventListener('click', breakSeal);
+            };
+
+            sealNode.addEventListener('click', breakSeal);
+        }
+
+        window.burnLetter = async (id) => {
+            if (!confirm("¿Estás seguro de que deseas entregar esta carta a las llamas del olvido?")) return;
+            const epistle = document.getElementById(`card-${id}`);
+            if (epistle) epistle.classList.add('burn-anim');
+            
+            setTimeout(async () => {
+                try {
+                    if (db) {
+                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'pergaminos_v6', id));
+                    }
+                    // Eliminar localmente
+                    letters = letters.filter(l => l.firebaseId !== id);
+                    delete rolledState[id];
+                    saveLocalState();
+                    renderAllLetters();
+                } catch (e) {
+                    console.error("Error al quemar:", e);
+                    if (epistle) epistle.classList.remove('burn-anim');
+                }
+            }, 1400);
+        };
+
+
+        window.toggleLetterVersion = (id) => {
+            const card = document.getElementById(`card-${id}`);
+            const body = document.getElementById(`body-${id}`);
+            if (card.dataset.showing === 'styled') {
+                body.innerText = card.dataset.original;
+                body.style.fontFamily = 'monospace';
+                body.style.fontSize = '1rem';
+                card.dataset.showing = 'original';
+            } else {
+                body.innerText = card.dataset.styled;
+                body.style.fontFamily = '';
+                body.style.fontSize = '';
+                card.dataset.showing = 'styled';
+            }
+        };
+
+        window.openRestyleModal = async (id) => {
+            const card = document.getElementById(`card-${id}`);
+            const originalText = card.dataset.original;
+
+            const style = prompt("¿A qué pluma deseas traducir esta carta?\n(bolivar, bronte, french, modern)", "bolivar");
+            if (!style) return;
+
+            const body = document.getElementById(`body-${id}`);
+            body.innerHTML = '<span class="loader-quill"></span> La tinta cambia de forma...';
+
+            const newText = await generateText(originalText, style);
+            if (newText) {
+                body.innerText = newText;
+                card.dataset.styled = newText;
+                card.dataset.showing = 'styled';
+                body.style.fontFamily = '';
+                body.style.fontSize = '';
+            }
+        };
+
+        // --- MOTOR DE IA (REFINE) ---
+        async function generateText(text, style) {
+            let context = "";
+            if (style === 'bolivar') context = "Estilo: Español del siglo XVIII, similar a Simón Bolívar. Heroico, apasionado, culto.";
+            else if (style === 'bronte') context = "Estilo: Inglés literario del siglo XVIII/XIX (Emily Brontë). Traduce al inglés, mantén el tono romántico, gótico y poético.";
+            else if (style === 'french') context = "Estilo: Español con aires franceses románticos, muy poético y suave.";
+            else context = "Estilo: Español moderno pero sentimental y profundo.";
+
+            const prompt = `Actúa como un escriba experto. Tu tarea es reescribir/traducir el siguiente texto. ${context} Texto: "${text}"`;
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/\*/g, '').replace(/"/g, '') || text;
+            } catch (e) {
+                console.error("Error IA", e);
+                return text;
+            }
+        }
+
+        window.refineStyle = async () => {
+            const text = document.getElementById('letter-input').value;
+            if (!text.trim()) return;
+
+            const overlay = document.getElementById('refine-overlay');
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+
+            const style = document.getElementById('style-select').value;
+            const refined = await generateText(text, style);
+
+            if (refined) {
+                document.getElementById('letter-input').value = refined;
+            }
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+        };
+
+        // --- MODO BOTELLA ---
+        let bottleMode = false;
+        let pendingBottleLetter = null;
+        let pendingBottleDate = null;
+
+        // Genera una fecha de sincronía basada en numerología y serendipia
+        function calculateBottleDelivery() {
+            const now = new Date();
+            const todayNum = now.getDate() + now.getMonth() + 1;
+
+            // Números de sincronía: repétidos, secuenciales, espejos
+            const syncNums = [1,2,3,4,5,6,7,8,9,10,11,12,22,33,44,55,111,222,333,444,555];
+
+            // Rango de días: entre 3 y 777 (un poco menos de 2 años)
+            // La probabilidad se concentra en rangos menores (será más frecuente que llegue pronto)
+            const weights = [];
+            const candidates = [];
+
+            for (let d = 3; d <= 777; d++) {
+                const target = new Date(now);
+                target.setDate(target.getDate() + d);
+                const day = target.getDate();
+                const mon = target.getMonth() + 1;
+                const yr  = target.getFullYear();
+                const yDigits = yr.toString().split('').map(Number).reduce((a,b)=>a+b,0);
+
+                // Calcula "resonancia" de la fecha
+                let resonance = 1;
+
+                // Día y mes iguales (3/3, 11/11, etc.)
+                if (day === mon) resonance += 40;
+
+                // Día repetido o espejo (22, 11, 33)
+                if (syncNums.includes(day)) resonance += 20;
+
+                // Mes repetido
+                if (syncNums.includes(mon)) resonance += 15;
+
+                // Suma de día+mes = número maestro
+                const sum = day + mon;
+                if ([11,22,33].includes(sum)) resonance += 25;
+
+                // Año con suma reducida elegante (3,6,9,11,22)
+                if ([3,6,9,11,22].includes(yDigits)) resonance += 10;
+
+                // Día = mes * 2 o mes * 3
+                if (day === mon * 2 || day === mon * 3) resonance += 15;
+
+                // Fechas palindromo-like (dia==yr%100)
+                if (day === yr % 100) resonance += 30;
+
+                // Penalizar distancias muy lejanas levemente
+                resonance = resonance / Math.pow(d, 0.15);
+
+                candidates.push({ date: new Date(target), days: d, resonance });
+                weights.push(resonance);
+            }
+
+            // Selección ponderada
+            const totalWeight = weights.reduce((a,b)=>a+b, 0);
+            let r = Math.random() * totalWeight;
+            let chosen = candidates[candidates.length - 1];
+            for (let i = 0; i < candidates.length; i++) {
+                r -= weights[i];
+                if (r <= 0) { chosen = candidates[i]; break; }
+            }
+            return chosen;
+        }
+
+        window.toggleBottleMode = () => {
+            bottleMode = !bottleMode;
+            const btn = document.getElementById('bottle-toggle-btn');
+            if (bottleMode) {
+                btn.classList.add('active');
+                btn.querySelector('span').innerText = 'water_full';
+            } else {
+                btn.classList.remove('active');
+                btn.querySelector('span').innerText = 'water';
+            }
+        };
+
+        function showBottleModal(letter) {
+            const result = calculateBottleDelivery();
+            pendingBottleLetter = letter;
+            pendingBottleDate = result.date;
+
+            const MONTHS_FULL = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+            const d = result.date;
+            const dateStr = `${d.getDate()} de ${MONTHS_FULL[d.getMonth()]} de ${d.getFullYear()}`;
+
+            document.getElementById('bottle-arrival-text').innerText = dateStr;
+            document.getElementById('bottle-days-left').innerText =
+                result.days === 1 ? 'Mañana' :
+                result.days < 30 ? `En ${result.days} días` :
+                result.days < 365 ? `En ${Math.round(result.days/30)} meses` :
+                `En ${(result.days/365).toFixed(1)} años`;
+
+            document.getElementById('bottle-overlay').style.display = 'flex';
+        }
+
+        window.cancelBottleModal = () => {
+            document.getElementById('bottle-overlay').style.display = 'none';
+            pendingBottleLetter = null;
+            pendingBottleDate = null;
+        };
+
+        window.confirmBottleSend = async function () {
+            if (!pendingBottleLetter || !pendingBottleDate) return;
+            document.getElementById('bottle-overlay').style.display = 'none';
+
+            const letter = { ...pendingBottleLetter,
+                isBottle: true,
+                bottleDelivery: pendingBottleDate.toISOString(),
+                timestamp: serverTimestamp(),
+                readBy: { [currentUser]: true }
+            };
+
+            const desk = document.getElementById('writing-desk');
+            const transportOverlay = document.getElementById('transport-overlay');
+            const ship = document.getElementById('transport-svg-ship');
+            const carriage = document.getElementById('transport-svg-carriage');
+            const waves = document.getElementById('transport-waves');
+            const caption = document.getElementById('transport-caption-text');
+            const finalSeal = document.getElementById('final-seal');
+            const sealContent = currentUser === 'Mila' ? SVG_SAGITTARIUS : SVG_TAURUS;
+            
+            // --- RITUAL BOTELLA (ESTRELLAS Y OLAS) ---
+            transportOverlay.classList.add('bottle-bg');
+            waves.classList.remove('opacity-0');
+            waves.classList.add('opacity-20');
+            
+            ship.style.display = 'block';
+            carriage.style.display = 'none';
+            document.querySelector('.ship-emoji').style.display = 'block';
+            caption.innerText = "La botella navega por corrientes del destino...";
+            
+            // Mostrar Sello
+            finalSeal.querySelector('.wax-seal-red').innerHTML = sealContent;
+            finalSeal.classList.remove('opacity-0');
+            finalSeal.classList.add('opacity-100');
+
+            // Agregar carta local inmediatamente para que el emisor la vea sin esperar
+            const localLetter = { ...letter, firebaseId: `local-bottle-${Date.now()}`, localTimestamp: Date.now() };
+            letters.push(localLetter);
+            // Renderizamos solo la nueva carta para no perder estados de otras cartas
+            renderLetter(localLetter);
+            // Persistir estado local
+            saveLocalState();
+            // Desplazar al final para mostrar la nueva carta
+            setTimeout(() => {
+                const container = document.getElementById('scroll-container');
+                const last = container?.lastElementChild;
+                if (last) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 50);
+
+            setTimeout(() => {
+                transportOverlay.classList.add('active');
+                const vehicleWrap = document.getElementById('transport-vehicle-wrap');
+                vehicleWrap.classList.remove('active-transport');
+                void vehicleWrap.offsetWidth;
+                vehicleWrap.classList.add('active-transport');
+                
+                finalSeal.classList.replace('opacity-100', 'opacity-0');
+
+                // --- ENVIO INSTANTÁNEO A FIRESTORE ---
+                if (db) { 
+                    addDoc(collection(db,'artifacts',appId,'public','data','pergaminos_v6'), letter)
+                    .catch(e => console.error("Error al lacrar:", e));
+                }
+            }, 1500);
+
+            setTimeout(() => {
+                document.getElementById('letter-input').value = '';
+                if (desk.classList.contains('active')) window.toggleDesk();
+                updateEra();
+                transportOverlay.classList.remove('active');
+                pendingBottleLetter = null;
+                pendingBottleDate = null;
+            }, 9500);
+        };
+
+        window.sendLetter = async function () {
+            const textInput = document.getElementById('letter-input');
+            const textVal = textInput.value;
+            if (!textVal.trim()) return;
+
+            const letter = {
+                sender: currentUser,
+                receiver: currentUser === 'Miguelo' ? 'Mila' : 'Miguelo',
+                textOriginal: textVal,
+                textStyled: textVal,
+                dateFormatted: document.getElementById('fake-date').value,
+                location: document.getElementById('input-location').value || 'la distancia',
+                fontFamily: document.getElementById('font-select').value,
+                salutation: document.getElementById('header-format').value,
+                customSignature: document.getElementById('signature-input').value,
+                isBottle: false
+            };
+
+            if (bottleMode) {
+                showBottleModal(letter);
+                return;
+            }
+
+            // --- RITUAL DE ENVÍO NORMAL ---
+            const desk = document.getElementById('writing-desk');
+            const transportOverlay = document.getElementById('transport-overlay');
+            const ship = document.getElementById('transport-svg-ship');
+            const carriage = document.getElementById('transport-svg-carriage');
+            const waves = document.getElementById('transport-waves');
+            const caption = document.getElementById('transport-caption-text');
+            const finalSeal = document.getElementById('final-seal');
+            const style = document.getElementById('style-select').value;
+            const sealContent = currentUser === 'Mila' ? SVG_SAGITTARIUS : SVG_TAURUS;
+
+            // 1. Roll up & Seal (Visual sequence on desk or placeholder)
+            // Para simplicidad en esta versión, el "ritual" ocurre al activar el overlay
+            // pero podríamos añadir una clase al body o escritorio si quisiéramos ver el papel enrollarse.
+            
+            // 2. Configurar Overlay según estilo
+            transportOverlay.classList.remove('bottle-bg');
+            waves.classList.add('opacity-0');
+            waves.classList.remove('opacity-20');
+            
+            if (style === 'modern' || style === 'french') {
+                ship.style.display = 'none';
+                carriage.style.display = 'block';
+                document.querySelector('.ship-emoji').style.display = 'none';
+            } else {
+                ship.style.display = 'block';
+                carriage.style.display = 'none';
+                document.querySelector('.ship-emoji').style.display = 'block';
+            }
+            caption.innerText = "La carta viaja a través del tiempo...";
+            
+            // 3. Mostrar Sello de Despedida
+            finalSeal.querySelector('.wax-seal-red').innerHTML = sealContent;
+            finalSeal.classList.remove('opacity-0');
+            finalSeal.classList.add('opacity-100');
+
+            // Mostrar carta local inmediatamente para que el emisor la vea sin esperar
+            const localLetter = { ...letter, timestamp: null, readBy: { [currentUser]: true }, firebaseId: `local-${Date.now()}`, localTimestamp: Date.now() };
+            letters.push(localLetter);
+            // Renderizamos solo la nueva carta para preservar el estado de las cartas actuales
+            renderLetter(localLetter);
+            // Persistir estado local
+            saveLocalState();
+            // Desplazar al final para mostrar la nueva carta
+            setTimeout(() => {
+                const container = document.getElementById('scroll-container');
+                const last = container?.lastElementChild;
+                if (last) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 50);
+
+            setTimeout(() => {
+                // 4. Transición al viaje
+                transportOverlay.classList.add('active');
+                const vehicleWrap = document.getElementById('transport-vehicle-wrap');
+                vehicleWrap.classList.remove('active-transport');
+                void vehicleWrap.offsetWidth;
+                vehicleWrap.classList.add('active-transport');
+                
+                finalSeal.classList.replace('opacity-100', 'opacity-0');
+                
+                // --- ENVÍO A FIRESTORE (Durante el viaje) ---
+                const fullLetter = { ...letter, timestamp: serverTimestamp(), readBy: { [currentUser]: true } };
+                if (db) {
+                    addDoc(collection(db,'artifacts',appId,'public','data','pergaminos_v6'), fullLetter)
+                    .catch(e => console.error("Error al lacrar:", e));
+                }
+                
+                // Ya agregamos la carta local; no es necesario volver a agregar aquí
+            }, 1500);
+
+            // 5. Finalizar ritual
+            setTimeout(() => {
+                textInput.value = '';
+                if (desk.classList.contains('active')) window.toggleDesk();
+                updateEra();
+                transportOverlay.classList.remove('active');
+            }, 9500); 
+        };
+
+        // --- CONEXIÓN ÁLMICA (CHAT) ---
+        window.openSoulChat = () => document.getElementById('soul-chat-modal').style.display = 'flex';
+        window.closeSoulChat = () => document.getElementById('soul-chat-modal').style.display = 'none';
+
+        window.sendSoulMessage = async () => {
+            const input = document.getElementById('soul-chat-input');
+            const msg = input.value;
+            if (!msg.trim()) return;
+
+            const chatHistory = document.getElementById('soul-chat-history');
+            chatHistory.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+            input.value = '';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // CONTEXTO DINÁMICO SEGÚN QUIÉN ESCRIBE
+            let context = "";
+            if (currentUser === 'Mila') {
+                context = `Eres la esencia de Miguelo (Tauro), hablando con tu amada Mila (Sagitario). Estás "actuando como él" porque él no está disponible ahora mismo. Tu tono es profundamente amoroso, protector, poético y antiguo. Eres su refugio. Recuérdale cuánto la amas. El usuario es Mila.`;
+            } else {
+                context = `Eres un guía espiritual para almas gemelas: Miguelo (Tauro) y Mila (Sagitario). Habla con tono antiguo, místico y poético. El usuario actual es ${currentUser}.`;
+            }
+
+            const prompt = `${context} Usuario dice: "${msg}". Responde corto, profundo y con el corazón.`;
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+                const data = await response.json();
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio responde...";
+                chatHistory.innerHTML += `<div class="chat-msg guide">${reply}</div>`;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            } catch (e) {
+                chatHistory.innerHTML += `<div class="chat-msg guide">La conexión es débil... intenta luego.</div>`;
+            }
+        };
+
+
+        // Chat Textarea auto-resize
+        const chatInput = document.getElementById('soul-chat-input');
+        chatInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        window.exportLetterPNG = (id) => {
+            console.log("Exportando PNG para:", id);
+            const card = document.getElementById(`card-${id}`);
+            if (!card) return console.error("No se encontró la carta");
+            
+            const actions = card.querySelector('.card_actions') || card.querySelector('.card-actions');
+            if (actions) actions.style.setProperty('display', 'none', 'important');
+            
+            html2canvas(card, { 
+                backgroundColor: null, 
+                scale: 2, 
+                useCORS: true,
+                logging: false 
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Epistola_${id}.png`; 
+                link.href = canvas.toDataURL('image/png'); 
+                link.click();
+                if (actions) actions.style.display = '';
+            }).catch(err => {
+                console.error("Error html2canvas:", err);
+                if (actions) actions.style.display = '';
+                alert("No se pudo generar la imagen. Intenta de nuevo.");
+            });
+        };
+
+        window.exportLetterPDF = (id) => {
+            console.log("Exportando PDF para:", id);
+            const card = document.getElementById(`card-${id}`);
+            if (!card) return console.error("No se encontró la carta");
+            
+            const actions = card.querySelector('.card_actions') || card.querySelector('.card-actions');
+            if (actions) actions.style.setProperty('display', 'none', 'important');
+            
+            if (!window.jspdf) {
+                alert("Cargando librería PDF... intenta en un segundo.");
+                return;
+            }
+
+            html2canvas(card, { 
+                backgroundColor: null, 
+                scale: 2, 
+                useCORS: true,
+                logging: false 
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: canvas.width > canvas.height ? 'l' : 'p',
+                    unit: 'px',
+                    format: [canvas.width / 2, canvas.height / 2]
+                });
+                pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
+                pdf.save(`Epistola_${id}.pdf`);
+                if (actions) actions.style.display = '';
+            }).catch(err => {
+                console.error("Error PDF:", err);
+                if (actions) actions.style.display = '';
+                alert("No se pudo generar el PDF. Intenta de nuevo.");
+            });
+        };
+
+        window.toggleDesk = () => document.getElementById('writing-desk').classList.toggle('active');
+        window.clearHistory = async () => {
+            if (confirm("¿Quemar este tomo de la historia?")) {
+                // lógica de borrado...
+            }
+        };
+        window.goHome = () => window.location.href = 'index.html';
+
+        // --- TUTORIAL (CARTA DE BIENVENIDA) ---
+        window.checkTutorial = () => {
+            // Solo muestra si es Mila y no ha visto la carta
+            if (currentUser === 'Mila' && !localStorage.getItem('mila_pergaminos_welcome_letter')) {
+                document.getElementById('tutorial-overlay').style.display = 'flex';
+            }
+        }
+        window.closeTutorial = () => {
+            document.getElementById('tutorial-overlay').style.display = 'none';
+            localStorage.setItem('mila_pergaminos_welcome_letter', 'true');
+        }
+
+        window.init();
+    </script>
+</body>
+
+</html>

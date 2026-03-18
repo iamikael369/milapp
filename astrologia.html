@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bóveda Celeste</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&family=Playfair+Display:ital@0;1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ESTILOS COMPARTIDOS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        /* Estilos específicos de Astrología */
+        body {
+            background-image: radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.1) 0%, transparent 60%);
+        }
+
+        .planet-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+        }
+
+        .planet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .planet-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .loader-stars span {
+            display: inline-block;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+            margin: 0 2px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Rueda Zodiacal (Simplificada para mobile) */
+        .zodiac-wheel {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 20px auto;
+            border-radius: 50%;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .planet-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 45%;
+            transform-origin: top center;
+            pointer-events: none;
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .planet-dot {
+            position: absolute;
+            bottom: 0;
+            left: -9px;
+            width: 20px;
+            height: 20px;
+            background: #0f172a;
+            border: 1px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            pointer-events: auto;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="pb-32">
+
+    <!-- HEADER -->
+    <header
+        class="p-4 sticky top-0 z-40 bg-[#0a0a19]/90 backdrop-blur-md border-b border-white/5 flex justify-between items-center">
+        <div class="flex gap-2">
+            <button onclick="goHome()"
+                class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 text-gray-400"><span
+                    class="material-symbols-rounded text-lg">home</span></button>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="toggleProfileSelector()">
+                <div id="header-avatar"
+                    class="w-9 h-9 rounded-full border-2 border-blue-500/50 bg-black/40 flex items-center justify-center font-bold text-white">
+                </div>
+                <div>
+                    <h2 id="header-name" class="font-cinzel text-sm text-white">Cargando...</h2>
+                    <p id="header-sign" class="text-[9px] text-blue-300 uppercase tracking-widest">--</p>
+                </div>
+                <span class="material-symbols-rounded text-gray-500 text-sm">expand_more</span>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="Universo.exportUniverse()"
+                class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/20 text-gray-400"><span
+                    class="material-symbols-rounded text-lg">save</span></button>
+            <button onclick="goToNumerology()"
+                class="w-8 h-8 rounded-full bg-purple-900/30 border border-purple-500/30 flex items-center justify-center text-purple-200 hover:bg-purple-800 transition"><span
+                    class="material-symbols-rounded text-base">tag</span></button>
+        </div>
+    </header>
+
+    <!-- SELECTOR -->
+    <div id="profile-selector"
+        class="hidden fixed top-16 left-4 right-4 bg-[#1e1b4b] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
+        <div id="profile-list" class="max-h-48 overflow-y-auto"></div>
+    </div>
+
+    <!-- TABS -->
+    <nav class="flex justify-center p-2 gap-4 my-2">
+        <button onclick="switchTab('carta')" id="tab-carta"
+            class="px-4 py-1 text-xs font-bold uppercase tracking-widest text-blue-300 border-b-2 border-blue-400">Carta
+            Natal</button>
+        <button onclick="switchTab('transitos')" id="tab-transitos"
+            class="px-4 py-1 text-xs font-bold uppercase tracking-widest text-gray-500 border-b-2 border-transparent">Tránsitos</button>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="px-4 py-2 relative min-h-[60vh]">
+        <!-- CARTA NATAL -->
+        <div id="view-carta" class="animate-fade-in space-y-6">
+            <div class="relative py-4">
+                <div class="zodiac-wheel">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center"><span
+                            class="text-4xl">☀️</span>
+                        <h3 class="font-cinzel text-xl text-white" id="main-sun-sign">--</h3>
+                    </div>
+                    <div id="planet-orbit-container"></div>
+                </div>
+            </div>
+            <div class="space-y-4" id="planet-cards-container"></div>
+        </div>
+
+        <!-- TRÁNSITOS -->
+        <div id="view-transitos" class="hidden animate-fade-in space-y-6">
+            <div class="text-center mb-4">
+                <h3 class="font-cinzel text-lg text-white">Clima Astral Hoy</h3>
+                <p class="text-xs text-gray-400" id="current-date-display">--</p>
+            </div>
+            <div class="glass-card p-5 border-l-4 border-blue-500">
+                <h4 class="font-bold text-sm text-blue-200 mb-2">Energía Global</h4>
+                <div id="transit-summary" class="text-xs text-gray-300 leading-relaxed">Calculando posiciones...</div>
+                <button class="mt-3 text-[10px] text-yellow-300 flex items-center gap-1 hover:text-white"
+                    onclick="askAIGuide('¿Cómo me afectan los tránsitos de hoy?')"><span
+                        class="material-symbols-rounded text-sm">auto_awesome</span> Interpretación Personal</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL LECTURA -->
+    <div id="reading-modal" class="sheet-modal">
+        <div class="sheet-content flex flex-col h-[70vh]">
+            <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-4 flex-none"></div>
+            <div class="flex justify-between items-center mb-4 flex-none px-2">
+                <h3 class="font-cinzel text-lg text-blue-300" id="reading-title">Oráculo</h3><button
+                    onclick="closeReadingModal()" class="text-gray-400"><span
+                        class="material-symbols-rounded">close</span></button>
+            </div>
+            <div id="reading-body"
+                class="flex-1 overflow-y-auto custom-scrollbar px-2 pb-4 text-sm text-gray-300 leading-relaxed font-serif">
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/universo.js"></script>
+    <script>
+        let KNOWLEDGE_BASE = {};
+        async function loadKnowledge() {
+            try {
+                const res = await fetch('assets/data/conocimiento.json');
+                KNOWLEDGE_BASE = await res.json();
+            } catch (e) { console.error("Error cargando base de conocimiento:", e); }
+        }
+        const Planets = [
+            { id: 'sun', name: 'Sol', icon: '☉', color: '#fbbf24', speed: 0.9856 }, { id: 'moon', name: 'Luna', icon: '☽', color: '#e2e8f0', speed: 13.176 },
+            { id: 'mercury', name: 'Mercurio', icon: '☿', color: '#a5f3fc', speed: 1.383 }, { id: 'venus', name: 'Venus', icon: '♀', color: '#f9a8d4', speed: 1.602 },
+            { id: 'mars', name: 'Marte', icon: '♂', color: '#f87171', speed: 0.524 }, { id: 'jupiter', name: 'Júpiter', icon: '♃', color: '#fb923c', speed: 0.083 },
+            { id: 'saturn', name: 'Saturno', icon: '♄', color: '#fcd34d', speed: 0.033 }, { id: 'uranus', name: 'Urano', icon: '♅', color: '#22d3ee', speed: 0.011 },
+            { id: 'neptune', name: 'Neptuno', icon: '♆', color: '#818cf8', speed: 0.006 }, { id: 'pluto', name: 'Plutón', icon: '♇', color: '#94a3b8', speed: 0.004 },
+            { id: 'node', name: 'Nodo Norte', icon: '☊', color: '#c084fc', speed: -0.053 }, { id: 'chiron', name: 'Quirón', icon: '⚷', color: '#4ade80', speed: 0.02 }
+        ];
+        const Signs = ["Aries", "Tauro", "Géminis", "Cáncer", "Leo", "Virgo", "Libra", "Escorpio", "Sagitario", "Capric", "Acuario", "Piscis"];
+
+        let currentProfile = Universo.getActiveProfile();
+
+        async function init() {
+            await loadKnowledge();
+            renderAll();
+            // Setup selector
+            Universo.renderProfileSelector('profile-list', (p) => {
+                currentProfile = p;
+                renderAll();
+                document.getElementById('profile-selector').classList.add('hidden');
+            });
+        }
+
+        const AstroCalc = {
+            calculatePos: (planet, date) => {
+                const J2000 = new Date('2000-01-01T12:00:00Z');
+                const days = (date - J2000) / (1000 * 60 * 60 * 24);
+                const basePos = { sun: 280.46, moon: 218.31, mercury: 252.25, venus: 181.97, mars: 355.45, jupiter: 34.40, saturn: 49.94, uranus: 313.23, neptune: 304.88, pluto: 238.92, node: 125.04, chiron: 255.0 };
+                let pos = basePos[planet.id] + (days * planet.speed);
+                if (planet.id === 'moon') pos += 6.289 * Math.sin((134.96 + 13.064 * days) * Math.PI / 180);
+                pos = pos % 360; if (pos < 0) pos += 360; return pos;
+            },
+            getAscendant: (date, timeStr) => {
+                if (!timeStr) return null;
+                const [h, m] = timeStr.split(':').map(Number);
+                const sunPos = AstroCalc.calculatePos(Planets[0], date);
+                const hoursFrom6 = (h + m / 60) - 6;
+                let asc = sunPos + (hoursFrom6 * 15); return asc % 360;
+            },
+            getDegData: (deg) => { const idx = Math.floor(deg / 30); const degree = Math.floor(deg % 30); return { sign: Signs[idx], degree: degree, index: idx }; }
+        };
+
+        function renderAll() {
+            renderHeader();
+            const date = new Date(currentProfile.dob + 'T' + (currentProfile.time || '12:00'));
+            const positions = Planets.map(p => { const deg = AstroCalc.calculatePos(p, date); return { ...p, deg, data: AstroCalc.getDegData(deg) }; });
+
+            if (currentProfile.time) {
+                const ascDeg = AstroCalc.getAscendant(date, currentProfile.time);
+                const ascObj = { id: 'asc', name: 'Ascendente', icon: 'ASC', color: '#ffffff', deg: ascDeg, data: AstroCalc.getDegData(ascDeg) };
+                positions.push(ascObj);
+            }
+
+            // Rueda
+            const orbitContainer = document.getElementById('planet-orbit-container');
+            orbitContainer.innerHTML = '';
+            positions.forEach(p => {
+                const el = document.createElement('div'); el.className = 'planet-marker';
+                const visAngle = p.deg + 180; el.style.transform = `translate(-50%, -50%) rotate(${visAngle}deg)`; el.style.top = '50%'; el.style.left = '50%';
+                const dot = document.createElement('div'); dot.className = 'planet-dot'; dot.innerHTML = p.icon; dot.style.color = p.color; dot.style.boxShadow = `0 0 5px ${p.color}`; dot.style.transform = `rotate(-${visAngle}deg)`;
+                // dot.onclick = () => interpretPlanet(p);
+                el.appendChild(dot); orbitContainer.appendChild(el);
+            });
+
+            // Tarjetas
+            const list = document.getElementById('planet-cards-container');
+            list.innerHTML = '';
+            const order = ['Sol', 'Luna', 'Ascendente', 'Mercurio', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Neptuno', 'Plutón', 'Quirón', 'Nodo Norte'];
+            positions.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+
+            positions.forEach(p => {
+                if (p.id === 'node') return;
+                const knowledge = KNOWLEDGE_BASE.astrologia || {};
+                const planetDesc = knowledge.planetas ? knowledge.planetas[p.name] : "Energía cósmica.";
+                const signDesc = knowledge.signos ? knowledge.signos[p.data.sign] : "";
+
+                const card = document.createElement('div');
+                card.className = "glass-card group";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center gap-3">
+                            <div class="planet-icon" style="color:${p.color}; border-color:${p.color}">${p.icon}</div>
+                            <div><h4 class="font-cinzel text-white text-base">${p.name}</h4><span class="text-[10px] text-gray-400 uppercase tracking-widest">en ${p.data.sign} ${p.data.degree}°</span></div>
+                        </div>
+                        <button class="text-xs text-yellow-300 hover:text-white flex items-center gap-1 bg-white/5 px-2 py-1 rounded-full transition" onclick="interpretPlanetWithAI('${p.name}', '${p.data.sign}', ${p.data.degree})"><span class="material-symbols-rounded text-sm">auto_awesome</span> IA</button>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-xs text-blue-200 font-bold italic line-clamp-1">${signDesc}</p>
+                        <p class="text-xs text-gray-300 leading-relaxed font-serif">${planetDesc}</p>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            const sun = positions.find(x => x.id === 'sun');
+            document.getElementById('header-sign').innerText = `Sol en ${sun.data.sign}`;
+            document.getElementById('main-sun-sign').innerText = sun.data.sign;
+        }
+
+        function renderHeader() {
+            document.getElementById('header-name').innerText = currentProfile.name;
+            const ava = document.getElementById('header-avatar');
+            ava.style.backgroundColor = currentProfile.color || '#3b82f6';
+            ava.innerText = currentProfile.name[0];
+            document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // --- IA Calls (via Universo) ---
+        async function interpretPlanetWithAI(planet, sign, deg) {
+            openReadingModal(`Lectura: ${planet}`);
+            const body = document.getElementById('reading-body');
+            body.innerHTML = '<span class="loader-stars"><span></span><span></span><span></span></span>';
+            const prompt = `Interpreta ${planet} en ${sign} (Grado ${deg}) para ${currentProfile.name}. Significado psicológico.`;
+            const text = await Universo.callGemini(prompt);
+            body.innerHTML = text.replace(/\n/g, '<br>');
+        }
+
+        async function askAIGuide(q) {
+            openReadingModal("Oráculo Estelar");
+            document.getElementById('reading-body').innerHTML = '<span class="loader-stars"><span></span><span></span><span></span></span>';
+            const text = await Universo.callGemini(`Usuario: ${currentProfile.name}. Pregunta: ${q}`);
+            document.getElementById('reading-body').innerHTML = text.replace(/\n/g, '<br>');
+        }
+
+        function openReadingModal(t) { document.getElementById('reading-title').innerText = t; document.getElementById('reading-modal').classList.add('active'); }
+        function closeReadingModal() { document.getElementById('reading-modal').classList.remove('active'); }
+
+        // Navigation / Utils
+        function goHome() { Universo.goHome(); }
+        function goToNumerology() { Universo.openModule('numerologia.html'); }
+        function toggleProfileSelector() { document.getElementById('profile-selector').classList.toggle('hidden'); }
+        function switchTab(t) {
+            ['carta', 'transitos'].forEach(id => document.getElementById('view-' + id).classList.add('hidden'));
+            ['tab-carta', 'tab-transitos'].forEach(id => { document.getElementById(id).classList.remove('text-blue-300', 'border-blue-400'); document.getElementById(id).classList.add('text-gray-500', 'border-transparent'); });
+            document.getElementById('view-' + t).classList.remove('hidden'); document.getElementById('tab-' + t).classList.add('text-blue-300', 'border-blue-400');
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

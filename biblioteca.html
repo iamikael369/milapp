@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bóveda de Luz</title>
+
+    <!-- FUENTES & ICONOS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&family=Playfair+Display:ital@0;1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* --- ESTILOS BASE (Tema Cian/Sabiduría) --- */
+        :root {
+            --lib-accent: #22d3ee;
+            /* Cian Brillante */
+            --lib-glow: #0891b2;
+            /* Cian Oscuro */
+            --deep-bg: rgba(8, 15, 25, 0.98);
+            --card-border: rgba(34, 211, 238, 0.2);
+        }
+
+        body {
+            background-color: var(--deep-bg);
+            color: #eaeef7;
+            font-family: 'Lato', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 15% 25%, rgba(34, 211, 238, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(14, 165, 233, 0.08) 0%, transparent 40%);
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+        }
+
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Tabs */
+        .nav-pill {
+            flex: 1;
+            padding: 12px 4px;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-pill.active {
+            color: var(--lib-accent);
+            border-bottom-color: var(--lib-accent);
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+        }
+
+        /* Tarjetas */
+        .lib-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, background 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .lib-card:active {
+            transform: scale(0.98);
+        }
+
+        .lib-card:hover {
+            background: rgba(34, 211, 238, 0.05);
+            border-color: var(--lib-accent);
+        }
+
+        /* Categorías Sabiduría */
+        .cat-badge {
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 99px;
+            border: 1px solid;
+            text-transform: uppercase;
+        }
+
+        .cat-crystal {
+            color: #f472b6;
+            border-color: #f472b6;
+            background: rgba(244, 114, 182, 0.1);
+        }
+
+        .cat-herb {
+            color: #4ade80;
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .cat-symbol {
+            color: #fbbf24;
+            border-color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .cat-animal {
+            color: #f87171;
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        /* Buscador */
+        .search-bar {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .glass-input:focus {
+            outline: none;
+            border-color: var(--lib-accent);
+        }
+
+        /* Audio Player Mini */
+        .track-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .track-row:hover {
+            background: rgba(34, 211, 238, 0.05);
+        }
+
+        .track-row.playing {
+            background: rgba(34, 211, 238, 0.1);
+            border-left: 3px solid var(--lib-accent);
+        }
+
+        /* PDF Viewer Placeholder */
+        .pdf-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .pdf-zone:hover {
+            border-color: var(--lib-accent);
+            color: var(--lib-accent);
+            background: rgba(34, 211, 238, 0.05);
+        }
+
+        /* Modales */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sheet-content {
+            background: linear-gradient(to top, #082f49, #0f172a);
+            border-top: 1px solid var(--card-border);
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .sheet-content {
+            transform: translateY(0);
+        }
+
+        /* Visualizador Audio */
+        .visualizer-bar {
+            width: 3px;
+            background: var(--lib-accent);
+            border-radius: 2px;
+            animation: bounce 1s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                height: 5px;
+                opacity: 0.5;
+            }
+
+            50% {
+                height: 20px;
+                opacity: 1;
+            }
+        }
+
+        .loader-dots span {
+            animation: bounce 1.4s infinite ease-in-out both;
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            background-color: currentColor;
+            border-radius: 50%;
+            margin: 0 2px;
+        }
+
+        /* Radio Botones de Tipo */
+        .type-radio:checked+label {
+            background: rgba(34, 211, 238, 0.2);
+            border-color: var(--lib-accent);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="pb-32">
+
+    <!-- HEADER -->
+    <header
+        class="p-4 sticky top-0 z-40 bg-[#080f19]/95 backdrop-blur-md border-b border-white/5 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+            <button onclick="goHome()"
+                class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 text-gray-400">
+                <span class="material-symbols-rounded text-lg">home</span>
+            </button>
+            <h2 class="font-cinzel text-lg text-white tracking-widest flex items-center gap-2">
+                Bóveda de Luz <span class="text-cyan-400 text-xs">✦</span>
+            </h2>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="openBackupModal()"
+                class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 text-gray-400"
+                title="Respaldo">
+                <span class="material-symbols-rounded text-lg">save</span>
+            </button>
+            <button onclick="openHelp()" class="text-gray-500 hover:text-cyan-400">
+                <span class="material-symbols-rounded">help</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- TABS -->
+    <nav class="flex justify-around p-1 border-b border-white/5 bg-black/20">
+        <button onclick="switchTab('grimorio')" id="tab-grimorio" class="nav-pill active">Grimorio</button>
+        <button onclick="switchTab('sabiduria')" id="tab-sabiduria" class="nav-pill">Enciclopedia</button>
+        <button onclick="switchTab('lector')" id="tab-lector" class="nav-pill">Lector</button>
+        <button onclick="switchTab('audio')" id="tab-audio" class="nav-pill">Frecuencias</button>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="px-4 py-6 min-h-[60vh]">
+
+        <!-- 1. GRIMORIO (Registro de IA) -->
+        <div id="view-grimorio" class="space-y-6 animate-fade-in">
+            <div class="bg-cyan-900/10 border border-cyan-500/20 rounded-xl p-4 flex justify-between items-center">
+                <div>
+                    <h3 class="font-cinzel text-sm text-cyan-200">Síntesis de Patrones</h3>
+                    <p class="text-[10px] text-gray-400">Analiza todas tus lecturas y sueños.</p>
+                </div>
+                <button onclick="analyzeGrimorioPatterns()" id="synthesis-btn"
+                    class="px-4 py-2 bg-cyan-600/20 hover:bg-cyan-600/40 border border-cyan-500/50 rounded-lg text-xs font-bold text-cyan-100 uppercase tracking-widest transition flex items-center gap-2">
+                    <span class="material-symbols-rounded text-sm">auto_awesome</span> Sintetizar
+                </button>
+            </div>
+
+            <!-- Resultado de Síntesis -->
+            <div id="synthesis-result"
+                class="hidden bg-gradient-to-br from-cyan-950 to-black p-5 rounded-xl border border-cyan-500/30 shadow-lg">
+                <h4 class="font-cinzel text-sm text-white mb-2 flex items-center gap-2"><span
+                        class="material-symbols-rounded text-cyan-400">psychology</span> Mensaje del Archivo</h4>
+                <p id="synthesis-text" class="text-xs text-gray-300 leading-relaxed font-serif italic">...</p>
+            </div>
+
+            <!-- Filtros -->
+            <div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
+                <button onclick="filterGrimorio('all')"
+                    class="px-3 py-1 rounded-full bg-white/10 text-[10px] text-white hover:bg-white/20 border border-white/5">Todos</button>
+                <button onclick="filterGrimorio('profile')"
+                    class="px-3 py-1 rounded-full border border-purple-500/30 text-[10px] text-purple-300">Perfiles</button>
+                <button onclick="filterGrimorio('dream')"
+                    class="px-3 py-1 rounded-full border border-blue-500/30 text-[10px] text-blue-300">Sueños</button>
+            </div>
+
+            <div id="grimorio-list" class="space-y-3">
+                <!-- Se llena con JS -->
+                <div class="text-center py-10 opacity-50 border border-dashed border-white/10 rounded-xl">
+                    <span class="material-symbols-rounded text-4xl mb-2 text-cyan-500/50">menu_book</span>
+                    <p class="text-xs text-gray-400">El libro está vacío.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. ENCICLOPEDIA (Editable + IA) -->
+        <div id="view-sabiduria" class="hidden space-y-4 animate-fade-in">
+            <!-- Header Sabiduría -->
+            <div class="flex justify-between items-center">
+                <div class="search-bar flex-1 mr-2 mb-0">
+                    <span class="material-symbols-rounded text-cyan-500">search</span>
+                    <input type="text" id="wiki-search" placeholder="Cristales, Animales..." class="search-input"
+                        oninput="renderWiki()">
+                </div>
+                <button onclick="openEditor()"
+                    class="w-10 h-10 rounded-xl bg-cyan-600/20 border border-cyan-500/30 flex items-center justify-center text-cyan-200 hover:bg-cyan-600/40">
+                    <span class="material-symbols-rounded">add</span>
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                <button onclick="filterWiki('all')"
+                    class="px-3 py-1 rounded-full bg-white/10 text-[10px] border border-white/10">Todo</button>
+                <button onclick="filterWiki('crystal')"
+                    class="px-3 py-1 rounded-full border border-pink-500/30 text-[10px] text-pink-300">Cristales</button>
+                <button onclick="filterWiki('herb')"
+                    class="px-3 py-1 rounded-full border border-green-500/30 text-[10px] text-green-300">Plantas</button>
+                <button onclick="filterWiki('animal')"
+                    class="px-3 py-1 rounded-full border border-red-500/30 text-[10px] text-red-300">Animales</button>
+            </div>
+
+            <div id="wiki-list" class="grid grid-cols-2 gap-3">
+                <!-- Se llena con JS -->
+            </div>
+        </div>
+
+        <!-- 3. LECTOR (PDF) -->
+        <div id="view-lector" class="hidden space-y-6 animate-fade-in">
+            <div class="text-center space-y-2 mb-6">
+                <h3 class="font-cinzel text-xl text-cyan-200">Sala de Lectura</h3>
+                <p class="text-xs text-gray-400">Estudia tus textos sagrados sin distracciones.</p>
+            </div>
+
+            <label class="pdf-zone group">
+                <div
+                    class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-3 group-hover:bg-cyan-500/10 transition">
+                    <span class="material-symbols-rounded text-3xl text-cyan-400">upload_file</span>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-300 group-hover:text-cyan-200">Abrir
+                    PDF Local</span>
+                <input type="file" id="pdf-input" accept="application/pdf" class="hidden" onchange="loadPDF(this)">
+            </label>
+
+            <div id="pdf-container"
+                class="hidden h-[65vh] bg-white/5 rounded-xl border border-white/10 overflow-hidden relative">
+                <iframe id="pdf-frame" class="w-full h-full" src=""></iframe>
+                <button onclick="closePDF()"
+                    class="absolute top-2 right-2 bg-black/80 text-white rounded-full p-2 hover:bg-red-900 transition"><span
+                        class="material-symbols-rounded text-sm">close</span></button>
+            </div>
+        </div>
+
+        <!-- 4. FRECUENCIAS (Audio) -->
+        <div id="view-audio" class="hidden space-y-6 animate-fade-in">
+            <div class="glass-card p-6 text-center border-t-4 border-cyan-500 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-cyan-900/20 to-transparent"></div>
+                <div class="flex items-end justify-center gap-1 h-12 mb-4 opacity-70">
+                    <div class="visualizer-bar" style="animation-duration: 0.8s"></div>
+                    <div class="visualizer-bar" style="animation-duration: 1.2s"></div>
+                    <div class="visualizer-bar" style="animation-duration: 0.5s"></div>
+                    <div class="visualizer-bar" style="animation-duration: 1.0s"></div>
+                    <div class="visualizer-bar" style="animation-duration: 0.7s"></div>
+                </div>
+                <h3 class="font-cinzel text-lg text-white relative z-10" id="now-playing-title">Silencio</h3>
+                <p class="text-xs text-gray-400 mb-4 relative z-10" id="now-playing-desc">Selecciona una frecuencia</p>
+                <audio id="main-audio" controls
+                    class="w-full h-8 opacity-60 hover:opacity-100 transition relative z-10 custom-audio"></audio>
+            </div>
+            <div class="space-y-1 bg-white/5 rounded-xl border border-white/10 overflow-hidden" id="audio-list"></div>
+        </div>
+
+    </main>
+
+    <!-- MODAL WIKI DETALLE -->
+    <div id="wiki-modal" class="modal-overlay">
+        <div class="sheet-content">
+            <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6"></div>
+            <div class="flex justify-between items-start mb-4">
+                <button onclick="deleteWikiItem()" class="text-red-400 hover:text-red-300"><span
+                        class="material-symbols-rounded">delete</span></button>
+                <button onclick="editWikiItem()" class="text-cyan-400 hover:text-white"><span
+                        class="material-symbols-rounded">edit</span></button>
+                <button onclick="document.getElementById('wiki-modal').classList.remove('active')"
+                    class="text-gray-400 hover:text-white"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <div class="text-center mb-6">
+                <div id="wiki-icon" class="text-6xl mb-4 animate-bounce">💎</div>
+                <h3 class="font-cinzel text-2xl text-white" id="wiki-title">--</h3>
+                <span class="cat-badge mt-2 inline-block" id="wiki-badge">--</span>
+            </div>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/5 mb-6 text-center">
+                <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Palabra Clave</p>
+                <p class="text-sm text-white italic" id="wiki-key">--</p>
+            </div>
+            <div class="text-sm text-gray-300 leading-relaxed space-y-4 font-light text-justify" id="wiki-content">...
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/10">
+                <button onclick="generateRitual()" id="ritual-btn"
+                    class="w-full py-3 bg-cyan-900/30 border border-cyan-500/30 rounded-xl text-xs font-bold text-cyan-200 uppercase tracking-widest hover:bg-cyan-900/50 flex items-center justify-center gap-2 transition">
+                    <span class="material-symbols-rounded">auto_awesome</span> Generar Ritual
+                </button>
+                <div id="ritual-result"
+                    class="hidden mt-4 bg-black/30 p-4 rounded-xl text-xs text-gray-300 italic border border-white/5">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITOR DE ENCICLOPEDIA -->
+    <div id="wiki-editor" class="modal-overlay">
+        <div class="sheet-content h-auto">
+            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+                <h3 class="font-cinzel text-lg text-white">Editar Sabiduría</h3>
+                <button onclick="closeEditor()" class="text-gray-400"><span
+                        class="material-symbols-rounded">close</span></button>
+            </div>
+            <form id="wiki-form" class="space-y-4">
+                <input type="hidden" id="edit-id">
+
+                <!-- Tipo -->
+                <div class="flex justify-center gap-4 text-center">
+                    <div><input type="radio" name="type" value="crystal" id="t-cry" class="hidden type-radio"
+                            checked><label for="t-cry"
+                            class="block w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center cursor-pointer text-xl">💎</label><span
+                            class="text-[9px] text-gray-500">Cristal</span></div>
+                    <div><input type="radio" name="type" value="herb" id="t-hrb" class="hidden type-radio"><label
+                            for="t-hrb"
+                            class="block w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center cursor-pointer text-xl">🌿</label><span
+                            class="text-[9px] text-gray-500">Planta</span></div>
+                    <div><input type="radio" name="type" value="animal" id="t-ani" class="hidden type-radio"><label
+                            for="t-ani"
+                            class="block w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center cursor-pointer text-xl">🐺</label><span
+                            class="text-[9px] text-gray-500">Animal</span></div>
+                    <div><input type="radio" name="type" value="symbol" id="t-sym" class="hidden type-radio"><label
+                            for="t-sym"
+                            class="block w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center cursor-pointer text-xl">✨</label><span
+                            class="text-[9px] text-gray-500">Símbolo</span></div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase block mb-1">Nombre</label>
+                    <input type="text" id="edit-name" class="glass-input" placeholder="Ej: Cuarzo Rosa">
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase block mb-1">Palabra Clave</label>
+                    <input type="text" id="edit-key" class="glass-input" placeholder="Ej: Amor Incondicional">
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase block mb-1 flex justify-between">
+                        Descripción <button type="button" onclick="aiWriteWiki()"
+                            class="text-cyan-400 text-[10px] flex items-center gap-1 hover:text-white"><span
+                                class="material-symbols-rounded text-sm">auto_awesome</span> Redactar con IA</button>
+                    </label>
+                    <textarea id="edit-desc" class="glass-input h-32"
+                        placeholder="Significado espiritual..."></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-cyan-600 rounded-xl font-bold text-white text-xs uppercase shadow-lg">Guardar
+                    en Bóveda</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL LECTURA GRIMORIO -->
+    <div id="reading-modal" class="modal-overlay">
+        <div class="sheet-content flex flex-col h-[85vh]">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-[#082f49] sticky top-0">
+                <h3 class="font-cinzel text-lg text-cyan-200" id="read-title">Título</h3>
+                <button onclick="document.getElementById('reading-modal').classList.remove('active')"
+                    class="text-gray-400 hover:text-white"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 text-sm text-gray-200 leading-relaxed font-serif whitespace-pre-wrap"
+                id="read-body">...</div>
+            <div class="p-4 border-t border-white/10 flex justify-between items-center bg-black/20">
+                <span class="text-[10px] text-gray-500 uppercase tracking-widest" id="read-date">--</span>
+                <span class="text-[10px] text-cyan-500" id="read-source">FUENTE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL RESPALDO UNIVERSAL -->
+    <div id="backup-modal" class="fixed inset-0 bg-black/95 z-[250] hidden flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-[#082f49] rounded-2xl border border-white/10 shadow-2xl p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-cinzel text-lg text-cyan-400">Respaldo Universal</h2><button
+                    onclick="document.getElementById('backup-modal').classList.add('hidden')"
+                    class="text-gray-500 hover:text-white"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <div class="space-y-3"><button onclick="downloadUniverse()"
+                    class="w-full py-3 bg-white/5 border border-white/20 rounded-xl flex items-center justify-center gap-2 text-sm text-white hover:bg-white/10"><span
+                        class="material-symbols-rounded">download</span> Exportar Todo</button>
+                <div class="relative"><input type="file" id="import-file" accept=".mila,.json"
+                        class="absolute inset-0 opacity-0 cursor-pointer" onchange="uploadUniverse(this)"><button
+                        class="w-full py-3 bg-cyan-600 rounded-xl flex items-center justify-center gap-2 text-sm text-white shadow-lg hover:bg-cyan-500"><span
+                            class="material-symbols-rounded">upload</span> Importar Todo</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        // --- DATOS BASE ---
+        const DEFAULT_WIKI = [
+            { id: 'c1', type: 'crystal', name: 'Amatista', icon: '🔮', key: 'Transmutación', desc: 'Piedra maestra para la meditación. Transmuta energía negativa en amor.' },
+            { id: 'c2', type: 'crystal', name: 'Cuarzo Rosa', icon: '💗', key: 'Amor Incondicional', desc: 'Sana heridas emocionales. Abre el chakra corazón al amor propio.' },
+            { id: 'c3', type: 'crystal', name: 'Citrino', icon: '✨', key: 'Abundancia', desc: 'Piedra del éxito. Atrae riqueza y prosperidad.' },
+            { id: 'h1', type: 'herb', name: 'Lavanda', icon: '🌿', key: 'Calma', desc: 'Limpia espacios y auras. Su aroma induce relajación profunda.' },
+            { id: 'h2', type: 'herb', name: 'Romero', icon: '🌱', key: 'Memoria y Protección', desc: 'Protector psíquico potente. Mejora la concentración.' },
+            { id: 'a1', type: 'animal', name: 'Búho', icon: '🦉', key: 'Sabiduría', desc: 'Ve en la oscuridad. Guía a través de los misterios.' },
+            { id: 's1', type: 'symbol', name: 'Flor de la Vida', icon: '💮', key: 'Creación', desc: 'Patrón geométrico sagrado que contiene las proporciones de toda la vida.' }
+        ];
+
+        const AUDIO_TRACKS = [
+            { title: "432Hz Sanación", desc: "Frecuencia natural", url: "https://cdn.pixabay.com/download/audio/2022/10/25/audio_5b304c519d.mp3" },
+            { title: "528Hz Milagros", desc: "Reparación ADN", url: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_823a35d975.mp3" },
+            { title: "Lluvia Zen", desc: "Limpieza", url: "https://cdn.pixabay.com/download/audio/2021/08/09/audio_03d6902265.mp3" }
+        ];
+
+        // --- ESTADO ---
+        let wikiData = JSON.parse(localStorage.getItem('mila_wiki')) || DEFAULT_WIKI;
+        let currentWikiItem = null;
+
+        // --- INIT ---
+        function init() {
+            // Guardar default si es la primera vez
+            if (!localStorage.getItem('mila_wiki')) localStorage.setItem('mila_wiki', JSON.stringify(DEFAULT_WIKI));
+
+            loadGrimorio();
+            renderWiki();
+            renderAudioList();
+        }
+
+        // --- WIKI CRUD ---
+        function renderWiki() {
+            const search = document.getElementById('wiki-search').value.toLowerCase();
+            const container = document.getElementById('wiki-list');
+            container.innerHTML = '';
+
+            const list = wikiData.filter(i => i.name.toLowerCase().includes(search) || i.key.toLowerCase().includes(search));
+
+            list.forEach(i => {
+                let badgeClass = i.type === 'crystal' ? 'cat-crystal' : i.type === 'herb' ? 'cat-herb' : i.type === 'animal' ? 'cat-animal' : 'cat-symbol';
+                container.innerHTML += `<div class="lib-card p-3 text-center" onclick="openWikiDetail('${i.id}')"><div class="text-3xl mb-2">${i.icon}</div><h4 class="font-cinzel text-xs text-white mb-1">${i.name}</h4><span class="cat-badge ${badgeClass}">${i.type}</span></div>`;
+            });
+        }
+        function filterWiki(type) { document.getElementById('wiki-search').value = type === 'all' ? '' : type; renderWiki(); }
+
+        function openWikiDetail(id) {
+            const item = wikiData.find(x => x.id === id);
+            currentWikiItem = item;
+            document.getElementById('wiki-icon').innerText = item.icon;
+            document.getElementById('wiki-title').innerText = item.name;
+            document.getElementById('wiki-key').innerText = `"${item.key}"`;
+            document.getElementById('wiki-content').innerText = item.desc;
+            document.getElementById('wiki-badge').innerText = item.type;
+            document.getElementById('ritual-result').classList.add('hidden');
+            document.getElementById('wiki-modal').classList.add('active');
+        }
+
+        // EDIT & CREATE
+        function openEditor(isEdit = false) {
+            const modal = document.getElementById('wiki-editor');
+            const form = document.getElementById('wiki-form');
+            modal.classList.add('active');
+            if (isEdit && currentWikiItem) {
+                document.getElementById('edit-id').value = currentWikiItem.id;
+                document.getElementById('edit-name').value = currentWikiItem.name;
+                document.getElementById('edit-key').value = currentWikiItem.key;
+                document.getElementById('edit-desc').value = currentWikiItem.desc;
+                // Set radio
+                const rad = document.querySelector(`input[name="type"][value="${currentWikiItem.type}"]`);
+                if (rad) rad.checked = true;
+            } else {
+                form.reset();
+                document.getElementById('edit-id').value = "";
+            }
+        }
+        function closeEditor() { document.getElementById('wiki-editor').classList.remove('active'); }
+
+        function editWikiItem() {
+            document.getElementById('wiki-modal').classList.remove('active');
+            openEditor(true);
+        }
+
+        function deleteWikiItem() {
+            if (confirm("¿Eliminar este conocimiento para siempre?")) {
+                wikiData = wikiData.filter(i => i.id !== currentWikiItem.id);
+                saveWiki();
+                document.getElementById('wiki-modal').classList.remove('active');
+                renderWiki();
+            }
+        }
+
+        document.getElementById('wiki-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const name = document.getElementById('edit-name').value;
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const key = document.getElementById('edit-key').value;
+            const desc = document.getElementById('edit-desc').value;
+
+            // Map types to icons (simple default)
+            const icons = { crystal: '💎', herb: '🌿', animal: '🐾', symbol: '✨' };
+            const icon = icons[type];
+
+            if (id) {
+                // Update
+                const idx = wikiData.findIndex(i => i.id === id);
+                if (idx !== -1) wikiData[idx] = { id, type, name, icon, key, desc };
+            } else {
+                // Create
+                wikiData.unshift({ id: Date.now().toString(), type, name, icon, key, desc });
+            }
+
+            saveWiki();
+            closeEditor();
+            renderWiki();
+        });
+
+        function saveWiki() { localStorage.setItem('mila_wiki', JSON.stringify(wikiData)); }
+
+        // --- IA ACTIONS ---
+        async function callGemini(prompt) {
+            try {
+                const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt }) });
+                const d = await res.json();
+                return d.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/\*/g, '')?.trim() || "El archivo está en silencio...";
+            } catch { return "Error conexión con el oráculo."; }
+        }
+
+        async function aiWriteWiki() {
+            const name = document.getElementById('edit-name').value;
+            const type = document.querySelector('input[name="type"]:checked').value;
+            if (!name) return alert("Escribe el nombre primero.");
+
+            const btn = document.querySelector('#wiki-form button[type="button"]'); // The AI button
+            btn.innerText = "...";
+
+            const prompt = `Actúa como una enciclopedia esotérica. Escribe una descripción breve y mística para: ${name} (${type}). Incluye propiedades mágicas y espirituales.`;
+            const text = await callGemini(prompt);
+
+            document.getElementById('edit-desc').value = text;
+
+            // Try to extract a keyword if empty
+            if (!document.getElementById('edit-key').value) {
+                const keyRes = await callGemini(`Dame 2 palabras clave para ${name}:`);
+                document.getElementById('edit-key').value = keyRes;
+            }
+            btn.innerHTML = '<span class="material-symbols-rounded text-sm">auto_awesome</span> Redactar con IA';
+        }
+
+        async function analyzeGrimorioPatterns() {
+            const btn = document.getElementById('synthesis-btn');
+            document.getElementById('synthesis-result').classList.remove('hidden');
+            document.getElementById('synthesis-text').innerHTML = '<span class="loader-dots"><span></span><span></span><span></span></span>';
+            const allContent = Array.from(document.querySelectorAll('#grimorio-list p')).slice(0, 5).map(e => e.innerText).join(" | ");
+            const prompt = `Analiza estos registros espirituales recientes: "${allContent}". Encuentra un patrón sincrónico.`;
+            const analysis = await callGemini(prompt);
+            document.getElementById('synthesis-text').innerHTML = analysis.replace(/\n/g, '<br>');
+            btn.innerHTML = 'Sintetizar de Nuevo';
+        }
+
+        async function askAkashicRecords() { /* Same as before but saves to temp wiki view or suggests adding */ }
+        async function generateRitual() {
+            if (!currentWikiItem) return;
+            document.getElementById('ritual-result').classList.remove('hidden');
+            document.getElementById('ritual-result').innerHTML = '<span class="loader-dots text-white"><span></span><span></span><span></span></span>';
+            const prompt = `Crea un ritual mágico con ${currentWikiItem.name}.`;
+            const text = await callGemini(prompt);
+            document.getElementById('ritual-result').innerHTML = text.replace(/\n/g, '<br>');
+        }
+
+        // --- GRIMORIO ---
+        function loadGrimorio() {
+            const c = document.getElementById('grimorio-list'); c.innerHTML = '';
+            let entries = [];
+            const profiles = JSON.parse(localStorage.getItem('mila_profiles')) || [];
+            profiles.forEach(p => { if (p.aiReadings) Object.entries(p.aiReadings).forEach(([k, t]) => entries.push({ type: k.includes('astro') ? 'astro' : 'profile', icon: 'auto_awesome', title: k, content: t, date: new Date(), source: p.name })); });
+            const dreams = JSON.parse(localStorage.getItem('mila_dreams')) || [];
+            dreams.forEach(d => { if (d.aiAnalysis) entries.push({ type: 'dream', icon: 'nights_stay', title: d.title, content: d.aiAnalysis, date: new Date(d.date), source: 'Bitácora' }); });
+
+            if (entries.length === 0) { c.innerHTML = '<div class="text-center opacity-50 py-10"><p class="text-xs">Vacío.</p></div>'; return; }
+
+            entries.forEach(e => {
+                c.innerHTML += `<div class="lib-card border-l-4 ${e.type === 'dream' ? 'border-purple-500' : 'border-cyan-500'}" onclick="openReading('${e.title}', \`${e.content}\`, '${e.date}', '${e.source}')">
+                    <div class="flex justify-between mb-1"><span class="text-[9px] uppercase tracking-widest text-gray-400">${e.source}</span><span class="text-[9px] text-gray-500">${e.date.toLocaleDateString()}</span></div>
+                    <h4 class="font-cinzel text-sm text-white mb-1 line-clamp-1">${e.title}</h4>
+                    <p class="text-xs text-gray-400 line-clamp-2">${e.content}</p>
+                </div>`;
+            });
+        }
+
+        // --- UTILS ---
+        function loadPDF(i) { if (i.files[0]) { document.getElementById('pdf-frame').src = URL.createObjectURL(i.files[0]); document.getElementById('pdf-container').classList.remove('hidden'); document.querySelector('.pdf-zone').classList.add('hidden'); } }
+        function closePDF() { document.getElementById('pdf-frame').src = ""; document.getElementById('pdf-container').classList.add('hidden'); document.querySelector('.pdf-zone').classList.remove('hidden'); }
+        function renderAudioList() { const c = document.getElementById('audio-list'); c.innerHTML = ''; AUDIO_TRACKS.forEach((t, i) => c.innerHTML += `<div class="track-row" onclick="playTrack('${t.url}','${t.title}','${t.desc}',this)"><div class="flex items-center gap-3"><span class="text-xs text-cyan-500 font-mono">${i + 1}</span><div><p class="text-xs font-bold text-white">${t.title}</p><p class="text-[9px] text-gray-500">${t.desc}</p></div></div><span class="material-symbols-rounded text-gray-500">play_circle</span></div>`); }
+        function playTrack(u, t, d, e) { document.getElementById('now-playing-title').innerText = t; document.getElementById('now-playing-desc').innerText = d; document.querySelectorAll('.track-row').forEach(r => r.classList.remove('playing')); e.classList.add('playing'); const a = document.getElementById('main-audio'); a.src = u; a.play(); }
+        function openReading(t, c, d, s) { document.getElementById('read-title').innerText = t; document.getElementById('read-body').innerHTML = c.replace(/\n/g, '<br>'); document.getElementById('read-date').innerText = new Date(d).toLocaleDateString(); document.getElementById('read-source').innerText = s; document.getElementById('reading-modal').classList.add('active'); }
+        function closeModal() { document.getElementById('reading-modal').classList.remove('active'); }
+        function switchTab(t) { ['grimorio', 'sabiduria', 'lector', 'audio'].forEach(id => { document.getElementById('view-' + id).classList.add('hidden'); document.getElementById('tab-' + id).classList.remove('active'); }); document.getElementById('view-' + t).classList.remove('hidden'); document.getElementById('tab-' + t).classList.add('active'); }
+        function goHome() { window.parent.postMessage({ type: 'CLOSE_MODULE' }, '*'); }
+        function filterGrimorio(t) { loadGrimorio(); } // Simplified
+        function openBackupModal() { document.getElementById('backup-modal').classList.remove('hidden'); }
+        function downloadUniverse() { const d = { profiles: JSON.parse(localStorage.getItem('mila_profiles')), dreams: JSON.parse(localStorage.getItem('mila_dreams')), desires: JSON.parse(localStorage.getItem('mila_desires')), wiki: wikiData }; const b = new Blob([JSON.stringify(d)], { type: 'application/json' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = `boveda_backup_${new Date().toISOString().slice(0, 10)}.mila`; a.click(); }
+        function uploadUniverse(i) { const f = i.files[0]; if (!f) return; const r = new FileReader(); r.onload = (e) => { try { const d = JSON.parse(e.target.result); if (confirm("¿Restaurar?")) { if (d.profiles) localStorage.setItem('mila_profiles', JSON.stringify(d.profiles)); if (d.dreams) localStorage.setItem('mila_dreams', JSON.stringify(d.dreams)); if (d.wiki) localStorage.setItem('mila_wiki', JSON.stringify(d.wiki)); location.reload(); } } catch { alert("Error"); } }; r.readAsText(f); }
+        function openHelp() { alert("Bienvenido a la Bóveda. Gestiona tu sabiduría."); }
+
+        init();
+    </script>
+</body>
+
+</html>

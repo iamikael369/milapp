@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Trance & Hipnosis</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ESTILOS COMPARTIDOS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        .breathe-circle {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-purple), transparent 70%);
+            opacity: 0.6;
+            filter: blur(40px);
+            animation: breathe 6s infinite ease-in-out;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: all 1s;
+        }
+
+        @keyframes breathe {
+
+            0%,
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0.4;
+            }
+
+            50% {
+                width: 320px;
+                height: 320px;
+                opacity: 0.8;
+            }
+        }
+
+        .player-active .breathe-circle {
+            background: radial-gradient(circle, var(--gold), transparent 60%);
+            animation-duration: 4s;
+            /* Más rápido si es activo? O lento? Hipnosis es lento */
+        }
+
+        .session-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .session-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .session-card.active {
+            border-color: var(--gold);
+            background: rgba(251, 191, 36, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-[#050510] relative h-screen overflow-hidden flex flex-col">
+
+    <!-- HEADER -->
+    <header
+        class="p-4 z-10 flex justify-between items-center absolute top-0 w-full bg-gradient-to-b from-[#050510] to-transparent">
+        <button onclick="Universo.goHome()" class="text-gray-400 hover:text-white"><span
+                class="material-symbols-rounded">arrow_back</span></button>
+        <h2 class="font-cinzel text-lg text-white/80 tracking-widest">Trance Quantum</h2>
+        <div class="w-8"></div>
+    </header>
+
+    <!-- VISUALIZADOR CENTRAL -->
+    <div class="flex-1 relative flex items-center justify-center">
+        <div class="breathe-circle" id="visualizer"></div>
+        <div class="relative z-10 text-center px-6">
+            <h1 class="font-cinzel text-3xl font-bold text-white mb-2 transition-all duration-1000" id="session-title">
+                Elegir Sesión</h1>
+            <p class="text-sm text-gray-400 font-light tracking-widest uppercase mb-8" id="session-status">Esperando...
+            </p>
+
+            <button id="play-btn" onclick="togglePlay()"
+                class="w-20 h-20 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-105 transition-all mx-auto backdrop-blur-md">
+                <span class="material-symbols-rounded text-4xl text-white pl-1" id="play-icon">play_arrow</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- PLAYLIST -->
+    <div
+        class="h-1/3 bg-[#0f0a1e]/90 backdrop-blur-xl border-t border-white/10 rounded-t-3xl p-6 overflow-y-auto custom-scrollbar z-20">
+        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Bibliotecas de Frecuencias</h3>
+        <div class="space-y-3">
+            <div class="session-card" onclick="loadSession(0)">
+                <div class="w-10 h-10 rounded-full bg-purple-900/50 flex items-center justify-center text-purple-300">
+                    <span class="material-symbols-rounded">self_improvement</span></div>
+                <div>
+                    <h4 class="text-sm font-bold text-white">Yo Soy (Afirmaciones)</h4>
+                    <span class="text-[10px] text-gray-400">Reprogramación suave • 12min</span>
+                </div>
+            </div>
+            <div class="session-card" onclick="loadSession(1)">
+                <div class="w-10 h-10 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-300"><span
+                        class="material-symbols-rounded">waves</span></div>
+                <div>
+                    <h4 class="text-sm font-bold text-white">Sueño Profundo (Delta)</h4>
+                    <span class="text-[10px] text-gray-400">Inducción al descanso • 30min</span>
+                </div>
+            </div>
+            <div class="session-card" onclick="loadSession(2)">
+                <div class="w-10 h-10 rounded-full bg-yellow-900/50 flex items-center justify-center text-yellow-300">
+                    <span class="material-symbols-rounded">solar_power</span></div>
+                <div>
+                    <h4 class="text-sm font-bold text-white">Manifestación Solar</h4>
+                    <span class="text-[10px] text-gray-400">Visualización de Metas • 15min</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audio-player" loop ontimeupdate="updateProgress()"></audio>
+
+    <script src="assets/js/universo.js"></script>
+    <script>
+        const SESSIONS = [
+            { title: "Yo Soy", src: "https://cdn.pixabay.com/download/audio/2022/10/25/audio_5b304c519d.mp3", color: "#a855f7" },
+            { title: "Sueño Delta", src: "https://cdn.pixabay.com/download/audio/2022/03/09/audio_8b0665b93d.mp3?filename=soft-rain-ambient-111154.mp3", color: "#3b82f6" }, // Placeholder URL ambiental
+            { title: "Manifestación", src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=meditation-impulse-30115.mp3", color: "#fbbf24" }
+        ];
+
+        let currentIdx = -1;
+        const player = document.getElementById('audio-player');
+        const icon = document.getElementById('play-icon');
+        const visualizer = document.getElementById('visualizer');
+        const titleEl = document.getElementById('session-title');
+        const statusEl = document.getElementById('session-status');
+
+        function loadSession(idx) {
+            currentIdx = idx;
+            const s = SESSIONS[idx];
+            player.src = s.src;
+            titleEl.innerText = s.title;
+            statusEl.innerText = "Listo para iniciar";
+            visualizer.style.background = `radial-gradient(circle, ${s.color}, transparent 70%)`;
+
+            // Highlight active
+            document.querySelectorAll('.session-card').forEach((c, i) => {
+                c.classList.toggle('active', i === idx);
+            });
+
+            togglePlay();
+        }
+
+        function togglePlay() {
+            if (currentIdx === -1) { loadSession(0); return; }
+
+            if (player.paused) {
+                player.play().then(() => {
+                    icon.innerText = "pause";
+                    statusEl.innerText = "Reproduciendo...";
+                    visualizer.style.animationDuration = "4s";
+                });
+            } else {
+                player.pause();
+                icon.innerText = "play_arrow";
+                statusEl.innerText = "Pausado";
+                visualizer.style.animationDuration = "8s";
+            }
+        }
+
+        function updateProgress() {
+            // Optional: visualization effect based on time?
+        }
+    </script>
+</body>
+
+</html>

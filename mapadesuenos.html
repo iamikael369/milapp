@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mapa de Sueños - Manifestación Colectiva</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" />
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'mystic-indigo': '#1a1b3a',
+                'mystic-violet': '#4c1d95',
+                'mystic-amber': '#d97706',
+                'mystic-gold': '#fbbf24',
+                'dream-bg': '#05070a',
+                'temple-gold': '#d4af37',
+              },
+              fontFamily: {
+                cinzel: ['Cinzel', 'serif'],
+                garamond: ['EB Garamond', 'serif'],
+              },
+            },
+          },
+        };
+    </script>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        :root {
+            --temple-gold: #fbbf24;
+            --temple-dark: #05070a;
+            --mystic-violet: #8b5cf6;
+            --mystic-amber: #f59e0b;
+        }
+
+        body {
+            background-color: var(--temple-dark);
+            color: #e2e8f0;
+            font-family: 'EB Garamond', serif;
+            overflow-x: hidden;
+            overflow-y: auto !important;
+            min-height: 100vh;
+            height: auto !important;
+            transition: background 0.8s ease;
+        }
+
+        /* Ambient */
+        .stars-container {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at center, #111827 0%, #030712 100%);
+            overflow: hidden;
+        }
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            opacity: 0.5; animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        /* Cursor Aura */
+        #cursor-aura {
+            position: fixed; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 1;
+            transform: translate(-50%, -50%); transition: opacity 0.3s;
+        }
+
+        /* Glass Panels */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+        }
+
+        /* Image Cards */
+        .dream-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dream-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--temple-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        .dream-card img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        .dream-card:hover img { transform: scale(1.1); }
+        .dream-card .overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 20px; opacity: 0; transition: opacity 0.3s;
+        }
+        .dream-card:hover .overlay { opacity: 1; }
+
+        /* Hypnosis Mode */
+        #hypnosis-overlay {
+            position: fixed; inset: 0; z-index: 1000;
+            background: #000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #hypnosis-overlay.active { display: flex; animation: fadeInHypno 2s forwards; }
+        @keyframes fadeInHypno { from { opacity: 0; } to { opacity: 1; } }
+
+        .hypnos-image {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: brightness(0.7) contrast(1.1);
+            animation: kenBurns 20s infinite alternate;
+        }
+        @keyframes kenBurns {
+            0% { transform: scale(1) translate(0,0); }
+            100% { transform: scale(1.2) translate(-2%, -2%); }
+        }
+
+        .affirmation-text {
+            position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; text-align: center;
+            font-family: 'Cinzel', serif;
+            color: white;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1010;
+        }
+        .affirmation-active { animation: affirmationCycle 6s infinite; }
+        @keyframes affirmationCycle {
+            0%, 100% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); filter: blur(10px); }
+            20%, 80% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+        }
+
+        .binaural-status {
+            position: absolute; bottom: 40px;
+            font-family: 'EB Garamond', serif; font-style: italic;
+            color: rgba(255,255,255,0.4); letter-spacing: 0.2em;
+            animation: pulseText 4s infinite;
+        }
+        @keyframes pulseText { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+        /* Floating Menu */
+        .floating-menu {
+            position: fixed; bottom: 30px; right: 30px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 100;
+        }
+
+        .action-btn {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            color: white; transition: all 0.3s;
+            cursor: pointer;
+        }
+        .action-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.1); border-color: var(--temple-gold); }
+
+        /* Alchemical Seal Button */
+        .seal-btn {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: #000; border: 1px solid var(--temple-gold);
+            display: flex; align-items: center; justify-content: center; font-size: 32px;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+            transition: all 0.5s; cursor: pointer;
+        }
+        .seal-btn:hover { transform: rotate(180deg) scale(1.1); box-shadow: 0 0 40px rgba(251, 191, 36, 0.4); }
+
+        /* Alch Chips */
+        .alch-chip.active, .style-chip.active {
+            background: var(--temple-gold);
+            color: black;
+            border-color: var(--temple-gold);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+        }
+
+    </style>
+</head>
+
+<body class="custom-scrollbar" id="mainBody">
+    <div id="cursor-aura"></div>
+    <div class="stars-container" id="starsLayer"></div>
+
+    <main class="min-h-screen flex flex-col items-center p-4 md:p-8 relative">
+        <!-- HEADER -->
+        <header class="w-full max-w-6xl flex justify-between items-center mb-16">
+            <div class="flex items-center gap-6">
+                <button onclick="goHome()" class="p-4 border border-white/10 rounded-full hover:bg-white/5 transition-all group">
+                    <span class="material-symbols-outlined text-white/60 group-hover:text-white">home</span>
+                </button>
+                <div class="flex flex-col">
+                    <h1 class="text-3xl md:text-4xl font-cinzel tracking-[0.3em] uppercase text-white">Mapa de Sueños</h1>
+                    <span id="dream-header-greeting" class="text-[10px] font-cinzel tracking-[0.5em] text-temple-gold/60 uppercase">Vision Quest • Mila & Miguelo</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex flex-col items-end">
+                    <span id="active-user-name" class="text-xs font-cinzel tracking-widest text-white">MILA</span>
+                    <span class="text-[9px] font-cinzel text-temple-gold/40">ALQUIMISTA ACTIVA</span>
+                </div>
+                <div class="w-12 h-12 rounded-full border border-temple-gold/30 p-1">
+                    <div id="user-avatar" class="w-full h-full rounded-full bg-mystic-violet flex items-center justify-center font-cinzel text-white">M</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN ACTION AREA (GENERATE) -->
+        <section class="w-full max-w-4xl mb-20 text-center">
+            <div class="glass-panel p-10 md:p-16 relative border-dashed border-2 border-white/5">
+                <h2 class="text-2xl md:text-3xl font-cinzel tracking-widest text-white mb-8">¿Qué deseas materializar hoy?</h2>
+                <div class="relative max-w-2xl mx-auto mb-10">
+                    <textarea id="dream-prompt" placeholder="Visualiza con detalles... una casa frente al mar, un viaje a Japón, nuestra abundancia infinita..." 
+                        class="w-full bg-white/5 border border-white/10 rounded-3xl p-8 font-garamond text-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-mystic-gold focus:border-transparent outline-none transition-all min-h-[120px] custom-scrollbar text-center"></textarea>
+                </div>
+
+                <!-- Advanced Alchemical Panel -->
+                <div class="mb-10 bg-white/5 p-8 rounded-[2rem] border border-white/10">
+                    <h3 class="font-cinzel text-xs tracking-[0.3em] text-temple-gold/60 mb-6 uppercase">Configuración de Alquimia Avanzada</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Character Selection -->
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-cinzel tracking-widest text-white/40 uppercase">Presencia en la Visión</label>
+                            <div class="flex flex-wrap justify-center gap-3">
+                                <button onclick="setAlchParam('char', 'Mila')" class="alch-chip active px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Mila</button>
+                                <button onclick="setAlchParam('char', 'Miguelo')" class="alch-chip px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Miguelo</button>
+                                <button onclick="setAlchParam('char', 'Ambos')" class="alch-chip px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Ambos</button>
+                                <button onclick="setAlchParam('char', 'Otro')" class="alch-chip px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Otro</button>
+                            </div>
+                            <input type="text" id="alch-char-other" placeholder="¿Quién más?" class="hidden w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2 text-xs font-garamond text-white outline-none focus:border-temple-gold/40">
+                        </div>
+
+                        <!-- Clothing Selection -->
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-cinzel tracking-widest text-white/40 uppercase">Atuendo Alquímico</label>
+                            <div class="flex flex-wrap justify-center gap-3">
+                                <button onclick="setAlchParam('style', 'Místico')" class="style-chip active px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Místico</button>
+                                <button onclick="setAlchParam('style', 'Victoriano')" class="style-chip px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Victoriano</button>
+                                <button onclick="setAlchParam('style', 'Ethereal')" class="style-chip px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Ethereal</button>
+                                <button onclick="setAlchParam('style', 'Otro')" class="style-chip px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel transition-all hover:bg-white/10">Otro</button>
+                            </div>
+                            <input type="text" id="alch-style-other" placeholder="Describe el estilo..." class="hidden w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2 text-xs font-garamond text-white outline-none focus:border-temple-gold/40">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Toggle -->
+                <div class="flex justify-center mb-10">
+                    <div class="flex items-center gap-4 bg-white/5 p-2 rounded-full border border-white/10">
+                        <button onclick="setVisibility('private')" id="vis-private" class="flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-cinzel tracking-[0.2em] transition-all bg-mystic-violet text-white">
+                            <span class="material-symbols-outlined text-sm">lock</span> PRIVADO
+                        </button>
+                        <button onclick="setVisibility('shared')" id="vis-shared" class="flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-cinzel tracking-[0.2em] transition-all text-white/40 hover:text-white">
+                            <span class="material-symbols-outlined text-sm">group</span> COMPARTIDO
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-6">
+                    <button id="invoke-btn" onclick="invokeDream()" class="px-10 py-4 bg-mystic-gold/10 border border-mystic-gold/40 rounded-full font-cinzel text-sm tracking-widest text-mystic-gold hover:bg-mystic-gold/20 transition-all magical-glow-hover flex items-center gap-3">
+                        <span class="material-symbols-outlined">auto_fix_high</span>
+                        INVOCAR VISIÓN
+                    </button>
+                    <label class="px-10 py-4 bg-white/5 border border-white/20 rounded-full font-cinzel text-sm tracking-widest text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer flex items-center gap-3">
+                        <span class="material-symbols-outlined text-sm">upload_file</span>
+                        SUBIR RECUERDO
+                        <input type="file" class="hidden" accept="image/*" onchange="uploadImage(this)">
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY -->
+        <section class="w-full max-w-6xl mb-32">
+            <div class="flex justify-between items-center mb-10 px-4">
+                <h3 class="font-cinzel text-xs tracking-[0.4em] text-white/40 uppercase font-bold">El Telar de Realidades</h3>
+                <div class="h-[1px] flex-1 mx-8 bg-white/5"></div>
+                <span id="gallery-count" class="font-cinzel text-[10px] text-temple-gold">0 IMÁGENES</span>
+            </div>
+            
+            <div id="dreams-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+                <!-- Sample Card -->
+                <!-- <div class="dream-card aspect-square h-80">
+                    <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b" alt="Dream">
+                    <div class="overlay">
+                        <h4 class="font-cinzel text-lg text-white">Oasis de Cristal</h4>
+                        <p class="text-xs text-white/60 font-garamond">Mila • 17 Mar 2026</p>
+                    </div>
+                </div> -->
+            </div>
+            
+            <div id="empty-gallery" class="hidden py-40 text-center glass-panel border-dashed border-2 border-white/5 opacity-40">
+                <span class="material-symbols-outlined text-6xl mb-4">image_search</span>
+                <p class="font-cinzel text-sm tracking-widest">El lienzo del destino está esperando tus pinceladas...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- FLOATING ACTIONS -->
+    <div class="floating-menu">
+        <button onclick="startHypnosis()" class="action-btn" title="Iniciar Reprogramación">
+            <span class="material-symbols-rounded">psychology_alt</span>
+        </button>
+        <button class="seal-btn" title="El Sello Alquímico">✨</button>
+    </div>
+
+    <!-- HYPNOSIS OVERLAY -->
+    <div id="hypnosis-overlay">
+        <button onclick="stopHypnosis()" class="absolute top-10 right-10 z-[1100] p-4 text-white/40 hover:text-white transition-colors">
+            <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+        
+        <div id="hypno-container" class="w-full h-full relative">
+            <img id="hypno-image-display" class="hypnos-image" src="" alt="Focus">
+            <div id="affirmation-display" class="affirmation-text text-3xl md:text-5xl lg:text-7xl">
+                TODO ES TUYO
+            </div>
+        </div>
+
+        <div class="binaural-status">Frecuencias Theta Activadas...</div>
+        
+        <audio id="binaural-audio" loop>
+            <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_5b304c519d.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script src="assets/js/universo.js"></script>
+    <script>
+        let dreamMap = JSON.parse(localStorage.getItem('mila_dream_map')) || [];
+        let activeProfile = Universo.getActiveProfile();
+        let currentVisibility = 'private';
+        let currentAlchChar = 'Mila';
+        let currentAlchStyle = 'Místico';
+        let hypnoTimer = null;
+        let currentHypnoIdx = 0;
+
+        function setAlchParam(type, val) {
+            if (type === 'char') {
+                currentAlchChar = val;
+                document.querySelectorAll('.alch-chip').forEach(c => {
+                    c.classList.toggle('active', c.innerText === val);
+                });
+                document.getElementById('alch-char-other').classList.toggle('hidden', val !== 'Otro');
+            } else {
+                currentAlchStyle = val;
+                document.querySelectorAll('.style-chip').forEach(c => {
+                    c.classList.toggle('active', c.innerText === val);
+                });
+                document.getElementById('alch-style-other').classList.toggle('hidden', val !== 'Otro');
+            }
+        }
+
+        function setVisibility(v) {
+            currentVisibility = v;
+            const btnPrivate = document.getElementById('vis-private');
+            const btnShared = document.getElementById('vis-shared');
+            if (v === 'private') {
+                btnPrivate.className = "flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-cinzel tracking-[0.2em] transition-all bg-mystic-violet text-white";
+                btnShared.className = "flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-cinzel tracking-[0.2em] transition-all text-white/40 hover:text-white";
+            } else {
+                btnShared.className = "flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-cinzel tracking-[0.2em] transition-all bg-mystic-amber text-white";
+                btnPrivate.className = "flex items-center gap-2 px-6 py-2 rounded-full text-[10px] font-cinzel tracking-[0.2em] transition-all text-white/40 hover:text-white";
+            }
+        }
+
+        const AFFIRMATIONS = [
+            "Eres el creador de tu realidad",
+            "Todo lo que buscas te está buscando",
+            "Eres abundancia infinita",
+            "Tu voluntad es el decreto del universo",
+            "Siente la emoción del logro ahora",
+            "Mereces todo lo que sueñas",
+            "MILA & MIGUELO: Un solo destino de luz",
+            "El tiempo se colapsa a tu favor",
+            "Ríndete a la magia del proceso"
+        ];
+
+        // --- INIT ---
+        function init() {
+            initStars();
+            initCursorAura();
+            updateProfileUI();
+            renderGallery();
+        }
+
+        function initStars() {
+            const container = document.getElementById('starsLayer');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = Math.random() * 2 + 0.5;
+                const duration = (Math.random() * 4 + 2) + 's';
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', duration);
+                container.appendChild(star);
+            }
+        }
+
+        function initCursorAura() {
+            const aura = document.getElementById('cursor-aura');
+            document.addEventListener('mousemove', (e) => {
+                if (aura) {
+                    aura.style.left = e.clientX + 'px';
+                    aura.style.top = e.clientY + 'px';
+                }
+            });
+        }
+
+        function updateProfileUI() {
+            activeProfile = Universo.getActiveProfile();
+            document.getElementById('active-user-name').innerText = activeProfile.name.toUpperCase();
+            
+            const greetingEl = document.getElementById('dream-header-greeting');
+            if (greetingEl) {
+                if (activeProfile.id === 'mila_admin') {
+                    greetingEl.innerText = "Bienvenida, Mila • Tu visión guía el templo";
+                } else if (activeProfile.id === 'miguelo_admin') {
+                    greetingEl.innerText = "Guardián Miguelo • Construyendo realidades";
+                }
+            }
+
+            const avatar = document.getElementById('user-avatar');
+            if (avatar) {
+                avatar.innerText = activeProfile.name.charAt(0);
+                avatar.style.backgroundColor = activeProfile.color || '#4c1d95';
+            }
+        }
+
+        // --- GALLERY ---
+        function renderGallery() {
+            const grid = document.getElementById('dreams-grid');
+            const empty = document.getElementById('empty-gallery');
+            const count = document.getElementById('gallery-count');
+            
+            grid.innerHTML = '';
+            
+            // FILTRADO DE PRIVACIDAD SAGRADA
+            let filteredDreams = Universo.filterPrivateData(dreamMap);
+            
+            count.innerText = `${filteredDreams.length} IMÁGENES`;
+
+            if (filteredDreams.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            filteredDreams.forEach((dream, idx) => {
+                const card = document.createElement('div');
+                card.className = "dream-card aspect-square relative";
+                card.innerHTML = `
+                    <img src="${dream.url}" alt="Sueño">
+                    <!-- Privacy Badge -->
+                    <div class="absolute top-4 right-4 z-10">
+                        ${dream.visibility === 'shared' ? 
+                            '<span class="material-symbols-outlined text-xs text-mystic-gold bg-black/40 p-2 rounded-full backdrop-blur-md">group</span>' : 
+                            '<span class="material-symbols-outlined text-xs text-white/40 bg-black/40 p-2 rounded-full backdrop-blur-md">lock</span>'}
+                    </div>
+                    <div class="overlay">
+                        <h4 class="font-cinzel text-lg text-white">${dream.title}</h4>
+                        <div class="flex justify-between items-center">
+                            <p class="text-[10px] text-white/60 font-cinzel uppercase tracking-widest">${dream.owner_name || dream.owner} • ${dream.date}</p>
+                            <button onclick="deleteDream(event, ${idx})" class="text-white/20 hover:text-red-400 transition-colors">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => openImageFullscreen(dream.url);
+                grid.appendChild(card);
+            });
+        }
+
+        function uploadImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const newDream = {
+                    url: e.target.result,
+                    title: "Recuerdo Invocado",
+                    owner: activeProfile.id,
+                    owner_name: activeProfile.name,
+                    visibility: currentVisibility,
+                    date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
+                };
+                dreamMap.unshift(newDream);
+                localStorage.setItem('mila_dream_map', JSON.stringify(dreamMap));
+                setVisibility('private'); // Reset
+                renderGallery();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function invokeDream() {
+            const promptInput = document.getElementById('dream-prompt');
+            const prompt = promptInput.value.trim();
+            if (!prompt) return;
+
+            const btn = document.getElementById('invoke-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">refresh</span> ALINEANDO...`;
+            btn.disabled = true;
+
+            // Refrescar perfil activo para tener datos actualizados (fotos, etc)
+            activeProfile = Universo.getActiveProfile();
+            const profiles = Universo.getProfiles();
+
+            // Alquimia Avanzada
+            let finalChar = currentAlchChar === 'Otro' ? document.getElementById('alch-char-other').value : currentAlchChar;
+            let finalStyle = currentAlchStyle === 'Otro' ? document.getElementById('alch-style-other').value : currentAlchStyle;
+            
+            // Construcción del Prompt Sagrado con Referencias Visuales Dinámicas
+            let fullPrompt = `Vision Quest: ${prompt}. `;
+            
+            // Lógica de Referencias según Personaje
+            if (finalChar === 'Mila') {
+                const mila = profiles.find(p => p.id === 'mila_admin') || activeProfile;
+                fullPrompt += `Personaje: Mila (Referencia Facial: ${mila.aiReferenceUrl || mila.photoUrl || 'assets/images/Mila.png'}). `;
+            } else if (finalChar === 'Miguelo') {
+                const miguelo = profiles.find(p => p.id === 'miguelo_admin') || activeProfile;
+                fullPrompt += `Personaje: Miguelo (Referencia Facial: ${miguelo.aiReferenceUrl || miguelo.photoUrl || 'assets/images/Miguelo.png'}). `;
+            } else if (finalChar === 'Ambos') {
+                const mila = profiles.find(p => p.id === 'mila_admin') || activeProfile;
+                const miguelo = profiles.find(p => p.id === 'miguelo_admin') || activeProfile;
+                fullPrompt += `Personajes: Mila (Ref: ${mila.aiReferenceUrl || mila.photoUrl}) y Miguelo (Ref: ${miguelo.aiReferenceUrl || miguelo.photoUrl}). `;
+            } else if (finalChar) {
+                // Si es un personaje personalizado, intentamos ver si el nombre coincide con el perfil activo
+                if (finalChar.toLowerCase() === activeProfile.name.toLowerCase()) {
+                    fullPrompt += `Personaje: ${finalChar} (Referencia Facial: ${activeProfile.aiReferenceUrl || activeProfile.photoUrl}). `;
+                } else {
+                    fullPrompt += `Personaje: ${finalChar}. `;
+                }
+            }
+            
+            fullPrompt += `Estilo de vestimenta: ${finalStyle}. Estética cinematográfica, ultra definida, 8k, luz mística.`;
+
+            try {
+                // Simulación de generación
+                console.log("Invocando con prompt:", fullPrompt);
+                await new Promise(r => setTimeout(r, 4000));
+                
+                const newDream = {
+                    url: `https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop`, // Placeholder místico
+                    title: prompt.substring(0, 20) + "...",
+                    owner: activeProfile.id,
+                    owner_name: activeProfile.name,
+                    visibility: currentVisibility,
+                    alchParams: { char: finalChar, style: finalStyle },
+                    date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
+                };
+                
+                dreamMap.unshift(newDream);
+                localStorage.setItem('mila_dream_map', JSON.stringify(dreamMap));
+                promptInput.value = '';
+                setVisibility('private'); // Reset
+                renderGallery();
+                
+            } catch (err) {
+                console.error(err);
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+
+        function deleteDream(e, idx) {
+            e.stopPropagation();
+            if (confirm("¿Disolver esta visión del mapa?")) {
+                dreamMap.splice(idx, 1);
+                localStorage.setItem('mila_dream_map', JSON.stringify(dreamMap));
+                renderGallery();
+            }
+        }
+
+        // --- HYPNOSIS MODE ---
+        function startHypnosis() {
+            if (dreamMap.length === 0) {
+                alert("Primero debes invocar o subir al menos una imagen a tu Mapa de Sueños.");
+                return;
+            }
+            
+            const overlay = document.getElementById('hypnosis-overlay');
+            const audio = document.getElementById('binaural-audio');
+            
+            overlay.classList.add('active');
+            audio.play();
+            
+            currentHypnoIdx = 0;
+            cycleHypnosis();
+        }
+
+        function cycleHypnosis() {
+            const imgEl = document.getElementById('hypno-image-display');
+            const textEl = document.getElementById('affirmation-display');
+
+            // Change Image
+            imgEl.src = dreamMap[currentHypnoIdx].url;
+            
+            // Change Text
+            textEl.innerText = AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)];
+            textEl.classList.remove('affirmation-active');
+            void textEl.offsetWidth; // Trigger reflow
+            textEl.classList.add('affirmation-active');
+
+            currentHypnoIdx = (currentHypnoIdx + 1) % dreamMap.length;
+
+            hypnoTimer = setTimeout(cycleHypnosis, 6000);
+        }
+
+        function stopHypnosis() {
+            const overlay = document.getElementById('hypnosis-overlay');
+            const audio = document.getElementById('binaural-audio');
+            
+            overlay.classList.remove('active');
+            audio.pause();
+            audio.currentTime = 0;
+            clearTimeout(hypnoTimer);
+        }
+
+        function openImageFullscreen(url) {
+            // Podríamos implementar un visor simple aquí también
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
