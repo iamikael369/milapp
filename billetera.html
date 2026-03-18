@@ -224,6 +224,46 @@
             </div>
         </div>
 
+        <!-- Goal Compass -->
+        <section class="glass-panel rounded-[2rem] p-5 sm:p-6 mb-6 border border-white/10">
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div>
+                    <p class="font-cinzel text-[10px] tracking-[0.3em] text-temple-gold uppercase mb-2">Faro de Manifestación</p>
+                    <h3 id="goal-title" class="font-playfair text-xl text-white">Aún no has trazado tu meta sagrada</h3>
+                    <p id="goal-copy" class="text-sm text-slate-400 mt-2 leading-relaxed">Define una intención, una cifra y un motivo amoroso para dar dirección a tu abundancia.</p>
+                </div>
+                <button onclick="openGoalModal()" class="shrink-0 rounded-full border border-temple-gold/30 px-4 py-2 text-[10px] font-cinzel tracking-[0.2em] uppercase text-temple-gold hover:bg-temple-gold/10 transition-all">Editar meta</button>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto]">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-[10px] font-cinzel tracking-[0.2em] uppercase text-slate-400">
+                        <span>Progreso ritual</span>
+                        <span id="goal-progress-label">0%</span>
+                    </div>
+                    <div class="h-3 rounded-full bg-white/5 overflow-hidden">
+                        <div id="goal-progress-bar" class="h-full rounded-full bg-gradient-to-r from-wealth-green via-temple-gold to-gold-light transition-all duration-700" style="width: 0%;"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
+                            <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Meta</p>
+                            <p id="goal-target" class="font-cinzel text-lg text-white">$0.00</p>
+                        </div>
+                        <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
+                            <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Falta por invocar</p>
+                            <p id="goal-remaining" class="font-cinzel text-lg text-white">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rounded-[1.75rem] border border-wealth-green/20 bg-wealth-green/5 p-4 sm:w-56">
+                    <p class="text-[9px] font-cinzel tracking-[0.2em] text-wealth-green uppercase mb-2">Ritual activo</p>
+                    <p id="goal-ritual-status" class="font-playfair italic text-white leading-relaxed min-h-[4.5rem]">Cuando declares una meta, podrás sellarla con una intención diaria.</p>
+                    <button id="goal-ritual-btn" onclick="activateGoalRitual()" class="mt-4 w-full rounded-full bg-wealth-green text-temple-dark px-4 py-3 text-[10px] font-cinzel tracking-[0.2em] uppercase font-bold hover:brightness-110 transition-all">Sellar ritual</button>
+                </div>
+            </div>
+        </section>
+
         <!-- Navigation -->
         <div class="flex gap-2 mb-5 sm:mb-8 bg-white/5 p-1.5 rounded-full border border-white/5">
             <button id="tab-wallet" onclick="switchTab('wallet')" class="nav-pill active flex-1 py-2.5">Billetera</button>
@@ -317,6 +357,40 @@
                     class="w-full py-5 bg-wealth-green text-temple-dark font-cinzel font-bold text-xs uppercase tracking-[0.2em] rounded-full shadow-lg shadow-wealth-green/20 hover:scale-[1.02] active:scale-95 transition-all mt-4">
                     Confirmar Energía
                 </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL META -->
+    <div id="goal-modal" class="modal-overlay">
+        <div class="glass-panel p-5 sm:p-8 rounded-[2.5rem] w-full max-w-lg m-4 border-t-2 border-t-temple-gold/20">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="font-cinzel text-lg text-white">Declarar meta</h3>
+                    <p class="text-sm text-slate-400 mt-1">Define una intención clara y deja que la billetera acompañe tu proceso.</p>
+                </div>
+                <button type="button" onclick="closeGoalModal()" class="text-slate-500 hover:text-white"><span class="material-symbols-rounded">close</span></button>
+            </div>
+            <form id="goal-form" class="space-y-4">
+                <div>
+                    <label for="goal-name" class="block text-[10px] font-cinzel tracking-[0.2em] text-slate-400 uppercase mb-2">Nombre de la meta</label>
+                    <input id="goal-name" type="text" maxlength="80" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white placeholder:text-slate-500 focus:outline-none focus:border-temple-gold/40" placeholder="Ej. Viaje sagrado, fondo de calma, nuevo comienzo" required>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="goal-amount-input" class="block text-[10px] font-cinzel tracking-[0.2em] text-slate-400 uppercase mb-2">Cantidad deseada</label>
+                        <input id="goal-amount-input" type="number" min="0" step="0.01" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white placeholder:text-slate-500 focus:outline-none focus:border-temple-gold/40" placeholder="0.00" required>
+                    </div>
+                    <div>
+                        <label for="goal-deadline" class="block text-[10px] font-cinzel tracking-[0.2em] text-slate-400 uppercase mb-2">Horizonte sagrado</label>
+                        <input id="goal-deadline" type="date" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white placeholder:text-slate-500 focus:outline-none focus:border-temple-gold/40">
+                    </div>
+                </div>
+                <div>
+                    <label for="goal-why" class="block text-[10px] font-cinzel tracking-[0.2em] text-slate-400 uppercase mb-2">¿Para qué la deseas?</label>
+                    <textarea id="goal-why" rows="3" class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-5 text-white placeholder:text-slate-500 focus:outline-none focus:border-temple-gold/40 resize-none" placeholder="Escribe el sentido emocional de esta abundancia."></textarea>
+                </div>
+                <button type="submit" class="w-full py-4 bg-temple-gold text-temple-dark font-cinzel font-bold text-xs uppercase tracking-[0.2em] rounded-full shadow-lg shadow-temple-gold/20 hover:scale-[1.01] active:scale-95 transition-all">Guardar meta</button>
             </form>
         </div>
     </div>
@@ -435,9 +509,50 @@
             ]
         });
 
-        let wallet = JSON.parse(localStorage.getItem('mila_wallet')) || { balance: 0, txs: [], checks: [] };
+        const dailyGoalRituals = [
+            'Hoy honro cada moneda como una semilla consciente.',
+            'Mi abundancia crece en calma, orden y gratitud.',
+            'Todo ingreso encuentra un propósito luminoso en mi vida.',
+            'El dinero que llega a mí sostiene paz, belleza y expansión.',
+            'Recibo con amor, administro con sabiduría y comparto con confianza.'
+        ];
+
+        let wallet = JSON.parse(localStorage.getItem('mila_wallet')) || { balance: 0, txs: [], checks: [], goal: null };
+
+        function ensureWalletShape() {
+            if (!Array.isArray(wallet.txs)) wallet.txs = [];
+            if (!Array.isArray(wallet.checks)) wallet.checks = [];
+            if (!wallet.goal || typeof wallet.goal !== 'object') {
+                wallet.goal = null;
+                return;
+            }
+
+            wallet.goal = {
+                name: wallet.goal.name || '',
+                amount: Number(wallet.goal.amount) || 0,
+                why: wallet.goal.why || '',
+                deadline: wallet.goal.deadline || '',
+                ritual: wallet.goal.ritual || '',
+                ritualCompletedAt: wallet.goal.ritualCompletedAt || '',
+                createdAt: wallet.goal.createdAt || new Date().toISOString()
+            };
+        }
+
+        function persistWallet() {
+            ensureWalletShape();
+            localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+        }
+
+        function getCurrentBalance() {
+            return wallet.txs.reduce((total, tx) => total + (tx.type === 'deposit' ? tx.amount : -tx.amount), 0);
+        }
+
+        function formatMoney(value) {
+            return `$${Number(value || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
 
         function init() {
+            ensureWalletShape();
             // Sincronizar tema desde URL
             const urlParams = new URLSearchParams(window.location.search);
             const theme = urlParams.get('theme');
@@ -445,6 +560,8 @@
 
             initStars();
             renderWallet();
+            renderGoal();
+            populateGoalForm();
             // Inyectar estrellas cada cierto tiempo para mantener el efecto
             setInterval(createStar, 3000);
         }
@@ -472,6 +589,85 @@
             
             field.appendChild(star);
             if(!initial) { setTimeout(() => star.remove(), duration * 1000); }
+        }
+
+        function populateGoalForm() {
+            const goal = wallet.goal;
+            document.getElementById('goal-name').value = goal?.name || '';
+            document.getElementById('goal-amount-input').value = goal?.amount ? goal.amount : '';
+            document.getElementById('goal-deadline').value = goal?.deadline || '';
+            document.getElementById('goal-why').value = goal?.why || '';
+        }
+
+        function renderGoal() {
+            const title = document.getElementById('goal-title');
+            const copy = document.getElementById('goal-copy');
+            const target = document.getElementById('goal-target');
+            const remaining = document.getElementById('goal-remaining');
+            const progressBar = document.getElementById('goal-progress-bar');
+            const progressLabel = document.getElementById('goal-progress-label');
+            const ritualStatus = document.getElementById('goal-ritual-status');
+            const ritualBtn = document.getElementById('goal-ritual-btn');
+            const goal = wallet.goal;
+
+            if (!goal || !goal.amount) {
+                title.textContent = 'Aún no has trazado tu meta sagrada';
+                copy.textContent = 'Define una intención, una cifra y un motivo amoroso para dar dirección a tu abundancia.';
+                target.textContent = formatMoney(0);
+                remaining.textContent = formatMoney(0);
+                progressBar.style.width = '0%';
+                progressLabel.textContent = '0%';
+                ritualStatus.textContent = 'Cuando declares una meta, podrás sellarla con una intención diaria.';
+                ritualBtn.disabled = true;
+                ritualBtn.classList.add('opacity-50');
+                ritualBtn.textContent = 'Sellar ritual';
+                return;
+            }
+
+            const balance = Math.max(getCurrentBalance(), 0);
+            const progress = Math.min((balance / goal.amount) * 100, 100);
+            const amountRemaining = Math.max(goal.amount - balance, 0);
+            const deadlineText = goal.deadline
+                ? new Date(`${goal.deadline}T00:00:00`).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+                : 'sin fecha límite';
+
+            title.textContent = goal.name;
+            copy.textContent = goal.why ? `${goal.why} · Horizonte ${deadlineText}.` : `Meta activa con horizonte ${deadlineText}.`;
+            target.textContent = formatMoney(goal.amount);
+            remaining.textContent = formatMoney(amountRemaining);
+            progressBar.style.width = `${progress}%`;
+            progressLabel.textContent = `${Math.round(progress)}%`;
+            ritualBtn.disabled = false;
+            ritualBtn.classList.remove('opacity-50');
+
+            if (goal.ritual) {
+                const sealedDate = goal.ritualCompletedAt
+                    ? new Date(goal.ritualCompletedAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
+                    : 'hoy';
+                ritualStatus.textContent = `${goal.ritual} · Sellado el ${sealedDate}.`;
+                ritualBtn.textContent = 'Renovar ritual';
+            } else {
+                ritualStatus.textContent = 'Tu meta está lista para ser sellada con una afirmación breve y consciente.';
+                ritualBtn.textContent = 'Sellar ritual';
+            }
+        }
+
+        function openGoalModal() {
+            populateGoalForm();
+            document.getElementById('goal-modal').classList.add('active');
+        }
+
+        function closeGoalModal() {
+            document.getElementById('goal-modal').classList.remove('active');
+        }
+
+        function activateGoalRitual() {
+            if (!wallet.goal || !wallet.goal.amount) return;
+            const seed = (wallet.goal.name.length + wallet.goal.amount + wallet.txs.length) % dailyGoalRituals.length;
+            wallet.goal.ritual = dailyGoalRituals[Math.floor(seed)];
+            wallet.goal.ritualCompletedAt = new Date().toISOString();
+            persistWallet();
+            renderGoal();
         }
 
         function renderWallet() {
@@ -561,11 +757,16 @@
             const emotions = type === 'deposit' ? 
                 ['🙏 Gratitud', '😲 Sorpresa', '💼 Valor', '🎁 Regalo', '✨ Milagro'] : 
                 ['🙌 Confianza', '🌱 Semilla', '🍎 Esencial', '🎉 Gozo', '🤍 Amor'];
+            currentEmotion = emotions[0];
             
-            emotions.forEach(e => {
+            emotions.forEach((e, index) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'px-4 py-2 rounded-full border border-white/10 text-[10px] font-cinzel tracking-widest uppercase text-slate-400 hover:text-white hover:bg-white/5 transition-all';
+                if (index === 0) {
+                    btn.classList.remove('border-white/10', 'text-slate-400');
+                    btn.classList.add('border-wealth-green', 'text-wealth-green');
+                }
                 btn.innerText = e;
                 btn.onclick = () => {
                     currentEmotion = e;
@@ -601,9 +802,35 @@
                 emotion: currentEmotion
             });
             
-            localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+            persistWallet();
             closeTxModal();
             renderWallet();
+            renderGoal();
+        });
+
+        document.getElementById('goal-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('goal-amount-input').value);
+            const name = document.getElementById('goal-name').value.trim();
+
+            if (!name || !amount || amount <= 0) {
+                alert('Tu meta necesita un nombre claro y una cantidad mayor a cero.');
+                return;
+            }
+
+            wallet.goal = {
+                name,
+                amount,
+                deadline: document.getElementById('goal-deadline').value,
+                why: document.getElementById('goal-why').value.trim(),
+                ritual: wallet.goal?.ritual || '',
+                ritualCompletedAt: wallet.goal?.ritualCompletedAt || '',
+                createdAt: wallet.goal?.createdAt || new Date().toISOString()
+            };
+
+            persistWallet();
+            closeGoalModal();
+            renderGoal();
         });
 
         function createNewCheck() {
@@ -654,7 +881,7 @@
                     const imgData = canvas.toDataURL('image/png');
                     if (!wallet.checks) wallet.checks = [];
                     wallet.checks.unshift({ ...data, image: imgData });
-                    localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+                    persistWallet();
                     
                     // 3. Efecto de Salida y Éxito
                     element.style.transition = 'all 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -723,7 +950,7 @@
         function deleteCheck(id) {
             if (confirm("¿Deseas disolver esta orden energética del tejido cósmico?")) {
                 wallet.checks = wallet.checks.filter(c => c.id !== id);
-                localStorage.setItem('mila_wallet', JSON.stringify(wallet));
+                persistWallet();
                 renderChecksList();
             }
         }
@@ -800,7 +1027,10 @@
             const view = document.getElementById(`view-${t}`);
             view.classList.remove('hidden');
             
-            if (t === 'wallet') renderWallet();
+            if (t === 'wallet') {
+                renderWallet();
+                renderGoal();
+            }
             if (t === 'checks') renderChecksList();
         }
 
