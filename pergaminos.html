@@ -1881,14 +1881,17 @@
             const cAvatarMe = document.getElementById('chat-avatar-me');
             const cAvatarOther = document.getElementById('chat-avatar-other');
 
-            if (mAvatarMila) mAvatarMila.style.backgroundImage = `url("${profilePhotos.Mila}")`;
-            if (mAvatarMiguel) mAvatarMiguel.style.backgroundImage = `url("${profilePhotos.Miguelo}")`;
+            const milaPhoto = profilePhotos.Mila || DEFAULT_PHOTOS.Mila;
+            const migueloPhoto = profilePhotos.Miguelo || DEFAULT_PHOTOS.Miguelo;
+
+            if (mAvatarMila) mAvatarMila.style.backgroundImage = `url("${milaPhoto}")`;
+            if (mAvatarMiguel) mAvatarMiguel.style.backgroundImage = `url("${migueloPhoto}")`;
             
             // Si estamos en init y ya hay usuario seleccionado, actualizar chat header
             if (currentUser) {
                 const isMila = currentUser === 'Mila';
-                if (cAvatarMe) cAvatarMe.style.backgroundImage = `url("${isMila ? profilePhotos.Mila : profilePhotos.Miguelo}")`;
-                if (cAvatarOther) cAvatarOther.style.backgroundImage = `url("${isMila ? profilePhotos.Miguelo : profilePhotos.Mila}")`;
+                if (cAvatarMe) cAvatarMe.style.backgroundImage = `url("${isMila ? milaPhoto : migueloPhoto}")`;
+                if (cAvatarOther) cAvatarOther.style.backgroundImage = `url("${isMila ? migueloPhoto : milaPhoto}")`;
             }
         };
 
