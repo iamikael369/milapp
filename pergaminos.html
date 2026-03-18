@@ -1000,13 +1000,21 @@
         #modern-chat-container {
             display: none;
             flex-direction: column;
-            max-width: 800px;
+            width: 100%;
             margin: 0 auto;
-            min-height: 100vh;
-            padding-top: 100px;
-            padding-bottom: 120px;
+            min-height: 100dvh;
+            height: 100dvh;
+            padding: 0;
             position: relative;
             z-index: 10;
+            overflow: hidden;
+        }
+
+        #chat-messages {
+            min-height: 0;
+            overscroll-behavior: contain;
+            scroll-padding-bottom: 7rem;
+            -webkit-overflow-scrolling: touch;
         }
 
         .chat-message {
@@ -1324,7 +1332,7 @@
                 </div>
             </div>
             
-            <input type="file" id="photo-input" class="hidden" accept="image/*">
+            <input type="file" id="photo-input" class="hidden" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
             <p class="mt-8 text-[9px] font-cinzel opacity-40 uppercase tracking-[0.2em]">Mila Universe • 2026</p>
         </div>
     </div>
@@ -1363,10 +1371,10 @@
     <!-- AUDIO PARA EFECTO DE ESCRITURA -->
 
     <!-- MODERN CHAT CONTAINER -->
-    <div id="modern-chat-container" class="relative z-10 flex h-screen w-full flex-col group/design-root overflow-hidden">
-        <div class="layout-container flex h-full grow flex-col">
+    <div id="modern-chat-container" class="relative z-10 flex h-[100dvh] min-h-[100dvh] w-full min-w-0 flex-col group/design-root overflow-hidden">
+        <div class="layout-container flex h-full min-h-0 grow flex-col">
             <div class="flex flex-1 justify-center">
-                <div class="layout-content-container flex flex-col w-full flex-1 max-w-5xl mx-auto border-x border-gold/20 shadow-2xl bg-parchment/40 dark:bg-black/20 backdrop-blur-sm">
+                <div class="layout-content-container flex min-h-0 flex-col w-full flex-1 max-w-5xl mx-auto border-x border-gold/20 shadow-2xl bg-parchment/40 dark:bg-black/20 backdrop-blur-sm">
                     <!-- Chat Header -->
                     <div class="flex items-center justify-between p-4 px-8 border-b border-solid border-gold/30 bg-parchment-dark/60 dark:bg-black/40 backdrop-blur-md z-10 shrink-0 shadow-sm">
                         <div class="flex items-center gap-5">
@@ -1409,14 +1417,14 @@
                     </div>
 
                     <!-- Messages Area -->
-                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 z-10 custom-scrollbar relative">
+                    <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto p-4 pb-28 md:p-8 md:pb-32 flex flex-col gap-4 z-10 custom-scrollbar relative">
                         <!-- Los mensajes se cargarán dinámicamente -->
                     </div>
 
                     <!-- Modern Composer -->
                     <div class="p-4 md:p-6 bg-parchment-dark/80 dark:bg-black/60 backdrop-blur-md border-t border-solid border-gold/30 z-10 shrink-0 shadow-[0_-4px_15px_rgba(184,134,11,0.05)]">
                         <div class="flex items-end gap-3 max-w-4xl mx-auto">
-                            <input type="file" id="chat-image-input" class="hidden" accept="image/*">
+                            <input type="file" id="chat-image-input" class="hidden" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
                             <div class="flex items-center gap-2 pb-1.5">
                                 <button onclick="attachChatImage()" class="flex items-center justify-center size-11 rounded-full bg-parchment/60 border border-gold/30 hover:bg-gold/10 text-ink/70 dark:text-parchment transition-all shadow-sm" title="Adjuntar imagen">
                                     <span class="material-symbols-rounded text-[24px]">attach_file</span>
@@ -1683,6 +1691,8 @@
         // Arreglo de mensajes del modo chat
         let messages = [];
         let soulMessages = [];
+        let chatShouldStickToBottom = true;
+        let chatViewportBound = false;
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'mila-universe';
         const CHAT_THREAD_ID = 'mila-miguelo-thread';
         const SOUL_CHAT_STORAGE_KEY = 'mila_pergaminos_soul_chat';
@@ -1739,6 +1749,12 @@
             document.getElementById('photo-input').addEventListener('change', async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
+                const allowedTypes = ['image/png', 'image/jpeg'];
+                if (!allowedTypes.includes(file.type)) {
+                    showToast('Por ahora la foto de perfil debe ser PNG o JPG/JPEG.');
+                    e.target.value = '';
+                    return;
+                }
                 const reader = new FileReader();
                 reader.onload = async (event) => {
                     const base64 = event.target.result;
@@ -2039,6 +2055,7 @@
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'), { ...msg, timestamp: serverTimestamp() });
             } else {
                 messages.push(msg);
+                chatShouldStickToBottom = true;
                 renderChatMessage(msg);
             }
         }
@@ -2556,14 +2573,54 @@
             window.applyMode();
         }
 
+        function isNearChatBottom(container, threshold = 96) {
+            if (!container) return true;
+            return (container.scrollHeight - container.scrollTop - container.clientHeight) <= threshold;
+        }
+
+        function scrollChatToBottom(force = false) {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+            if (!force && !chatShouldStickToBottom) return;
+            requestAnimationFrame(() => {
+                container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        function bindChatViewport() {
+            if (chatViewportBound) return;
+            chatViewportBound = true;
+            const syncViewport = () => {
+                const chatShell = document.getElementById('modern-chat-container');
+                if (!chatShell) return;
+                const viewportHeight = window.visualViewport?.height || window.innerHeight;
+                chatShell.style.height = `${viewportHeight}px`;
+            };
+            syncViewport();
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', syncViewport);
+                window.visualViewport.addEventListener('scroll', syncViewport);
+            } else {
+                window.addEventListener('resize', syncViewport);
+            }
+        }
+
         function renderChatMessages() {
             const container = document.getElementById('chat-messages');
             if (!container) return;
+            const shouldStick = chatShouldStickToBottom || isNearChatBottom(container);
+            const previousBottomOffset = container.scrollHeight - container.scrollTop - container.clientHeight;
             container.innerHTML = '';
             messages.forEach(m => {
                 renderChatMessage(m, false);
             });
-            container.scrollTop = container.scrollHeight;
+            if (shouldStick) {
+                scrollChatToBottom(true);
+            } else {
+                requestAnimationFrame(() => {
+                    container.scrollTop = Math.max(0, container.scrollHeight - container.clientHeight - previousBottomOffset);
+                });
+            }
         }
 
         function renderChatMessage(msg, shouldScroll = true) {
@@ -2655,7 +2712,7 @@
                 }
                 
                 container.appendChild(div);
-                if (shouldScroll) container.scrollTop = container.scrollHeight;
+                if (shouldScroll) scrollChatToBottom(true);
             }
 
             window.playChatAudio = (btn, base64) => {
@@ -2692,6 +2749,7 @@
                 msg.imageLocal = true;
             }
             messages.push(msg);
+            chatShouldStickToBottom = true;
             renderChatMessage(msg);
             if (input && !overrideText) {
                 input.value = '';
@@ -2719,12 +2777,26 @@
 
         function setupChatListeners() {
             const input = document.getElementById('chat-input');
-            if (!input) return;
+            const container = document.getElementById('chat-messages');
+            if (!input || !container) return;
+            bindChatViewport();
+            if (!container.dataset.scrollListenerAdded) {
+                container.addEventListener('scroll', () => {
+                    chatShouldStickToBottom = isNearChatBottom(container);
+                }, { passive: true });
+                container.dataset.scrollListenerAdded = 'true';
+            }
             if (!input.dataset.listenerAdded) {
                 input.addEventListener('input', function () {
                     this.style.height = 'auto';
                     this.style.height = (this.scrollHeight) + 'px';
+                    chatShouldStickToBottom = true;
                     updateComposerButtons();
+                    scrollChatToBottom();
+                });
+                input.addEventListener('focus', function () {
+                    chatShouldStickToBottom = true;
+                    setTimeout(() => scrollChatToBottom(true), 220);
                 });
                 input.addEventListener('keydown', function (e) {
                     if (e.key === 'Enter' && !e.shiftKey) {

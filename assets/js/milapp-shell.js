@@ -5,6 +5,7 @@
     firebaseConfigPromise: null,
     listenersAttached: false,
     syncModes: {},
+    installChipVisible: false,
   };
 
   function ensureContainer(className) {
@@ -106,21 +107,43 @@
     stack.appendChild(chip);
   }
 
+  function openInstallGuide() {
+    openGuide({
+      moduleId: "install-milapp",
+      title: "Lleva MilApp contigo",
+      steps: [
+        "En Android, toca ‘Instalar MilApp’ y deja que el teléfono convierta este templo en una app propia.",
+        "Si tu navegador no ofrece el rito automático, abre el menú del navegador y elige ‘Instalar app’ o ‘Agregar a pantalla de inicio’.",
+        "En iPhone o iPad, abre Compartir en Safari y elige ‘Agregar a pantalla de inicio’ para guardar MilApp como un refugio permanente."
+      ],
+    });
+  }
+
+  async function promptInstall() {
+    const promptEvent = state.installPrompt;
+    if (!promptEvent) {
+      openInstallGuide();
+      return false;
+    }
+
+    await promptEvent.prompt();
+    await promptEvent.userChoice.catch(() => null);
+    state.installPrompt = null;
+    renderInstallChip();
+    return true;
+  }
+
   function renderInstallChip() {
-    if (!state.installPrompt || !document.body) return;
+    if (!document.body) return;
     renderFloatingChip({
       type: "install",
-      icon: "download",
-      label: "Instalar MilApp",
-      onClick: async () => {
-        const promptEvent = state.installPrompt;
-        if (!promptEvent) return;
-        await promptEvent.prompt();
-        await promptEvent.userChoice.catch(() => null);
-        state.installPrompt = null;
-        removeFloatingChip("install");
+      icon: state.installPrompt ? "download" : "phone_iphone",
+      label: state.installPrompt ? "Instalar MilApp" : "Llevar MilApp",
+      onClick: () => {
+        promptInstall().catch(() => openInstallGuide());
       },
     });
+    state.installChipVisible = true;
   }
 
   function tutorialKey(moduleId) {
@@ -319,6 +342,11 @@
       setLocal: (options = {}) => setSyncMode({ ...options, mode: "local" }),
       setCloud: (options = {}) => setSyncMode({ ...options, mode: "cloud" }),
       getMode: (module) => state.syncModes[module] || null,
+    },
+    install: {
+      open: () => openInstallGuide(),
+      trigger: () => promptInstall(),
+      available: () => Boolean(state.installPrompt),
     },
   };
 })();

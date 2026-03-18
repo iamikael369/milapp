@@ -37,14 +37,42 @@ const DEFAULT_PROFILES = [
   },
 ];
 
+function normalizeProfiles(rawProfiles) {
+  const baseById = new Map(DEFAULT_PROFILES.map((profile) => [profile.id, profile]));
+  const incoming = Array.isArray(rawProfiles) ? rawProfiles : [];
+  const merged = incoming.map((profile) => {
+    const base = baseById.get(profile.id);
+    return {
+      ...(base || {}),
+      ...profile,
+      gender: base?.gender || profile?.gender || "F",
+      photoUrl: profile?.photoUrl || base?.photoUrl || "",
+      aiReferenceUrl: profile?.aiReferenceUrl || base?.aiReferenceUrl || profile?.photoUrl || "",
+      aiReadings: profile?.aiReadings || base?.aiReadings || {},
+    };
+  });
+
+  DEFAULT_PROFILES.forEach((profile) => {
+    if (!merged.some((entry) => entry.id === profile.id)) {
+      merged.push({ ...profile });
+    }
+  });
+
+  if (!merged.some((profile) => profile.active)) {
+    merged[0].active = true;
+  }
+
+  return merged;
+}
+
 const Universo = {
   // --- Perfiles ---
   getProfiles: () => {
-    let profiles = JSON.parse(localStorage.getItem("mila_profiles"));
+    let profiles = normalizeProfiles(JSON.parse(localStorage.getItem("mila_profiles")));
     if (!profiles || profiles.length === 0) {
-      profiles = DEFAULT_PROFILES;
-      localStorage.setItem("mila_profiles", JSON.stringify(profiles));
+      profiles = DEFAULT_PROFILES.map((profile) => ({ ...profile }));
     }
+    localStorage.setItem("mila_profiles", JSON.stringify(profiles));
     return profiles;
   },
 
@@ -54,7 +82,7 @@ const Universo = {
   },
 
   saveProfiles: (profiles) => {
-    localStorage.setItem("mila_profiles", JSON.stringify(profiles));
+    localStorage.setItem("mila_profiles", JSON.stringify(normalizeProfiles(profiles)));
   },
 
   setActiveProfile: (id) => {

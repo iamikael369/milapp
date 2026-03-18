@@ -435,7 +435,7 @@
                 </div>
                 <label class="px-6 py-2 bg-white/5 border border-gold/30 rounded-full text-[10px] font-bold text-gold hover:bg-gold hover:text-deep-indigo cursor-pointer transition uppercase tracking-widest">
                   Cargar Imagen
-                  <input type="file" id="input-photo" class="hidden" accept="image/*" onchange="previewPhoto(this)">
+                  <input type="file" id="input-photo" class="hidden" accept=".png,.jpg,.jpeg,image/png,image/jpeg" onchange="previewPhoto(this)">
                 </label>
             </div>
 
@@ -838,6 +838,7 @@
             if (p) {
                 title.innerText = "EDITAR LLAMA";
                 hiddenId.value = editId;
+                form.dataset.photoB64 = p.photoUrl || "";
                 document.getElementById('input-name').value = p.name;
                 document.getElementById('input-fullname').value = p.fullname || "";
                 if (p.dob) {
@@ -848,11 +849,17 @@
                 }
                 document.getElementById('input-time').value = p.time || "";
                 document.getElementById('input-place').value = (typeof p.place === 'object' ? p.place.city : p.place) || "";
+                document.getElementById('g-fem').checked = (p.gender || 'F') !== 'M';
+                document.getElementById('g-masc').checked = (p.gender || 'F') === 'M';
                 if (p.photoUrl) document.getElementById('profile-photo-preview').innerHTML = `<img src="${p.photoUrl}" class="w-full h-full object-cover">`;
+                else document.getElementById('profile-photo-preview').innerHTML = '<span class="material-symbols-outlined text-3xl text-white/10">person</span>';
             }
         } else {
             title.innerText = "NUEVA LLAMA";
             hiddenId.value = "";
+            form.dataset.photoB64 = "";
+            document.getElementById('g-fem').checked = true;
+            document.getElementById('g-masc').checked = false;
             document.getElementById('profile-photo-preview').innerHTML = '<span class="material-symbols-outlined text-3xl text-white/10">person</span>';
         }
     }
@@ -860,14 +867,20 @@
     function closeNewProfileModal() { document.getElementById('new-profile-modal').classList.add('hidden'); }
     
     function previewPhoto(input) {
-        if (input.files && input.files[0]) {
-            const r = new FileReader();
-            r.onload = (e) => {
-                document.getElementById('profile-photo-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-                document.getElementById('profile-form').dataset.photoB64 = e.target.result;
-            };
-            r.readAsDataURL(input.files[0]);
+        if (!(input.files && input.files[0])) return;
+        const file = input.files[0];
+        const allowedTypes = ['image/png', 'image/jpeg'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Por ahora solo se admiten imágenes PNG o JPG/JPEG.');
+            input.value = '';
+            return;
         }
+        const r = new FileReader();
+        r.onload = (e) => {
+            document.getElementById('profile-photo-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            document.getElementById('profile-form').dataset.photoB64 = e.target.result;
+        };
+        r.readAsDataURL(file);
     }
 
     function submitProfileForm() {

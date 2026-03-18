@@ -572,6 +572,7 @@
         </div>
     </div>
 
+    <script src="assets/js/universo.js"></script>
     <script>
         MilApp.bootstrap({
             module: 'biblioteca',
@@ -779,7 +780,7 @@
         function openReading(t, c, d, s) { document.getElementById('read-title').innerText = t; document.getElementById('read-body').innerHTML = c.replace(/\n/g, '<br>'); document.getElementById('read-date').innerText = new Date(d).toLocaleDateString(); document.getElementById('read-source').innerText = s; document.getElementById('reading-modal').classList.add('active'); }
         function closeModal() { document.getElementById('reading-modal').classList.remove('active'); }
         function switchTab(t) { ['grimorio', 'sabiduria', 'lector', 'audio'].forEach(id => { document.getElementById('view-' + id).classList.add('hidden'); document.getElementById('tab-' + id).classList.remove('active'); }); document.getElementById('view-' + t).classList.remove('hidden'); document.getElementById('tab-' + t).classList.add('active'); }
-        function goHome() { Universo.goHome(); }
+        function goHome() { if (window.Universo?.goHome) Universo.goHome(); else window.location.href = 'index.html'; }
         function filterGrimorio(t) { loadGrimorio(); } // Simplified
         function openBackupModal() { document.getElementById('backup-modal').classList.remove('hidden'); }
         function downloadUniverse() { const d = { profiles: JSON.parse(localStorage.getItem('mila_profiles')), dreams: JSON.parse(localStorage.getItem('mila_dreams')), desires: JSON.parse(localStorage.getItem('mila_desires')), wiki: wikiData }; const b = new Blob([JSON.stringify(d)], { type: 'application/json' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = `boveda_backup_${new Date().toISOString().slice(0, 10)}.mila`; a.click(); }
