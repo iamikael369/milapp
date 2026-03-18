@@ -11,6 +11,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -370,6 +372,16 @@
 
 <script src="assets/js/universo.js"></script>
 <script>
+    MilApp.bootstrap({
+        module: 'astrologia',
+        title: 'Bóveda Celeste',
+        tutorial: [
+            'La bóveda astral conserva su lectura simbólica, ahora apoyada por un shell común con ayuda contextual.',
+            'Numerología y astrología empiezan a alinearse bajo la misma infraestructura sin perder su lenguaje propio.',
+            'La próxima fase reforzará los estados de carga y error del conocimiento local.'
+        ]
+    });
+
     // --- DATA & STATE ---
     let KNOWLEDGE_BASE = {};
     

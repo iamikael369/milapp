@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Billetera de Luz | Mila</title>
     <!-- Tailwind & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -424,6 +425,16 @@
     <!-- SCRIPT -->
     <script src="assets/js/universo.js"></script>
     <script>
+        MilApp.bootstrap({
+            module: 'billetera',
+            title: 'Billetera de Abundancia',
+            tutorial: [
+                'La billetera conserva su tono ceremonial, pero ahora comparte ayuda contextual y avisos con MilApp.',
+                'Por ahora tus flujos y cheques siguen siendo locales; la sincronía uniforme vendrá en una fase posterior.',
+                'El objetivo es fortalecer la base técnica sin volver este módulo genérico.'
+            ]
+        });
+
         let wallet = JSON.parse(localStorage.getItem('mila_wallet')) || { balance: 0, txs: [], checks: [] };
 
         function init() {

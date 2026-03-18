@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Mila – El Templo Central</title>
 
     <!-- Google Fonts -->
@@ -701,6 +702,17 @@
     <script src="assets/js/universo.js"></script>
 
     <script>
+        MilApp.bootstrap({
+            module: 'index',
+            title: 'Templo Central',
+            welcomeMessage: 'La arquitectura de MilApp empieza a unificarse sin perder su alma.',
+            tutorial: [
+                'Explora el templo central como mapa vivo: cada portal conserva su personalidad, pero la base compartida empieza aquí.',
+                'Instala MilApp cuando veas el botón flotante para convertir el refugio en una presencia íntima en tu teléfono.',
+                'Si cambias de identidad o tema, el shell común mantendrá el contexto entre módulos.'
+            ]
+        });
+
         // ====== ESTADO GLOBAL ======
         let currentPlaylistKey = 'mila_playlist';
         let playlist = JSON.parse(localStorage.getItem(currentPlaylistKey)) || [

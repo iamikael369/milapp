@@ -1,0 +1,233 @@
+:root {
+  --milapp-shell-panel: rgba(14, 10, 28, 0.88);
+  --milapp-shell-border: rgba(212, 175, 55, 0.18);
+  --milapp-shell-text: #f5efe3;
+  --milapp-shell-muted: rgba(245, 239, 227, 0.74);
+  --milapp-shell-gold: #d4af37;
+  --milapp-shell-warning: #f59e0b;
+  --milapp-shell-danger: #f43f5e;
+  --milapp-shell-success: #10b981;
+  --milapp-shell-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.milapp-toast-region,
+.milapp-floating-stack {
+  position: fixed;
+  right: max(18px, calc(env(safe-area-inset-right, 0px) + 18px));
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.milapp-toast-region {
+  top: max(18px, calc(env(safe-area-inset-top, 0px) + 18px));
+}
+
+.milapp-floating-stack {
+  bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 18px));
+}
+
+.milapp-toast,
+.milapp-floating-chip,
+.milapp-guide-sheet {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
+    var(--milapp-shell-panel);
+  border: 1px solid var(--milapp-shell-border);
+  color: var(--milapp-shell-text);
+  box-shadow: var(--milapp-shell-shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.milapp-toast {
+  width: min(340px, calc(100vw - 36px));
+  border-radius: 20px;
+  padding: 14px 16px;
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: auto;
+}
+
+.milapp-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.milapp-toast[data-tone="warning"] { border-color: rgba(245, 158, 11, 0.35); }
+.milapp-toast[data-tone="success"] { border-color: rgba(16, 185, 129, 0.35); }
+.milapp-toast[data-tone="danger"] { border-color: rgba(244, 63, 94, 0.35); }
+
+.milapp-toast-title {
+  font: 700 0.72rem/1.2 "Cinzel", serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--milapp-shell-gold);
+}
+
+.milapp-toast-body {
+  margin-top: 6px;
+  font: 400 0.92rem/1.45 "Inter", system-ui, sans-serif;
+  color: var(--milapp-shell-muted);
+}
+
+.milapp-floating-chip {
+  pointer-events: auto;
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 0.72rem/1 "Cinzel", serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--milapp-shell-text);
+}
+
+.milapp-floating-chip button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.milapp-floating-chip .material-symbols-rounded {
+  font-size: 18px;
+  color: var(--milapp-shell-gold);
+}
+
+.milapp-guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 320;
+  background: rgba(5, 3, 18, 0.74);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding:
+    max(20px, env(safe-area-inset-top, 0px))
+    16px
+    max(20px, env(safe-area-inset-bottom, 0px))
+    16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.milapp-guide-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.milapp-guide-sheet {
+  width: min(100%, 520px);
+  border-radius: 28px;
+  padding: 22px 20px 18px;
+  transform: translateY(24px);
+  transition: transform 0.25s ease;
+}
+
+.milapp-guide-overlay.is-open .milapp-guide-sheet {
+  transform: translateY(0);
+}
+
+.milapp-guide-kicker {
+  font: 700 0.7rem/1 "Cinzel", serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--milapp-shell-gold);
+}
+
+.milapp-guide-title {
+  margin-top: 10px;
+  font: 700 1.25rem/1.2 "Cinzel", serif;
+  color: var(--milapp-shell-text);
+}
+
+.milapp-guide-body {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.milapp-guide-step {
+  border-radius: 18px;
+  padding: 14px 14px 14px 48px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--milapp-shell-muted);
+  line-height: 1.45;
+}
+
+.milapp-guide-step::before {
+  content: attr(data-step);
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font: 700 0.7rem/1 "Cinzel", serif;
+  color: #110a2e;
+  background: var(--milapp-shell-gold);
+}
+
+.milapp-guide-actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.milapp-guide-btn {
+  appearance: none;
+  border-radius: 999px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--milapp-shell-text);
+  font: 700 0.72rem/1 "Cinzel", serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.milapp-guide-btn.is-primary {
+  border-color: rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--milapp-shell-gold);
+}
+
+body.milapp-shell-ready {
+  --milapp-safe-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 640px) {
+  .milapp-toast-region,
+  .milapp-floating-stack {
+    right: 12px;
+    left: 12px;
+  }
+
+  .milapp-toast,
+  .milapp-floating-chip {
+    width: 100%;
+    justify-content: center;
+  }
+}

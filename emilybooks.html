@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Emily Books • STITCH Studio</title>
 
     <!-- FUENTES PREMIUM -->
@@ -403,6 +404,16 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        MilApp.bootstrap({
+            module: 'emilybooks',
+            title: 'Emily Books',
+            tutorial: [
+                'Emily Books ya comparte shell, tutoriales y avisos con el resto de MilApp sin perder su atmósfera editorial.',
+                'Si la nube no responde, tus manuscritos siguen viviendo en modo local.',
+                'Usa la musa y la cubierta como rituales de escritura, no como herramientas genéricas.'
+            ]
+        });
+
         const appId = 'mila-universe'; 
         let db;
         let currentUser = localStorage.getItem('mila_pergamino_user') || 'Miguelo';
@@ -413,10 +424,8 @@
 
         async function setupFirebase() {
             try {
-                const response = await fetch('/api/firebase-config').catch(() => null);
-                if (!response || !response.ok) throw new Error("Config local fallback");
-                
-                const config = await response.json();
+                const config = await MilApp.firebase.getConfig();
+                if (!config.apiKey || !config.projectId) throw new Error("Config local fallback");
                 const app = initializeApp(config);
                 db = getFirestore(app);
 
@@ -454,6 +463,7 @@
                 });
             } catch (e) {
                 console.error("Firebase Sync Error:", e);
+                MilApp.toast("Sin sincronía en la nube — Emily Books seguirá guardando en modo local.", "warning", "Emily Books");
                 loadLocalChapters();
             }
         }

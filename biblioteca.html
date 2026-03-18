@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Bóveda de Luz</title>
 
     <!-- FUENTES & ICONOS -->
@@ -572,7 +573,15 @@
     </div>
 
     <script>
-
+        MilApp.bootstrap({
+            module: 'biblioteca',
+            title: 'La Bóveda',
+            tutorial: [
+                'La biblioteca reúne grimorio, sabiduría, lector y audio bajo una entrada común más clara.',
+                'El nuevo shell común ordena ayuda, instalación y avisos para que la experiencia sea menos fragmentada.',
+                'La IA de la bóveda empieza a migrar a la capa unificada.'
+            ]
+        });
 
         // --- DATOS BASE ---
         const DEFAULT_WIKI = [
@@ -696,11 +705,8 @@
 
         // --- IA ACTIONS ---
         async function callGemini(prompt) {
-            try {
-                const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt }) });
-                const d = await res.json();
-                return d.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/\*/g, '')?.trim() || "El archivo está en silencio...";
-            } catch { return "Error conexión con el oráculo."; }
+            const text = await MilApp.ai.generate(prompt, { quiet: true });
+            return text?.replace(/\*/g, '')?.trim() || "El archivo está en silencio...";
         }
 
         async function aiWriteWiki() {

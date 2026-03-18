@@ -13,7 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
+    <link rel="stylesheet" href="/assets/css/milapp-shell.css">
+    <script src="/assets/js/milapp-shell.js" defer></script>
     <title>Bitácora Alquímica</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -387,6 +388,16 @@
 
     <script src="assets/js/universo.js"></script>
     <script>
+        MilApp.bootstrap({
+            module: 'diario',
+            title: 'Bitácora Alquímica',
+            tutorial: [
+                'Registra sueños o intenciones desde un mismo altar, pero con rituales distintos para noche y sol.',
+                'La IA del diario ya usa la misma capa compartida del resto de MilApp.',
+                'Tus registros siguen siendo íntimos: puedes mantenerlos privados o compartirlos con la otra llama.'
+            ]
+        });
+
         let mode = 'moon';
         let currentVisibility = 'private';
         let dreams = JSON.parse(localStorage.getItem('mila_dreams')) || [];
