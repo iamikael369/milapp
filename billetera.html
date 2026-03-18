@@ -185,7 +185,7 @@
         <header class="flex justify-between items-start mb-8 sm:mb-10">
             <div>
                 <h1 class="font-cinzel text-2xl tracking-[0.2em] text-white uppercase">Billetera de Luz</h1>
-                <p class="font-playfair italic text-slate-400 text-sm mt-1">Tu flujo de abundancia infinita</p>
+                <p class="font-playfair italic text-slate-400 text-sm mt-1">Ordena, dirige y materializa tu abundancia</p>
             </div>
             <div class="flex gap-2">
                 <button onclick="resetWallet()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-red-400 transition-all">
@@ -197,87 +197,112 @@
             </div>
         </header>
 
-        <!-- Balance Card -->
-        <div class="balance-card rounded-[2.5rem] p-5 sm:p-8 mb-6 sm:mb-10 relative overflow-hidden group">
-            <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-wealth-green/5 blur-3xl rounded-full"></div>
+        <!-- Goal Compass -->
+        <section class="balance-card rounded-[2.75rem] p-5 sm:p-8 mb-6 sm:mb-8 relative overflow-hidden border border-temple-gold/20">
+            <div class="absolute -top-16 -right-12 w-48 h-48 bg-temple-gold/10 blur-3xl rounded-full"></div>
+            <div class="absolute -bottom-16 -left-10 w-44 h-44 bg-wealth-green/10 blur-3xl rounded-full"></div>
+            <div class="relative z-10 space-y-6">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <p class="font-cinzel text-[10px] tracking-[0.35em] text-temple-gold uppercase mb-2">Altar de Manifestación</p>
+                        <h2 id="goal-title" class="font-playfair text-2xl sm:text-4xl text-white leading-tight">Aún no has trazado tu meta sagrada</h2>
+                        <p id="goal-copy" class="text-sm sm:text-base text-slate-300 mt-3 leading-relaxed max-w-2xl">Declara el sueño que quieres materializar, activa tu ritual y deja que cada movimiento de abundancia tenga dirección.</p>
+                    </div>
+                    <button onclick="openGoalModal()" class="shrink-0 rounded-full border border-temple-gold/40 px-4 py-2.5 text-[10px] font-cinzel tracking-[0.2em] uppercase text-temple-gold hover:bg-temple-gold/10 transition-all">Declarar meta</button>
+                </div>
+
+                <div class="grid gap-4 lg:grid-cols-[1.2fr_0.8fr] items-start">
+                    <div class="space-y-4">
+                        <div class="rounded-[2rem] bg-black/20 border border-white/10 p-5 sm:p-6">
+                            <div class="flex items-center justify-between text-[10px] font-cinzel tracking-[0.25em] uppercase text-slate-400 mb-3">
+                                <span>Camino de materialización</span>
+                                <span id="goal-progress-label">0%</span>
+                            </div>
+                            <div class="h-3 rounded-full bg-white/5 overflow-hidden mb-4">
+                                <div id="goal-progress-bar" class="h-full rounded-full bg-gradient-to-r from-wealth-green via-temple-gold to-gold-light transition-all duration-700" style="width: 0%;"></div>
+                            </div>
+                            <div class="grid sm:grid-cols-3 gap-3">
+                                <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
+                                    <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Sueño declarado</p>
+                                    <p id="goal-target" class="font-cinzel text-lg text-white">$0.00</p>
+                                </div>
+                                <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
+                                    <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Energía reunida</p>
+                                    <p id="goal-current" class="font-cinzel text-lg text-white">$0.00</p>
+                                </div>
+                                <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
+                                    <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Falta por invocar</p>
+                                    <p id="goal-remaining" class="font-cinzel text-lg text-white">$0.00</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-[2rem] bg-temple-dark/40 border border-white/10 p-5 sm:p-6">
+                            <p class="text-[10px] font-cinzel tracking-[0.25em] text-wealth-green uppercase mb-2">Propósito vivo</p>
+                            <p id="goal-purpose" class="font-playfair italic text-white text-lg leading-relaxed">Toda abundancia necesita un propósito amoroso para encontrar dirección.</p>
+                            <p id="goal-next-step" class="text-sm text-slate-400 mt-3">Empieza declarando una meta clara para que el resto del altar cobre sentido.</p>
+                        </div>
+
+                        <div class="grid sm:grid-cols-3 gap-3">
+                            <button onclick="openGoalModal()" class="rounded-full bg-temple-gold text-temple-dark px-4 py-4 text-[10px] font-cinzel tracking-[0.2em] uppercase font-bold hover:brightness-110 transition-all">Ordenar meta</button>
+                            <button onclick="openTxModal('deposit')" class="rounded-full border border-wealth-green/30 text-wealth-green px-4 py-4 text-[10px] font-cinzel tracking-[0.2em] uppercase hover:bg-wealth-green/10 transition-all">Recibir abundancia</button>
+                            <button onclick="switchTab('checks')" class="rounded-full border border-white/15 text-white px-4 py-4 text-[10px] font-cinzel tracking-[0.2em] uppercase hover:bg-white/5 transition-all">Materializar cheque</button>
+                        </div>
+                    </div>
+
+                    <div class="rounded-[2rem] border border-wealth-green/20 bg-wealth-green/5 p-5 sm:p-6">
+                        <p class="text-[9px] font-cinzel tracking-[0.25em] text-wealth-green uppercase mb-2">Ritual central</p>
+                        <h3 class="font-cinzel text-white text-lg mb-3">Sellar la meta del día</h3>
+                        <p id="goal-ritual-status" class="font-playfair italic text-white leading-relaxed min-h-[5rem]">Cuando declares una meta, podrás sellarla con una intención diaria que conecte tu energía con ese sueño.</p>
+                        <button id="goal-ritual-btn" onclick="activateGoalRitual()" class="mt-4 w-full rounded-full bg-wealth-green text-temple-dark px-4 py-4 text-[10px] font-cinzel tracking-[0.2em] uppercase font-bold hover:brightness-110 transition-all">Activar ritual</button>
+                        <button onclick="generateDailyDecree()" id="btn-decree" class="mt-3 w-full rounded-full border border-wealth-green/20 px-4 py-4 text-[10px] font-cinzel tracking-[0.2em] uppercase text-wealth-green hover:bg-wealth-green/5 transition-all flex items-center justify-center gap-3">
+                            <span class="material-symbols-rounded text-sm">auto_awesome</span> Invocar decreto para esta meta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Balance Card -->
+        <div class="glass-panel rounded-[2rem] p-5 sm:p-6 mb-6 sm:mb-8 relative overflow-hidden group border border-white/10">
             <div class="relative z-10">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="font-cinzel text-[10px] tracking-[0.3em] text-wealth-green uppercase font-bold">Balance Disponible</span>
+                <div class="flex justify-between items-center mb-5">
+                    <span class="font-cinzel text-[10px] tracking-[0.3em] text-slate-400 uppercase font-bold">Reserva disponible para tu meta</span>
                     <div class="w-8 h-8 rounded-full bg-wealth-green/10 flex items-center justify-center text-wealth-green animate-glow-pulse">
                         <span class="material-symbols-rounded text-sm">auto_awesome</span>
                     </div>
                 </div>
-                <div class="flex items-baseline gap-2 mb-8">
+                <div class="flex items-baseline gap-2 mb-6">
                     <span class="text-wealth-green font-cinzel text-lg opacity-50">$</span>
-                    <h2 class="text-3xl sm:text-5xl font-cinzel tracking-tighter text-white" id="display-balance">0.00</h2>
+                    <h3 class="text-3xl sm:text-4xl font-cinzel tracking-tighter text-white" id="display-balance">0.00</h3>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="glass-panel rounded-2xl p-4 border-l-2 border-l-wealth-green/30">
-                        <p class="text-[9px] font-cinzel tracking-widest text-slate-400 uppercase mb-1">Ingresos</p>
+                        <p class="text-[9px] font-cinzel tracking-widest text-slate-400 uppercase mb-1">Energía recibida</p>
                         <p class="text-lg font-cinzel text-wealth-green" id="display-in">+ 0.00</p>
                     </div>
                     <div class="glass-panel rounded-2xl p-4 border-l-2 border-l-temple-gold/30">
-                        <p class="text-[9px] font-cinzel tracking-widest text-slate-400 uppercase mb-1">Egresos</p>
+                        <p class="text-[9px] font-cinzel tracking-widest text-slate-400 uppercase mb-1">Energía dirigida</p>
                         <p class="text-lg font-cinzel text-temple-gold" id="display-out">- 0.00</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Goal Compass -->
-        <section class="glass-panel rounded-[2rem] p-5 sm:p-6 mb-6 border border-white/10">
-            <div class="flex items-start justify-between gap-4 mb-4">
-                <div>
-                    <p class="font-cinzel text-[10px] tracking-[0.3em] text-temple-gold uppercase mb-2">Faro de Manifestación</p>
-                    <h3 id="goal-title" class="font-playfair text-xl text-white">Aún no has trazado tu meta sagrada</h3>
-                    <p id="goal-copy" class="text-sm text-slate-400 mt-2 leading-relaxed">Define una intención, una cifra y un motivo amoroso para dar dirección a tu abundancia.</p>
-                </div>
-                <button onclick="openGoalModal()" class="shrink-0 rounded-full border border-temple-gold/30 px-4 py-2 text-[10px] font-cinzel tracking-[0.2em] uppercase text-temple-gold hover:bg-temple-gold/10 transition-all">Editar meta</button>
-            </div>
-
-            <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto]">
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between text-[10px] font-cinzel tracking-[0.2em] uppercase text-slate-400">
-                        <span>Progreso ritual</span>
-                        <span id="goal-progress-label">0%</span>
-                    </div>
-                    <div class="h-3 rounded-full bg-white/5 overflow-hidden">
-                        <div id="goal-progress-bar" class="h-full rounded-full bg-gradient-to-r from-wealth-green via-temple-gold to-gold-light transition-all duration-700" style="width: 0%;"></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
-                            <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Meta</p>
-                            <p id="goal-target" class="font-cinzel text-lg text-white">$0.00</p>
-                        </div>
-                        <div class="rounded-2xl bg-white/5 p-4 border border-white/5">
-                            <p class="text-[9px] font-cinzel tracking-[0.2em] text-slate-500 uppercase mb-1">Falta por invocar</p>
-                            <p id="goal-remaining" class="font-cinzel text-lg text-white">$0.00</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="rounded-[1.75rem] border border-wealth-green/20 bg-wealth-green/5 p-4 sm:w-56">
-                    <p class="text-[9px] font-cinzel tracking-[0.2em] text-wealth-green uppercase mb-2">Ritual activo</p>
-                    <p id="goal-ritual-status" class="font-playfair italic text-white leading-relaxed min-h-[4.5rem]">Cuando declares una meta, podrás sellarla con una intención diaria.</p>
-                    <button id="goal-ritual-btn" onclick="activateGoalRitual()" class="mt-4 w-full rounded-full bg-wealth-green text-temple-dark px-4 py-3 text-[10px] font-cinzel tracking-[0.2em] uppercase font-bold hover:brightness-110 transition-all">Sellar ritual</button>
-                </div>
-            </div>
-        </section>
-
         <!-- Navigation -->
         <div class="flex gap-2 mb-5 sm:mb-8 bg-white/5 p-1.5 rounded-full border border-white/5">
-            <button id="tab-wallet" onclick="switchTab('wallet')" class="nav-pill active flex-1 py-2.5">Billetera</button>
-            <button id="tab-checks" onclick="switchTab('checks')" class="nav-pill flex-1 py-2.5">Cheques de Poder</button>
-            <button id="tab-guide" onclick="switchTab('guide')" class="nav-pill flex-1 py-2.5">Guía Alquimia</button>
+            <button id="tab-wallet" onclick="switchTab('wallet')" class="nav-pill active flex-1 py-2.5">Flujo</button>
+            <button id="tab-checks" onclick="switchTab('checks')" class="nav-pill flex-1 py-2.5">Materializar</button>
+            <button id="tab-guide" onclick="switchTab('guide')" class="nav-pill flex-1 py-2.5">Claridad</button>
         </div>
 
         <!-- View: Wallet -->
         <div id="view-wallet" class="space-y-6">
             <div class="flex justify-between items-center px-2">
-                <h3 class="font-cinzel text-[10px] tracking-[0.3em] text-slate-500 uppercase">Historial Energético</h3>
+                <h3 class="font-cinzel text-[10px] tracking-[0.3em] text-slate-500 uppercase">Flujo consciente</h3>
                 <div class="flex gap-4">
-                    <button onclick="openTxModal('deposit')" class="text-[9px] font-cinzel tracking-widest text-wealth-green uppercase hover:underline">Recibir</button>
-                    <button onclick="openTxModal('withdraw')" class="text-[9px] font-cinzel tracking-widest text-temple-gold uppercase hover:underline">Circular</button>
+                    <button onclick="openTxModal('deposit')" class="text-[9px] font-cinzel tracking-widest text-wealth-green uppercase hover:underline">Recibir energía</button>
+                    <button onclick="openTxModal('withdraw')" class="text-[9px] font-cinzel tracking-widest text-temple-gold uppercase hover:underline">Dirigir energía</button>
                 </div>
             </div>
             
@@ -291,8 +316,8 @@
                 <p id="decree-text" class="font-playfair italic text-white text-lg leading-relaxed">...</p>
             </div>
             
-            <button onclick="generateDailyDecree()" id="btn-decree"
-                class="w-full py-4 border border-wealth-green/20 rounded-full text-[10px] font-cinzel tracking-widest uppercase text-wealth-green hover:bg-wealth-green/5 transition-all flex items-center justify-center gap-3">
+            <button onclick="generateDailyDecree()" id="btn-decree-secondary"
+                class="hidden w-full py-4 border border-wealth-green/20 rounded-full text-[10px] font-cinzel tracking-widest uppercase text-wealth-green hover:bg-wealth-green/5 transition-all flex items-center justify-center gap-3">
                 <span class="material-symbols-rounded text-sm">auto_awesome</span> Invocar Decreto de Hoy
             </button>
         </div>
@@ -300,10 +325,10 @@
         <!-- View: Checks -->
         <div id="view-checks" class="hidden space-y-8 animate-fade-in">
             <div class="text-center py-6">
-                <p class="font-playfair italic text-slate-400 mb-8 max-w-xs mx-auto">"Escribe tu intención y permite que el universo se encargue de la entrega."</p>
+                <p class="font-playfair italic text-slate-400 mb-8 max-w-xs mx-auto">"Cuando tu meta esté clara, emite un cheque como acto de materialización consciente."</p>
                 <button onclick="createNewCheck()" 
                     class="px-6 py-3 sm:px-10 sm:py-4 rounded-full bg-temple-gold text-temple-dark font-cinzel tracking-widest uppercase text-xs shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:bg-white transition-all transform hover:-translate-y-1">
-                    Escribir Nuevo Cheque
+                    Emitir cheque ritual
                 </button>
             </div>
             <div id="checks-list" class="grid grid-cols-1 gap-8">
@@ -334,7 +359,7 @@
     <div id="tx-modal" class="modal-overlay">
         <div class="glass-panel p-5 sm:p-8 rounded-[2.5rem] w-full max-w-sm m-4 border-t-2 border-t-wealth-green/20">
             <div class="flex justify-between items-center mb-8">
-                <h3 class="font-cinzel text-lg text-white" id="tx-title">Registrar</h3>
+                <h3 class="font-cinzel text-lg text-white" id="tx-title">Registrar abundancia</h3>
                 <button onclick="closeTxModal()" class="text-slate-500 hover:text-white"><span class="material-symbols-rounded">close</span></button>
             </div>
             <form id="tx-form" class="space-y-6">
@@ -346,10 +371,10 @@
                 </div>
                 <input type="text" id="tx-desc"
                     class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-wealth-green/30"
-                    placeholder="¿Cuál es el concepto?" required>
+                    placeholder="¿Qué estás recibiendo o dirigiendo hoy?" required>
                 
                 <div class="space-y-3">
-                    <p class="text-[9px] font-cinzel tracking-widest text-slate-500 uppercase px-1">Emoción Asociada</p>
+                    <p class="text-[9px] font-cinzel tracking-widest text-slate-500 uppercase px-1">Energía de este movimiento</p>
                     <div class="flex flex-wrap gap-2" id="tx-emotions"></div>
                 </div>
 
@@ -603,7 +628,10 @@
             const title = document.getElementById('goal-title');
             const copy = document.getElementById('goal-copy');
             const target = document.getElementById('goal-target');
+            const current = document.getElementById('goal-current');
             const remaining = document.getElementById('goal-remaining');
+            const purpose = document.getElementById('goal-purpose');
+            const nextStep = document.getElementById('goal-next-step');
             const progressBar = document.getElementById('goal-progress-bar');
             const progressLabel = document.getElementById('goal-progress-label');
             const ritualStatus = document.getElementById('goal-ritual-status');
@@ -612,15 +640,18 @@
 
             if (!goal || !goal.amount) {
                 title.textContent = 'Aún no has trazado tu meta sagrada';
-                copy.textContent = 'Define una intención, una cifra y un motivo amoroso para dar dirección a tu abundancia.';
+                copy.textContent = 'Declara el sueño que quieres materializar, activa tu ritual y deja que cada movimiento de abundancia tenga dirección.';
                 target.textContent = formatMoney(0);
+                current.textContent = formatMoney(0);
                 remaining.textContent = formatMoney(0);
+                purpose.textContent = 'Toda abundancia necesita un propósito amoroso para encontrar dirección.';
+                nextStep.textContent = 'Empieza declarando una meta clara para que el resto del altar cobre sentido.';
                 progressBar.style.width = '0%';
                 progressLabel.textContent = '0%';
-                ritualStatus.textContent = 'Cuando declares una meta, podrás sellarla con una intención diaria.';
+                ritualStatus.textContent = 'Cuando declares una meta, podrás sellarla con una intención diaria que conecte tu energía con ese sueño.';
                 ritualBtn.disabled = true;
                 ritualBtn.classList.add('opacity-50');
-                ritualBtn.textContent = 'Sellar ritual';
+                ritualBtn.textContent = 'Activar ritual';
                 return;
             }
 
@@ -632,9 +663,14 @@
                 : 'sin fecha límite';
 
             title.textContent = goal.name;
-            copy.textContent = goal.why ? `${goal.why} · Horizonte ${deadlineText}.` : `Meta activa con horizonte ${deadlineText}.`;
+            copy.textContent = `Tu altar está enfocado en esta meta${goal.deadline ? ` con horizonte ${deadlineText}` : ''}. Cada paso de abundancia debe acercarte a ella.`;
             target.textContent = formatMoney(goal.amount);
+            current.textContent = formatMoney(balance);
             remaining.textContent = formatMoney(amountRemaining);
+            purpose.textContent = goal.why || 'Esta meta ya tiene dirección; ahora aliméntala con actos pequeños y conscientes.';
+            nextStep.textContent = amountRemaining > 0
+                ? `Siguiente paso sugerido: recibe o dirige abundancia con intención hasta acercarte a ${formatMoney(amountRemaining)} restantes.`
+                : 'Tu meta ya fue alcanzada. Este es un momento perfecto para materializarla con un cheque ritual.';
             progressBar.style.width = `${progress}%`;
             progressLabel.textContent = `${Math.round(progress)}%`;
             ritualBtn.disabled = false;
@@ -644,11 +680,11 @@
                 const sealedDate = goal.ritualCompletedAt
                     ? new Date(goal.ritualCompletedAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
                     : 'hoy';
-                ritualStatus.textContent = `${goal.ritual} · Sellado el ${sealedDate}.`;
+                ritualStatus.textContent = `${goal.ritual} · Ritual sellado el ${sealedDate} para sostener ${goal.name}.`;
                 ritualBtn.textContent = 'Renovar ritual';
             } else {
-                ritualStatus.textContent = 'Tu meta está lista para ser sellada con una afirmación breve y consciente.';
-                ritualBtn.textContent = 'Sellar ritual';
+                ritualStatus.textContent = `Tu meta ${goal.name} está lista para recibir una intención breve que ordene tu energía de hoy.`;
+                ritualBtn.textContent = 'Activar ritual';
             }
         }
 
@@ -691,7 +727,7 @@
             
             if (!wallet.txs || wallet.txs.length === 0) {
                 list.innerHTML = `<div class="glass-panel rounded-3xl p-10 text-center">
-                    <p class="font-garamond italic text-slate-500 text-lg">Aún no hay flujos de energía registrados.</p>
+                    <p class="font-garamond italic text-slate-500 text-lg">Aún no has guiado movimientos de abundancia hacia tu meta.</p>
                 </div>`;
             } else {
                 wallet.txs.slice(0, 20).forEach((t, index) => {
@@ -748,7 +784,7 @@
 
         function openTxModal(type) {
             currentTxType = type;
-            document.getElementById('tx-title').innerText = type === 'deposit' ? 'Recibir Abundancia' : 'Circular Energía';
+            document.getElementById('tx-title').innerText = type === 'deposit' ? 'Recibir abundancia' : 'Dirigir abundancia';
             document.getElementById('tx-modal').classList.add('active');
             
             const container = document.getElementById('tx-emotions');
@@ -798,7 +834,7 @@
                 date: new Date(),
                 type: currentTxType,
                 amount: amount,
-                desc: desc || (currentTxType === 'deposit' ? 'Ingreso' : 'Egreso'),
+                desc: desc || (currentTxType === 'deposit' ? 'Abundancia recibida' : 'Abundancia dirigida'),
                 emotion: currentEmotion
             });
             
@@ -814,7 +850,7 @@
             const name = document.getElementById('goal-name').value.trim();
 
             if (!name || !amount || amount <= 0) {
-                alert('Tu meta necesita un nombre claro y una cantidad mayor a cero.');
+                alert('Tu altar necesita un sueño claro y una cantidad mayor a cero.');
                 return;
             }
 
@@ -840,6 +876,12 @@
             
             const activeProfile = Universo.getActiveProfile();
             if (activeProfile) document.getElementById('chk-name').value = activeProfile.name;
+            if (wallet.goal?.name && !document.getElementById('chk-memo').value) {
+                document.getElementById('chk-memo').value = wallet.goal.name;
+            }
+            if (wallet.goal?.amount && !document.getElementById('chk-num-amount').value) {
+                document.getElementById('chk-num-amount').value = wallet.goal.amount.toFixed(2);
+            }
         }
 
         function closeCheckModal() {
