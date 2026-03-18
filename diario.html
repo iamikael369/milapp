@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- PWA -->
     <meta name="theme-color" content="#d4af37">
@@ -803,13 +803,7 @@
         }
 
         async function callGemini(prompt) {
-            // Este es un placeholder que simula la respuesta de la IA Mila
-            console.log("Mila procesando:", prompt);
-            await new Promise(r => setTimeout(r, 2000));
-            if (prompt.includes("SPEC")) {
-                return "S: Visualiza tu éxito | P: Siéntelo en tu médula | E: Mantén la fe inamovible | C: Recibe con gratitud";
-            }
-            return "El universo susurra que tus sueños son mapas de realidades por descubrir. Este mensaje es una señal de tu guía espiritual.";
+            return Universo.callGemini(prompt);
         }
 
         // Initialize on load

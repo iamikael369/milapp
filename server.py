@@ -15,7 +15,6 @@ def get_api_key():
     """Lee la API Key desde GEMINI_API_KEY env var; fallback a API.md (deprecado)."""
     env_key = os.environ.get('GEMINI_API_KEY')
     if env_key:
-        print(f"🔑 API Key desde entorno: {env_key[:5]}...{env_key[-3:]}")
         return env_key
 
     print("⚠️  DEPRECADO: GEMINI_API_KEY no encontrada en variables de entorno. Intentando API.md como respaldo...")
@@ -30,7 +29,6 @@ def get_api_key():
 
         if match:
             key = match.group(1)
-            print(f"🔑 API Key desde API.md (DEPRECADO): {key[:5]}...{key[-3:]} (Longitud: {len(key)})")
             return key
 
         print("❌ Error: No se detectó patrón 'AIza...' en API.md")
@@ -64,7 +62,13 @@ def get_firebase_config():
 
 class MilaHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/api/firebase-config':
+        if self.path == '/api/health':
+            self.respond_json({
+                'status': 'ok',
+                'geminiConfigured': bool(os.environ.get('GEMINI_API_KEY')),
+                'firebaseConfigured': bool(get_firebase_config()),
+            })
+        elif self.path == '/api/firebase-config':
             self.respond_json(get_firebase_config())
         else:
             super().do_GET()
@@ -107,11 +111,12 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
 
         try:
             req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
-            with urllib.request.urlopen(req) as response:
+            with urllib.request.urlopen(req, timeout=20) as response:
                 result = response.read()
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Cache-Control', 'no-store')
                 self.end_headers()
                 self.wfile.write(result)
         except urllib.error.HTTPError as e:
@@ -126,6 +131,7 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Cache-Control', 'no-store')
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
 
