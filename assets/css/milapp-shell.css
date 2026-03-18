@@ -88,6 +88,14 @@
   color: var(--milapp-shell-text);
 }
 
+.milapp-floating-chip[data-chip="network"] {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.milapp-floating-chip[data-chip="network"] .material-symbols-rounded {
+  color: var(--milapp-shell-warning);
+}
+
 .milapp-floating-chip button {
   appearance: none;
   border: none;
@@ -237,5 +245,16 @@ body.milapp-shell-ready {
   .milapp-floating-chip {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

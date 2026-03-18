@@ -51,7 +51,12 @@
     if (state.listenersAttached) return;
     state.listenersAttached = true;
 
+    if (!navigator.onLine) {
+      renderNetworkChip();
+    }
+
     window.addEventListener("offline", () => {
+      renderNetworkChip();
       toast(
         "La red se ha retirado por un momento. El templo seguirá contigo con lo ya guardado.",
         "warning",
@@ -60,6 +65,7 @@
     });
 
     window.addEventListener("online", () => {
+      removeFloatingChip("network");
       toast(
         "La conexión ha regresado. Puedes volver a sincronizar tus rituales.",
         "success",
@@ -144,6 +150,22 @@
       },
     });
     state.installChipVisible = true;
+  }
+
+  function renderNetworkChip() {
+    if (!document.body) return;
+    renderFloatingChip({
+      type: "network",
+      icon: "wifi_off",
+      label: "Modo local",
+      onClick: () => {
+        toast(
+          "Sigues en modo local. MilApp conserva lo ya guardado y retomará la sincronía cuando vuelva la red.",
+          "warning",
+          "Sin conexión",
+        );
+      },
+    });
   }
 
   function tutorialKey(moduleId) {
