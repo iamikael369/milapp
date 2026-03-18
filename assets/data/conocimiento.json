@@ -1,48 +1,137 @@
 {
   "numerologia": {
-    "numeros": {
-      "1": "El Pionero. Representa el inicio, la independencia y la originalidad. Es la energía del líder que traza su propio camino. Su vibración impulsa a la acción y a la autosuficiencia. En desequilibrio, puede tender al egoísmo o al autoritarismo.",
-      "2": "El Mediador. Simboliza la dualidad, la cooperación y la diplomacia. Es una energía sensible, intuitiva y busca la armonía en las relaciones. Su fuerza reside en la unión y el soporte. En sombra, puede ser excesivamente dependiente o indeciso.",
-      "3": "El Comunicador. Representa la alegría de vivir, la creatividad y la expresión social. Es el número de los artistas y optimistas. Su vibración atrae la expansión a través de las palabras y el arte. En baja frecuencia, puede ser superficial o disperso.",
-      "4": "El Constructor. Simboliza el orden, la estructura y el trabajo metódico. Representa la estabilidad y los cimientos sólidos. Es la energía de la perseverancia y la disciplina. En sombra, puede ser rígido, testarudo o excesivamente serio.",
-      "5": "El Aventurero. Representa la libertad, el cambio y la adaptabilidad. Es una energía dinámica que busca experiencias constantes y expansión sensorial. Su don es la versatilidad. En desequilibrio, puede caer en la irresponsabilidad o la impaciencia.",
-      "6": "El Amoroso. Simboliza la responsabilidad familiar, el hogar y el servicio desinteresado. Es la energía de la sanación y el equilibrio emocional. Busca la belleza y la justicia. En sombra, puede ser entrometido o propenso al sacrificio excesivo.",
-      "7": "El Buscador. Representa la introspección, el análisis y la espiritualidad. Es el número de los sabios y solitarios que buscan la verdad profunda. Su vibración es intelectual y mística. En baja frecuencia, puede ser frío, cínico o aislado.",
-      "8": "El Estratega. Simboliza el poder material, la autoridad y la justicia. Representa el equilibrio entre lo espiritual y lo terrenal a través del logro. Es la energía de la abundancia. En sombra, puede ser despiadado o excesivamente ambicioso.",
-      "9": "El Humanitario. Representa el amor universal, la compasión y el cierre de ciclos. Es una energía sabia que abarca todas las lecciones anteriores. Su don es la entrega. En desequilibrio, puede sufrir por heridas del pasado o falta de realismo.",
-      "11": "Maestro Iluminador. Trae una intuición altamente desarrollada y una visión espiritual superior. Su misión es inspirar a otros. Es un canal de luz entre planos. Requiere gran equilibrio para no caer en la ansiedad o el nerviosismo.",
-      "22": "Maestro Constructor. Posee la capacidad de manifestar grandes ideales en la realidad física para el bien común. Es el visionario práctico. Su desafío es no abrumarse por la magnitud de sus propias metas.",
-      "33": "Maestro Guía. Representa el amor crístico y la protección absoluta. Su vibración es la del maestro de maestros, dedicado al servicio incondicional y la sanación de la humanidad a través del amor puro."
+    "arquetipos_vibracionales": {
+      "1": "La Semilla Primordial (El Pionero). Es el relámpago que rompe el vacío, la chispa de la individualidad divina despertando en la materia. Representa la voluntad indomable, el coraje de iniciar y el líder que traza caminos en la oscuridad. Su luz forja imperios; su sombra, sin embargo, puede consumirse en el ego, el egoísmo o la tiranía de la soledad profunda.",
+      "2": "El Cáliz de la Dualidad (El Mediador). Es el agua que amolda y el espejo que refleja la divinidad en el otro. Simboliza el sagrado equilibrio, la intuición maternal y la diplomacia del alma. Su fuerza no reside en el grito, sino en el susurro que sana. En su luz, une lo que estaba roto; en su sombra, puede ahogarse en la codependencia, olvidando su propio valor.",
+      "3": "El Canto del Creador (El Expresivo). Es la alegría de existir materializada en arte, palabra y movimiento. La trinidad perfecta (mente, cuerpo, espíritu) danzando en armonía. Es el niño interior del universo, bendecido con un magnetismo expansivo. En baja frecuencia, su energía se dispersa en la frivolidad, el chisme o la incapacidad de profundizar.",
+      "4": "El Ancla de la Tierra (El Constructor). Simboliza la geometría sagrada, el orden perfecto y las raíces profundas. Es la energía estoica que materializa los sueños etéreos en realidades tangibles a través de la disciplina. En su sombra, el cimiento se vuelve prisión: rigidez, terquedad y miedo paralizante al cambio.",
+      "5": "El Viento Cósmico (El Aventurero). Representa el aliento de la libertad, la alquimia del cambio constante y la expansión sensorial. Es el espíritu indomable que busca experimentar todas las facetas de la encarnación humana. En desequilibrio, el viento se vuelve huracán: caos, impulsividad, adicciones y huida del compromiso.",
+      "6": "El Útero Sagrado (El Amoroso). La frecuencia de la sanación, la empatía y la responsabilidad familiar. Es el sanador cósmico que busca la belleza, la justicia y la armonía incondicional en su entorno. En su vibración más baja, el cuidado se vuelve control, asumiendo un rol de mártir o entrometiéndose en el libre albedrío ajeno.",
+      "7": "El Velo del Templo (El Buscador). Es la mente mística, el puente hacia los registros akáshicos y la introspección absoluta. Representa al ermitaño sabio que busca verdades más allá de la ilusión material (Maya). En la sombra, el intelecto aísla al corazón, volviéndose cínico, frío o paranoico ante el mundo exterior.",
+      "8": "El Cetro del Infinito (El Estratega). El equilibrio perfecto entre el reino espiritual y el plano material. Representa la manifestación de la abundancia, la autoridad kármica y el poder ejecutivo del universo. En su oscuridad, la ambición ciega al espíritu, cayendo en la tiranía, el materialismo extremo y la crueldad.",
+      "9": "El Alfa y el Omega (El Humanitario). Es la sabiduría acumulada de todos los números anteriores. Representa la compasión universal, la entrega incondicional y el cierre de ciclos kármicos. Es el hermano mayor de la humanidad. En sombra, carga con el sufrimiento del mundo, perdiendo el arraigo y viviendo en melancolía por el pasado.",
+      "11": "El Portal del Relámpago (Maestro Iluminador). Es una antena directa con la fuente divina. Trae una clarividencia pura y la misión de despertar a otros a través de su propia luz. Es inspiración encarnada. Su mayor desafío es mantener sus nervios anclados, pues procesar tanta luz puede llevar a la ansiedad o a vivir en las nubes.",
+      "22": "El Arquitecto de Realidades (Maestro Constructor). La vibración más poderosa para la manifestación a gran escala. Tiene la capacidad divina de anclar utopías espirituales en estructuras mundiales (sistemas, ciudades, movimientos). Su sombra es abrumarse por la colosal magnitud de su propia visión kármica.",
+      "33": "El Loto de los Mil Pétalos (Maestro Guía). La frecuencia crística del amor absoluto. Es el avatar de la compasión, dispuesto a sacrificar sus propios deseos por la sanación y el consuelo de la humanidad entera. Una energía de protección maternal tan vasta que su único riesgo es olvidar que también habita un cuerpo humano."
+    },
+    "destinos_del_alma": {
+      "1": { "titulo": "La Llama del Principio", "resumen": "Tu alma es un fuego que abre senderos donde solo había niebla. Tu contrato sagrado es liderar con integridad y valentía, enseñando al mundo el poder del 'Yo Soy'.", "maestro": false },
+      "2": { "titulo": "El Hilo de Plata", "resumen": "Descendiste para ser el puente entre corazones aislados. Tu don místico es la empatía; naciste para enseñar el arte sagrado de la unión y la paz profunda.", "maestro": false },
+      "3": { "titulo": "El Canto del Cosmos", "resumen": "Tu existencia es un lienzo divino. Tu misión es elevar la frecuencia del planeta a través de la belleza, la palabra y la alegría indomable de tu niño interno.", "maestro": false },
+      "4": { "titulo": "El Pilar del Templo", "resumen": "Eres la raíz que sostiene el árbol de la vida. Tu misión kármica es estructurar el caos, brindando refugio y estabilidad a través de tu devoción y trabajo inquebrantable.", "maestro": false },
+      "5": { "titulo": "La Danza del Viento", "resumen": "Viniste a liberar a los cautivos. Tu esencia es el cambio; tu destino es explorar las maravillas del reino físico y enseñar a otros a romper sus propias cadenas.", "maestro": false },
+      "6": { "titulo": "El Refugio de Cristal", "resumen": "Eres el corazón que nutre. Tu pacto divino es irradiar amor compasivo, creando armonía y belleza en tu hogar, sanando a quienes la vida ha herido.", "maestro": false },
+      "7": { "titulo": "El Ojo del Oráculo", "resumen": "Tu mirada atraviesa las ilusiones. Eres el peregrino de la verdad; tu destino es descifrar los misterios del universo y compartir tu profunda sabiduría espiritual.", "maestro": false },
+      "8": { "titulo": "El Tejedor de Abundancia", "resumen": "Eres el alquimista de la materia. Viniste a demostrar que el dinero y el poder, cuando son guiados por un alma pura, son herramientas para elevar a la humanidad.", "maestro": false },
+      "9": { "titulo": "El Abrazo de la Eternidad", "resumen": "Has recorrido incontables vidas. Eres el faro final; tu misión es amar sin fronteras, perdonar lo imperdonable y guiar a otros hacia el final del sufrimiento.", "maestro": false },
+      "11": { "titulo": "El Espejo de las Estrellas", "resumen": "Eres un canal de luz directa. Tu simple presencia altera la vibración de los demás. Has nacido para inspirar, iluminar e intuir los secretos del cosmos.", "maestro": true },
+      "22": { "titulo": "El Forjador de Mundos", "resumen": "Tus sueños son mapas divinos. Tienes el mandato cósmico de materializar ideas grandiosas que transformen la forma en que la humanidad vive y evoluciona.", "maestro": true },
+      "33": { "titulo": "El Avatar de la Compasión", "resumen": "Tu alma vibra en la frecuencia del amor incondicional. Eres un maestro sanador; tu destino es derramar bálsamo espiritual sobre el corazón de la Tierra.", "maestro": true }
+    },
+    "rueda_del_tiempo": {
+      "day": {
+        "1": "La Semilla: Hoy el universo abre un portal para ti. Actúa con osadía, planta la primera intención de tus deseos.",
+        "2": "El Rocío: Un día para fluir, ceder y escuchar los susurros del entorno. La magia ocurrirá en la cooperación.",
+        "3": "La Chispa: La energía te pide reír. Expresa tu luz, comunícate y deja que la inspiración artística te posea.",
+        "4": "La Raíz: El cosmos exige disciplina. Un día para organizar, cimentar y atender el plano físico de tu existencia.",
+        "5": "El Ciclón: Lo inesperado es la regla hoy. Abraza el movimiento, viaja (física o mentalmente) y libérate de lo estático.",
+        "6": "El Nido: La vibración te atrae hacia adentro. Nutre a los tuyos, sana tus espacios y envuélvete en amor propio.",
+        "7": "La Cueva: Un día de retiro espiritual. El ruido externo te agotará; busca la soledad, la meditación y la verdad interna.",
+        "8": "La Cosecha: Las puertas del mundo material se abren. Toma decisiones de poder, lidera con justicia y reclama tu abundancia.",
+        "9": "El Ocaso: Un día sagrado para soltar. Perdona, purga lo viejo y haz espacio en tu alma para lo que está por nacer.",
+        "11": "El Portal: Un día de revelaciones. Tu antena espiritual está amplificada; presta atención a las sincronicidades y los mensajes del universo.",
+        "22": "El Plano Maestro: Un día de visión arquitectónica. Las ideas que concibas hoy tienen potencial de materializarse en estructuras duraderas.",
+        "33": "El Bálsamo: Un día de servicio sagrado. Tu compasión se eleva al máximo; tus palabras y actos sanan a quienes te rodean."
+      },
+      "month": {
+        "1": "Mes de Renacimiento: Una nueva fuerza te impulsa. Las iniciativas que tomes este ciclo tendrán el favor de los astros.",
+        "2": "Mes de Gestación: Todo requiere tiempo. Es un periodo de sensibilidad, paciencia y unión profunda con tu entorno.",
+        "3": "Mes de Expansión: Tu campo áurico atrae miradas. Época fértil para el amor, la creatividad y la vida social vibrante.",
+        "4": "Mes de Cimientos: La realidad te pide atención. Es hora de cuidar la salud, el dinero y construir desde la base.",
+        "5": "Mes de Transmutación: La rutina se quiebra. Llegan vientos de cambios veloces, viajes o revelaciones que te liberan.",
+        "6": "Mes de Armonía: El centro de tu universo será el afecto. Días para resolver conflictos, embellecer tu vida y amar incondicionalmente.",
+        "7": "Mes de Iluminación: El velo entre los mundos es fino. Estudia, medita y escucha las revelaciones que te entrega tu alma.",
+        "8": "Mes de Maestría: El cosmos evalúa tu poder interior. Es tiempo de cosechar recompensas materiales, avanzar en tu carrera y reclamar tu valor.",
+        "9": "Mes de Purificación: Un ciclo se despide. Limpia tus armarios, tus contactos y tu corazón. Agradece lo vivido y déjalo ir con gracia.",
+        "11": "Mes del Relámpago: Tu intuición se dispara como una antena cósmica. Visiones, sueños lúcidos y signos del universo llegan sin pausa. Escucha y canaliza.",
+        "22": "Mes del Arquitecto Divino: Las semillas que plantes ahora tienen alcance generacional. Piensa en grande, construye con paciencia y deja un legado.",
+        "33": "Mes del Maestro Sanador: Tu presencia se convierte en bálsamo. Las personas acudirán a ti buscando luz. Sirve con amor pero no te olvides de ti."
+      },
+      "year": {
+        "1": "Año 1 - El Despertar: Entras a un nuevo ciclo de 9 años. Eres el arquitecto de esta nueva era. Atrévete a reescribir tu historia sin mirar atrás.",
+        "2": "Año 2 - La Sincronía: El año de los espejos. El universo te enviará maestros en forma de relaciones, alianzas y amores para pulir tu empatía.",
+        "3": "Año 3 - El Florecimiento: Tu energía rompe el cascarón. Es un año de fertilidad, donde tu voz debe ser escuchada y tus talentos compartidos con el mundo.",
+        "4": "Año 4 - La Estructura: Un periodo de karma práctico. Las bases de tu futuro deben ser aseguradas con esfuerzo, orden y atención a la tierra.",
+        "5": "Año 5 - La Metamorfosis: La rueda gira velozmente. Prepárate para mudanzas, cambios de paradigma y una profunda liberación de antiguas ataduras.",
+        "6": "Año 6 - La Devoción: Tu corazón es el protagonista. Un año donde el karma familiar y los vínculos de amor requieren de toda tu compasión y presencia.",
+        "7": "Año 7 - El Descenso: Un año místico, a menudo incomprendido. El mundo exterior se ralentiza para que escuches a Dios en tu interior. Estudia tu espíritu.",
+        "8": "Año 8 - El Apogeo: Las leyes del karma actúan rápido. Si sembraste con justicia, este año serás coronado con éxito, abundancia y autoridad moral.",
+        "9": "Año 9 - El Cierre del Telón: El invierno del ciclo. Suelta todo aquello que no deba viajar contigo a la próxima década de tu vida. Ríndete a la transformación.",
+        "11": "Año 11 - La Iluminación: Un año maestro de despertar espiritual acelerado. Las sincronicidades te persiguen. Eres canal de luz para otros; tu misión se clarifica.",
+        "22": "Año 22 - La Obra Magna: El año más poderoso para la manifestación a gran escala. Sueños ambiciosos encuentran forma concreta. Construye tu catedral interior y exterior.",
+        "33": "Año 33 - La Gracia Crística: El año más elevado del servicio. Tu amor trasciende lo personal y toca lo colectivo. Eres un faro; el universo te usa como instrumento de paz."
+      }
+    },
+    "alquimia_vincular": {
+      "1": "Colisión de Soles. Respeten la soberanía del otro; su vínculo es un fuego que necesita aire para no asfixiarse, sino para iluminar el mundo juntos.",
+      "2": "Entrelazamiento de Almas. Fluyen como dos ríos que se unen en el mismo océano. Es una danza de telepatía, donde la sanación del otro es la propia.",
+      "3": "Éxtasis Compartido. Su unión es un festival de luz. Se nutren riendo y creando. Su mayor magia es nunca dejar que la vida pierda su asombro.",
+      "4": "La Fortaleza Inexpugnable. Son el refugio seguro del otro. Juntos construyen una catedral inquebrantable frente a las tormentas del mundo.",
+      "5": "Torbellino de Libertad. Su amor no tiene cadenas. Son compañeros de viaje cósmico, donde el cambio es el único hogar que necesitan.",
+      "6": "El Santuario Sagrado. Un vínculo kármico profundamente protector. Se aman con una ternura incondicional, curando mutuamente sus heridas de infancia.",
+      "7": "Comunión de Mentes Cósmicas. Su intimidad más profunda ocurre en el silencio. Son dos ermitaños que decidieron compartir la misma estrella.",
+      "8": "Alianza de Titanes. Su energía combinada mueve montañas. Son el equilibrio perfecto entre pasión y manifestación; un imperio de a dos.",
+      "9": "Amor Trascendental. Su conexión tiene un propósito superior. Se encontraron para elevarse mutuamente y derramar esa luz sobre el resto del mundo."
     }
   },
   "astrologia": {
-    "signos": {
-      "Aries": "El Iniciador. Fuego cardinal. Representa el coraje, la impulsividad y el inicio de la primavera. Es la energía del 'Yo soy', el guerrero que no teme a lo desconocido.",
-      "Tauro": "El Estabilizador. Tierra fija. Simboliza el placer sensorial, la persistencia y la conexión con la naturaleza. Valora la seguridad, la lealtad y la belleza física.",
-      "Géminis": "El Comunicador. Aire mutable. Representa la curiosidad intelectual, la dualidad y el intercambio de ideas. Es la mente inquieta que busca conectar mundos distintos.",
-      "Cáncer": "El Protector. Agua cardinal. Simboliza el refugio, la memoria emocional y la conexión con la madre o el hogar. Es la energía nutritiva que cuida desde el corazón.",
-      "Leo": "El Creador. Fuego fijo. Representa el brillo propio, la generosidad y la expresión del corazón. Es el centro del zodiaco que busca ser visto y amado por su luz.",
-      "Virgo": "El Analista. Tierra mutable. Simboliza el orden, el discernimiento y el servicio práctico. Busca la perfección a través de la mejora constante y el cuidado del detalle.",
-      "Libra": "El Equilibrador. Aire cardinal. Representa la justicia, las relaciones y la búsqueda de la belleza estética y social. Es el espejo que busca la armonía con el otro.",
-      "Escorpio": "El Alquimista. Agua fija. Simboliza la profundidad, el misterio y el poder de la transformación. Es la energía que no teme a las sombras para renacer victoriosa.",
-      "Sagitario": "El Explorador. Fuego mutable. Representa la búsqueda de la verdad, la filosofía y el optimismo. Es la flecha que apunta siempre al horizonte en busca de sentido.",
-      "Capricornio": "El Maestro. Tierra cardinal. Simboliza la ambición, la disciplina y el tiempo. Es el escalador que sabe que el éxito llega con esfuerzo, paciencia y estructura.",
-      "Acuario": "El Revolucionario. Aire fijo. Representa el futuro, la originalidad y la conciencia colectiva. Es el visionario que rompe estructuras para traer lo nuevo.",
-      "Piscis": "El Místico. Agua mutable. Simboliza la disolución, la compasión universal y el mundo de los sueños. Es el océano de conciencia donde todo está conectado."
+    "signos_zodiacales": {
+      "Aries": "La Chispa Primordial. Fuego Cardinal. Regido por Marte. Es el grito de vida que rasga el invierno, el guerrero espiritual que encarna la fuerza del 'Yo Soy'. Aries no pide permiso para existir; avanza con el coraje virgen de un alma que confía ciegamente en su propio fuego interior.",
+      "Tauro": "El Ancla de Venus. Tierra Fija. Regido por Venus. Simboliza la materialización del deseo y la sabiduría de la paciencia. Tauro nos enseña la alquimia de la materia: disfrutar el paraíso terrenal a través de los sentidos y construir una fortaleza de lealtad y belleza inquebrantables.",
+      "Géminis": "El Alquimista del Verbo. Aire Mutable. Regido por Mercurio. Es la mente cósmica en constante expansión, la dualidad sagrada que baila entre la luz y la sombra. Géminis es el viento veloz que teje conexiones, enseñando que la verdad suprema siempre tiene, al menos, dos perspectivas.",
+      "Cáncer": "El Océano de la Memoria. Agua Cardinal. Regido por la Luna. Es la Gran Madre del zodiaco, el útero emocional donde se gestan las almas. Cáncer custodia el poder de la vulnerabilidad; nos muestra que la verdadera fuerza reside en nutrir, proteger y recordar el origen de nuestro corazón.",
+      "Leo": "El Rey Solar. Fuego Fijo. Regido por el Sol. Es el corazón latiente del universo, la expresión pura y generosa del ser. Leo encarna la chispa divina de la creatividad y el amor radiante, recordándonos que todos nacimos para brillar en el centro de nuestro propio escenario cósmico.",
+      "Virgo": "La Sacerdotisa de la Tierra. Tierra Mutable. Regido por Mercurio. Representa el discernimiento sagrado, la purificación y el servicio devoto. Virgo es el sanador detallista que busca la perfección del alma a través del orden, entendiendo que lo divino habita en lo cotidiano y en lo diminuto.",
+      "Libra": "El Espejo Sagrado. Aire Cardinal. Regido por Venus. Es la búsqueda eterna de la armonía cósmica y la geometría de la belleza. Libra nos enseña el arte supremo del 'Nosotros', comprendiendo que solo a través del otro podemos ver el reflejo completo de nuestro propio ser.",
+      "Escorpio": "El Fénix del Abismo. Agua Fija. Regido por Plutón y Marte. Es el descenso al inframundo y la resurrección en pura luz. Escorpio tiene el poder absoluto de transmutar el dolor en sabiduría eterna; su mirada penetra las ilusiones para abrazar la verdad cruda de la vida y la muerte.",
+      "Sagitario": "La Flecha de la Verdad. Fuego Mutable. Regido por Júpiter. Es el buscador eterno, el fuego filosófico que anhela horizontes infinitos. Sagitario viaja guiado por un optimismo inquebrantable, enseñándonos que el significado de la vida se encuentra en el viaje mismo, no en el destino.",
+      "Capricornio": "El Maestro de la Montaña. Tierra Cardinal. Regido por Saturno. Representa la maestría kármica sobre el tiempo y la materia. Capricornio es el sabio anciano que asciende la cumbre de la existencia con disciplina de hierro, construyendo un legado que resista el paso de los eones.",
+      "Acuario": "El Portador de la Nueva Era. Aire Fijo. Regido por Urano y Saturno. Es la mente cuántica, el visionario que rompe las estructuras del ego para dar a luz la conciencia colectiva. Acuario canaliza relámpagos de genialidad y libertad, siendo el puente hacia el futuro de la humanidad.",
+      "Piscis": "El Mar de la Unidad. Agua Mutable. Regido por Neptuno y Júpiter. Es el último suspiro antes del renacimiento, donde se disuelven todas las fronteras. Piscis es el místico, el poeta y el soñador; nos enseña que el amor es la única realidad y que todos somos gotas del mismo océano divino."
     },
-    "planetas": {
-      "Sol": "Tu Esencia Radiante. Representa tu centro, tu vitalidad y tu identidad consciente. Es el motor de tu voluntad y la luz que guía tu propósito en esta vida.",
-      "Luna": "Tu Mundo Emocional. Rige tus necesidades instintivas, tu intuición y cómo te nutres emocionalmente. Representa tu niño interior y tu sentido de seguridad.",
-      "Mercurio": "Tu Aliento Mental. Gobierna tus procesos de pensamiento, tu comunicación y cómo percibes la información. Es el puente entre tu mundo interno y el externo.",
-      "Venus": "Tu Fuerza de Atracción. Rige lo que valoras, cómo amas y tu sentido de la armonía. Representa tu capacidad de disfrutar y de crear vínculos sagrados.",
-      "Marte": "Tu Guerrero Interior. Gobierna tu acción, tu deseo y tu impulso competitivo. Es la energía que utilizas para defender tus ideales y conquistar tus metas.",
-      "Júpiter": "Tu Expansión Divina. Representa la fe, la abundancia y el crecimiento espiritual. Es donde buscas el sentido de la vida y dónde encuentras tus mayores bendiciones.",
-      "Saturno": "Tu Gran Maestro. Rige el tiempo, el karma y las estructuras. Aunque trae limitaciones, su propósito es forjar tu madurez y otorgarte sabiduría eterna.",
-      "Urano": "Tu Chispa de Genio. Gobierna el despertar, el cambio súbito y la originalidad. Es la energía que te impulsa a romper moldes y a ser auténticamente libre.",
-      "Neptuno": "Tu Sueño Místico. Representa la inspiración espiritual, la disolución de límites y la compasión infinita. Es el canal hacia el arte y la conexión con lo invisible.",
-      "Plutón": "Tu Poder de Muerte y Vida. Gobierna los procesos de transformación profunda, el poder oculto y la regeneración. Es donde debes morir a lo viejo para renacer en poder.",
-      "Quirón": "Tu Sanador Herido. Representa esa parte de ti que siente dolor crónico o insuficiencia, pero que a través de su sanación se convierte en tu mayor don para otros.",
-      "Nodo Norte": "Tu Propósito del Alma. Marca la dirección hacia la cual debes evolucionar en esta encarnación para equilibrar tu karma y alcanzar tu máxima realización."
+    "astros_y_luminarias": {
+      "Sol": "El Corazón de tu Galaxia (Tu Identidad Luminosa). No es solo un astro; es el fuego consciente por el cual decidiste encarnar. Rige tu chispa de vida, tu ego elevado y la luz heroica que viniste a irradiar en este mundo.",
+      "Luna": "El Cáliz de tu Alma (Tu Refugio Emocional). Rige las mareas de tu mundo interno, tus respuestas instintivas y el niño cósmico que habita en ti. Es tu memoria akáshica, tu intuición pura y tu forma sagrada de dar y recibir consuelo.",
+      "Mercurio": "El Mensajero Alado (El Puente Mental). La frecuencia en la que procesas el código del universo. Rige cómo aprendes, cómo hablas y cómo traduces lo etéreo en lenguaje humano. Es el mago de tus conexiones y percepciones.",
+      "Venus": "El Canto de Afrodita (El Imán Cósmico). Va más allá del romance; es la geometría sagrada de tu capacidad de amar, tu sentido del valor propio y la forma en que magnetizas la abundancia y la belleza hacia tu campo energético.",
+      "Marte": "La Espada del Espíritu (El Guerrero Interno). Es tu pulso de supervivencia, la fuerza motriz que te saca de la cama. Rige cómo defiendes tus límites, cómo expresas tu pasión y la voluntad indomable para conquistar tus deseos.",
+      "Júpiter": "El Gurú de la Expansión (El Lente de la Fe). El planeta de la gracia divina y los milagros. Rige el área de tu vida donde los cielos te colman de suerte. Es tu brújula filosófica, tu optimismo y tu hambre de significado supremo.",
+      "Saturno": "El Señor del Karma (El Arquitecto del Tiempo). Aunque a menudo temido, es tu maestro más devoto. Trae limitaciones y pruebas pesadas con un solo fin: forjar en ti una madurez de diamante, otorgándote autoridad real sobre tu vida.",
+      "Urano": "El Relámpago del Despertar (El Genio Rebelde). Rige la chispa cuántica, la disrupción y la verdad que rompe esquemas. Es donde tu alma no admite cadenas, donde eres radicalmente auténtico y donde ocurre la evolución súbita.",
+      "Neptuno": "El Océano de la Ilusión (El Portal Místico). Rige tu glándula pineal, tus sueños y la disolución del ego. Es el puente hacia el amor incondicional y el arte elevado, pero advierte sobre el peligro de perderse en los espejismos.",
+      "Plutón": "El Fuego del Submundo (El Alquimista Oscuro). Gobierna tus procesos de muerte psicológica y resurrección. Rige los tabúes, las crisis profundas y el poder nuclear oculto en ti que, al ser liberado, te transforma en un ser invencible.",
+      "Quirón": "La Herida Sagrada (El Sanador Chamánico). Representa una grieta en tu alma, un dolor que parece incurable. Sin embargo, en el punto exacto donde te quiebras, es por donde entra la luz; sanando esa herida, descubres tu mayor don para curar a otros.",
+      "Nodo Norte": "El Faro de tu Destino (La Estrella Polar). No es un planeta, es un punto matemático que marca la misión evolutiva de tu alma en esta encarnación. Es hacia dónde debes caminar (con esfuerzo) para romper la inercia del karma pasado (Nodo Sur)."
+    },
+    "casas_del_karma": {
+      "Casa 1": "La Puerta del Alma (El Ascendente). Es el amanecer de tu ser, la máscara mágica con la que saludas al mundo. Rige tu cuerpo físico, tu instinto de supervivencia y el velo inicial a través del cual la gente siente tu aura.",
+      "Casa 2": "El Cofre del Tesoro. El santuario de la materia. Rige tus finanzas, pero más profundamente, rige tu autoestima, tu relación con la abundancia de la Tierra y lo que necesitas atesorar para sentirte a salvo en este plano.",
+      "Casa 3": "El Teatro de la Mente. La esfera de la comunicación, los hermanos y el entorno inmediato. Es donde la mente lógica juega, aprende, procesa información corta y teje las primeras redes de conexión humana.",
+      "Casa 4": "La Raíz Ancestral (El Fondo del Cielo). Tu base kármica. Rige tu hogar literal y tu hogar interior. Es el linaje de sangre, los ancestros, la figura materna y el refugio privado donde acudes cuando la noche es oscura.",
+      "Casa 5": "El Escenario del Corazón. El imperio de la creatividad divina, los romances pasionales, los hijos y el juego. Es la zona donde tu fuego interno exige ser expresado sin inhibiciones para encontrar pura dicha.",
+      "Casa 6": "El Templo de la Rutina. Rige el servicio devoto, los animales, el trabajo diario y la conexión sagrada mente-cuerpo (la salud). Aquí se aprende que la maestría espiritual se halla en los detalles más pequeños.",
+      "Casa 7": "El Espejo del Otro (El Descendente). El reino del 'Tú'. Rige el matrimonio, los contratos kármicos, los socios y los enemigos declarados. Es donde proyectas tus sombras y luces buscando completar tu propia geometría.",
+      "Casa 8": "La Cueva del Alquimista. El inframundo del mapa. Rige la sexualidad sagrada o tabú, la muerte, la transformación psicológica profunda, la magia oculta y los recursos compartidos. Entras siendo uno y sales siendo otro.",
+      "Casa 9": "El Templo de la Sabiduría. La sed de expansión. Rige los viajes largos (mentales o físicos), la religión, las universidades y la búsqueda del dogma o la verdad suprema que rige tu vida.",
+      "Casa 10": "La Cúspide del Destino (El Medio Cielo). El mediodía de tu carta. Rige tu estatus público, tu reputación, la vocación kármica, la figura paterna y el legado que las estrellas te piden dejar marcado en piedra antes de partir.",
+      "Casa 11": "La Red Galáctica. El campo de la conciencia colectiva. Rige los amigos, los grupos, las esperanzas futuras y los actos de rebeldía donde te unes a tu 'tribu de almas' para romper el statu quo y elevar a la humanidad.",
+      "Casa 12": "El Océano del Retorno. La casa de lo invisible, de los enemigos ocultos, los hospitales y el karma de vidas pasadas. Es el vientre cósmico donde el ego se disuelve; un lugar de aislamiento sagrado donde te fundes de nuevo con la Fuente."
+    },
+    "elementos_sagrados": {
+      "Fuego": "(Aries, Leo, Sagitario) La chispa vital. El Fuego es el reino del espíritu puro, la intuición instantánea, la pasión abrasadora y el impulso heroico. Da el coraje para quemar lo obsoleto y alumbrar nuevos caminos.",
+      "Tierra": "(Tauro, Virgo, Capricornio) El útero material. La Tierra es el reino de la materia, la manifestación tangible, la sensualidad de los cuerpos y la firmeza. Aterriza las ideas etéreas y las convierte en realidades que soportan el paso del tiempo.",
+      "Aire": "(Géminis, Libra, Acuario) El aliento del cosmos. El Aire es el reino de la mente suprema, el intelecto, las ideas y la interconexión humana. Fluye invisiblemente, distribuyendo la información, la lógica y los vientos del cambio social.",
+      "Agua": "(Cáncer, Escorpio, Piscis) Las lágrimas de la fuente. El Agua es el reino del alma emocional, el misticismo, la empatía psíquica y los recuerdos. Absorbe y purifica, permitiéndonos sentir la unidad subyacente que nos conecta a todos."
     }
   }
 }

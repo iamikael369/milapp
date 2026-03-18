@@ -124,7 +124,8 @@ const Universo = {
   _aiAvailable: null,
 
   callGemini: async (prompt) => {
-    const FALLBACK = "\u2726 El oráculo descansa en este momento — su silencio también es sabiduría. Intenta más tarde cuando el servidor esté disponible. \u2726";
+    const FALLBACK =
+      "\u2726 El oráculo descansa en este momento — su silencio también es sabiduría. Intenta más tarde cuando el servidor esté disponible. \u2726";
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
@@ -154,17 +155,19 @@ const Universo = {
 
   _disableAIButtons: () => {
     const tooltip = "El oráculo descansa — intenta más tarde";
-    document.querySelectorAll(
-      "[onclick*=\"callGemini\"],[onclick*=\"aiInterpret\"],[onclick*=\"aiGenerate\"],[onclick*=\"askAbundanceGuide\"],[onclick*=\"getInspiration\"]"
-    ).forEach((btn) => {
-      if (!btn.dataset.aiDisabled) {
-        btn.dataset.aiDisabled = "1";
-        btn.setAttribute("title", tooltip);
-        btn.style.opacity = "0.45";
-        btn.style.cursor = "not-allowed";
-        btn.style.pointerEvents = "none";
-      }
-    });
+    document
+      .querySelectorAll(
+        '[onclick*="callGemini"],[onclick*="aiInterpret"],[onclick*="aiGenerate"],[onclick*="askAbundanceGuide"],[onclick*="getInspiration"]',
+      )
+      .forEach((btn) => {
+        if (!btn.dataset.aiDisabled) {
+          btn.dataset.aiDisabled = "1";
+          btn.setAttribute("title", tooltip);
+          btn.style.opacity = "0.45";
+          btn.style.cursor = "not-allowed";
+          btn.style.pointerEvents = "none";
+        }
+      });
     const interpretBtn = document.getElementById("interpretBtn");
     if (interpretBtn && !interpretBtn.dataset.aiDisabled) {
       interpretBtn.dataset.aiDisabled = "1";
@@ -177,11 +180,21 @@ const Universo = {
 
   // --- Navegación ---
   goHome: () => {
-    Universo.sendMessage("CLOSE_MODULE");
+    // Si el módulo está en un iframe real, notifica al padre
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: "CLOSE_MODULE" }, "*");
+    } else {
+      // Modo ventana directa (PWA / acceso directo)
+      window.location.href = "index.html";
+    }
   },
 
   openModule: (url) => {
-    Universo.sendMessage("OPEN_MODULE", { url });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: "OPEN_MODULE", url }, "*");
+    } else {
+      window.location.href = url;
+    }
   },
 
   // --- UI Helpers ---

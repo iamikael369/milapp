@@ -1,1462 +1,889 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html class="dark" lang="es">
 <head>
-  <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Perfil de Luz | Mila</title>
+    
     <!-- PWA -->
-    <meta name="theme-color" content="#d4af37">
+    <meta name="theme-color" content="#ec135b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
-  <title>Perfil de Luz</title>
 
-  <!-- FUENTES & ICONOS -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&family=Playfair+Display:ital@0;1&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
-  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec135b",
+                        "gold": "#f2b90d",
+                        "mystic-purple": "#7c3aed",
+                        "deep-indigo": "#0a061e",
+                        "background-dark": "#050312",
+                    },
+                    fontFamily: {
+                        "sans": ["Plus Jakarta Sans", "sans-serif"],
+                        "serif": ["Cinzel", "serif"],
+                        "body": ["EB Garamond", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050312;
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .cosmic-bg {
+            background: radial-gradient(circle at 50% 50%, #110a2e 0%, #050312 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .stars {
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 50px 160px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            opacity: 0.4;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        .sacred-geometry {
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 0 L112 88 L200 100 L112 112 L100 200 L88 112 L0 100 L88 88 Z' fill='none' stroke='rgba(242,185,13,0.1)' stroke-width='0.5'/%3E%3C/svg%3E");
+            animation: rotate-sacred 60s linear infinite;
+        }
+        @keyframes rotate-sacred {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .gold-glow {
+            text-shadow: 0 0 20px rgba(242, 185, 13, 0.5);
+        }
+        .tab-active {
+            border-bottom: 2px solid #f2b90d;
+            color: #f2b90d;
+        }
+        .progress-ring {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        /* Modal Sheets */
+        .sheet-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .sheet-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sheet-content {
+            background: linear-gradient(to top, #0a061e, #1a1535);
+            border-top: 1px solid rgba(242, 185, 13, 0.2);
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sheet-modal.active .sheet-content {
+            transform: translateY(0);
+        }
 
-  <!-- ESTILOS COMPARTIDOS -->
-  <link rel="stylesheet" href="assets/css/style.css">
-
-  <style>
-    /* Estilos específicos de Numerología */
-    :root {
-      --accent-purple: #7c3aed;
-      --accent-pink: #db2777;
-      --deep-bg: rgba(15, 10, 30, 0.95);
-      --card-border: rgba(255, 255, 255, 0.1);
-    }
-
-    body {
-      background-color: var(--deep-bg);
-      color: #eaeef7;
-      font-family: 'Lato', sans-serif;
-      overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
-      min-height: 100vh;
-    }
-
-    .font-cinzel {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-    }
-
-    .font-playfair {
-      font-family: 'Playfair Display', serif;
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    /* Tarjetas */
-    .stat-card {
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s, border-color 0.3s;
-    }
-
-    .stat-card:active {
-      transform: scale(0.98);
-    }
-
-    .hero-card {
-      background: linear-gradient(135deg, #4c1d95 0%, #2e1065 100%);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px -10px rgba(76, 29, 149, 0.5);
-    }
-
-    /* Botón Sparkle IA */
-    .sparkle-btn {
-      background: linear-gradient(45deg, #7c3aed, #db2777);
-      color: white;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 4px 12px rgba(219, 39, 119, 0.3);
-      transition: transform 0.2s;
-    }
-
-    .sparkle-btn:active {
-      transform: scale(0.95);
-    }
-
-    .astro-btn {
-      background: linear-gradient(45deg, #1e3a8a, #4f46e5);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #bfdbfe;
-    }
-
-    /* Inputs */
-    .glass-input {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-      border-radius: 8px;
-      padding: 12px;
-      width: 100%;
-      font-size: 0.9rem;
-      transition: border-color 0.3s;
-    }
-
-    .glass-input:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    .glass-select {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white;
-      border-radius: 8px;
-      padding: 8px;
-      font-size: 0.8rem;
-      width: 100%;
-      appearance: none;
-      /* Remove default arrow */
-    }
-
-    .glass-select:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    /* Sheet Modal */
-    .sheet-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: flex-end;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .sheet-modal.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .sheet-content {
-      background: linear-gradient(to top, #1a103c, #2d1b4e);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 24px 24px 0 0;
-      padding: 24px;
-      transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .sheet-modal.active .sheet-content {
-      transform: translateY(0);
-    }
-
-    .profile-badge {
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cinzel', serif;
-      font-weight: bold;
-      color: white;
-      font-size: 1.1rem;
-    }
-
-    .radio-group input[type="radio"] {
-      display: none;
-    }
-
-    .radio-group label {
-      display: inline-block;
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 0.8rem;
-    }
-
-    .radio-group input[type="radio"]:checked+label {
-      background: var(--gold);
-      color: #1a103c;
-      font-weight: bold;
-      border-color: var(--gold);
-    }
-
-    .loader-dots span {
-      animation: bounce 1.4s infinite ease-in-out both;
-      display: inline-block;
-      width: 4px;
-      height: 4px;
-      background-color: var(--gold);
-      border-radius: 50%;
-      margin: 0 1px;
-    }
-
-    .loader-dots span:nth-child(1) {
-      animation-delay: -0.32s;
-    }
-
-    .loader-dots span:nth-child(2) {
-      animation-delay: -0.16s;
-    }
-
-    @keyframes bounce {
-
-      0%,
-      80%,
-      100% {
-        transform: scale(0);
-      }
-
-      40% {
-        transform: scale(1);
-      }
-    }
-
-    /* Tutorial Overlay */
-    .tutorial-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      background: rgba(10, 5, 20, 0.95);
-      backdrop-filter: blur(10px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s;
-    }
-
-    .tutorial-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .tut-card {
-      background: linear-gradient(145deg, #2e1065, #1e1b4b);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      max-width: 85%;
-      width: 350px;
-      box-shadow: 0 0 50px rgba(124, 58, 237, 0.3);
-    }
-
-    .tut-dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .tut-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: all 0.3s;
-    }
-
-    .tut-dot.active {
-      background: var(--gold);
-      transform: scale(1.2);
-    }
-  </style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
 </head>
-
-<body class="pb-24 sm:pb-40">
-
-  <!-- 1. HEADER: PERFIL ACTIVO (Dropdown) -->
-  <header class="p-4 fade-in sticky top-0 z-40 bg-[#0f0a1e]/95 backdrop-blur-md border-b border-white/5 shadow-lg">
-    <div class="flex items-center justify-between">
-      <!-- Izquierda: Botón Home y Perfil -->
-      <div class="flex items-center gap-2">
-        <!-- Botón Home -->
-        <button onclick="goHome()"
-          class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 text-gray-400"
-          title="Ir al Inicio">
-          <span class="material-symbols-rounded text-lg">home</span>
+<body class="font-sans min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col cosmic-bg">
+    <div class="stars absolute inset-0 pointer-events-none"></div>
+    
+    <!-- Header -->
+    <header class="flex items-center gap-6 px-6 py-4 border-b border-white/10 bg-deep-indigo/50 backdrop-blur-md relative z-40">
+        <button onclick="goHome()" class="p-2 rounded-full hover:bg-white/10 transition-colors text-white">
+            <span class="material-symbols-outlined">home</span>
         </button>
-
-        <!-- Selector de Perfil -->
-        <div class="flex items-center gap-2 cursor-pointer group" onclick="toggleProfileDropdown()">
-          <!-- Badge Numérico -->
-          <div id="header-badge"
-            class="w-9 h-9 rounded-lg bg-purple-600 flex items-center justify-center font-cinzel font-bold text-white text-base shadow-inner border border-white/20">
-            --
-          </div>
-          <div class="hidden sm:block">
-            <h2 id="header-name"
-              class="font-cinzel text-sm text-white leading-none group-hover:text-yellow-400 transition-colors">
-              Cargando...</h2>
-            <p id="header-dob" class="text-[9px] text-gray-400 font-mono mt-0.5 tracking-wider">--/--/----</p>
-          </div>
-          <span
-            class="material-symbols-rounded text-gray-500 text-sm group-hover:rotate-180 transition-transform duration-300">expand_more</span>
+        
+        <div class="flex items-center gap-3 pr-4 border-r border-white/10">
+            <span class="material-symbols-outlined text-gold">temple_hindu</span>
+            <h2 class="font-serif text-lg font-bold tracking-[0.2em] text-white uppercase hidden sm:block">Mila</h2>
         </div>
-      </div>
 
-      <!-- Derecha: Acciones -->
-      <div class="flex gap-2">
-        <!-- Botón Tutorial -->
-        <button onclick="openTutorial()"
-          class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/20 transition text-yellow-200"
-          title="Guía">
-          <span class="material-symbols-rounded text-lg">help</span>
-        </button>
-        <!-- Botón Respaldo -->
-        <button onclick="openBackupModal()"
-          class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/20 transition text-gray-400"
-          title="Respaldo">
-          <span class="material-symbols-rounded text-lg">save</span>
-        </button>
-        <!-- Botón Astral (Destacado) -->
-        <button onclick="goToAstrology()"
-          class="w-8 h-8 rounded-full bg-blue-900/50 border border-blue-500/50 flex items-center justify-center hover:bg-blue-800 transition text-blue-200 shadow-lg shadow-blue-900/20"
-          title="Ir a Astrología">
-          <span class="material-symbols-rounded text-lg">auto_awesome</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Dropdown de Perfiles -->
-    <div id="profile-dropdown"
-      class="hidden absolute top-16 left-4 right-4 bg-[#1a103c] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden transform origin-top transition-all">
-      <div class="p-3 border-b border-white/5 text-[10px] uppercase text-gray-500 tracking-widest font-bold">Mis
-        Perfiles</div>
-      <div id="profiles-list-container" class="max-h-64 overflow-y-auto custom-scrollbar p-2 space-y-1">
-        <!-- Se llena con JS -->
-      </div>
-      <div class="p-2 border-t border-white/5">
-        <button onclick="openNewProfileModal()"
-          class="w-full py-3 text-xs font-bold text-yellow-400 bg-white/5 rounded-lg hover:bg-white/10 flex items-center justify-center gap-2">
-          <span class="material-symbols-rounded text-sm">person_add</span> Agregar un perfil
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- BIENVENIDA DINÁMICA -->
-  <div id="numerology-overview" class="px-6 pt-6 pb-2"></div>
-
-  <!-- 2. NAVEGACIÓN PRINCIPAL -->
-  <nav class="flex justify-around p-2 border-b border-white/5 bg-[#0f0a1e]/50">
-    <button onclick="switchTab('carta')" id="tab-carta"
-      class="flex-1 py-3 text-[10px] font-bold uppercase tracking-widest text-center text-yellow-400 border-b-2 border-yellow-400 transition-colors">Esencia</button>
-    <button onclick="switchTab('ciclos')" id="tab-ciclos"
-      class="flex-1 py-3 text-[10px] font-bold uppercase tracking-widest text-center text-gray-500 border-b-2 border-transparent hover:text-white transition-colors">Ciclos</button>
-    <button onclick="switchTab('sinergia')" id="tab-sinergia"
-      class="flex-1 py-3 text-[10px] font-bold uppercase tracking-widest text-center text-gray-500 border-b-2 border-transparent hover:text-white transition-colors">Sinergia</button>
-  </nav>
-
-  <!-- 3. CONTENIDO PRINCIPAL -->
-  <main id="main-content" class="px-4 py-6 relative min-h-[60vh]">
-
-    <!-- A. CARTA NATAL -->
-    <div id="view-carta" class="space-y-6 animate-fade-in">
-      <div class="flex justify-between items-end mb-2">
-        <h3 class="text-xs font-bold text-purple-300 uppercase tracking-widest">Números de Nacimiento</h3>
-        <!-- Indicador de datos astrales -->
-        <div id="astro-status"
-          class="flex items-center gap-1 bg-blue-900/20 px-2 py-1 rounded border border-blue-500/20 cursor-pointer hover:bg-blue-900/40"
-          onclick="goToAstrology()">
-          <span class="material-symbols-rounded text-[10px] text-blue-300">public</span>
-          <span class="text-[9px] text-blue-200" id="astro-location-text">Datos Faltantes</span>
-        </div>
-      </div>
-
-      <!-- HERO: SENDERO DE VIDA & SIGNO SOLAR -->
-      <div class="hero-card p-6 flex items-center gap-6 relative overflow-hidden group cursor-pointer"
-        onclick="showLocalMeaning('Sendero de Vida', 'lifepath')">
-        <div class="absolute right-0 top-0 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl -mr-10 -mt-10"></div>
-        <div class="flex-shrink-0 relative z-10"><span
-            class="material-symbols-rounded text-6xl text-white/90 drop-shadow-lg">neurology</span></div>
-        <div class="flex-grow relative z-10 border-l border-white/10 pl-6">
-          <span class="text-[10px] uppercase text-purple-200 tracking-widest font-bold block mb-1">Camino de Vida</span>
-          <div class="flex items-baseline gap-2">
-            <h1 class="font-cinzel text-6xl text-white drop-shadow-md leading-none" id="num-lifepath">0</h1>
-            <!-- Signo Solar Display -->
-            <div id="sun-sign-display"
-              class="text-[10px] font-bold text-yellow-200 uppercase bg-white/10 px-2 py-1 rounded-full border border-white/10 self-center">
-              --
+        <div class="flex items-center gap-2 cursor-pointer flex-1" onclick="toggleProfileDropdown()">
+            <div id="header-badge" class="size-10 rounded-full border-2 border-gold/50 overflow-hidden bg-primary/20 flex items-center justify-center font-serif text-white">
+                --
             </div>
-          </div>
-          <div class="mt-2 inline-flex items-center gap-2">
-            <button
-              class="text-[10px] bg-white/10 px-2 py-1 rounded text-white font-bold hover:bg-white/20">Leer</button>
-            <button class="text-[10px] text-yellow-300 hover:text-white flex items-center gap-1"
-              onclick="event.stopPropagation(); deepenWithAI('Sendero de Vida', 'lifepath')"><span
-                class="material-symbols-rounded text-sm">auto_awesome</span> IA</button>
-          </div>
+            <div class="text-left">
+                <p id="header-name" class="text-xs text-gold font-bold italic">Cargando...</p>
+                <p class="text-[9px] text-white/40 font-medium uppercase tracking-widest">Perfil de Luz</p>
+            </div>
         </div>
-      </div>
-
-      <!-- GRID DETALLE -->
-      <div class="bg-white/5 rounded-xl border border-white/5 overflow-hidden">
-        <div class="grid grid-cols-1 divide-y divide-white/5">
-          <div class="p-4 flex justify-between items-center hover:bg-white/5 transition cursor-pointer"
-            onclick="showLocalMeaning('Actitud', 'attitude')">
-            <span class="text-sm text-gray-300">Actitud</span>
-            <div class="flex items-center gap-3"><span class="font-cinzel text-xl text-white"
-                id="num-attitude">0</span><span
-                class="material-symbols-rounded text-xs text-gray-500">chevron_right</span></div>
-          </div>
-          <div class="p-4 flex justify-between items-center hover:bg-white/5 transition cursor-pointer"
-            onclick="showLocalMeaning('Generación', 'generation')">
-            <span class="text-sm text-gray-300">Generación</span>
-            <div class="flex items-center gap-3"><span class="font-cinzel text-xl text-white"
-                id="num-generation">0</span><span
-                class="material-symbols-rounded text-xs text-gray-500">chevron_right</span></div>
-          </div>
-          <div class="p-4 flex justify-between items-center hover:bg-white/5 transition cursor-pointer"
-            onclick="showLocalMeaning('Día de Nacimiento', 'birthday')">
-            <span class="text-sm text-gray-300">Día de Nacimiento</span>
-            <div class="flex items-center gap-3"><span class="font-cinzel text-xl text-white"
-                id="num-birthday">0</span><span
-                class="material-symbols-rounded text-xs text-gray-500">chevron_right</span></div>
-          </div>
+        
+        <!-- Dropdown de Perfiles -->
+        <div id="profile-dropdown" class="hidden absolute top-16 left-28 bg-deep-indigo border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden w-64 transform origin-top transition-all">
+            <div class="p-3 border-b border-white/5 text-[10px] uppercase text-gray-400 tracking-widest font-bold">Mis Perfiles</div>
+            <div id="profiles-list-container" class="max-h-64 overflow-y-auto p-2 space-y-1 no-scrollbar">
+                <!-- Se llena con JS -->
+            </div>
+            <div class="p-2 border-t border-white/5">
+                <button onclick="openNewProfileModal()" class="w-full py-3 text-[10px] font-bold text-gold bg-white/5 rounded-lg hover:bg-white/10 flex items-center justify-center gap-2 uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-sm">person_add</span> Agregar Perfil
+                </button>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <!-- NÚMEROS DEL NOMBRE (Con Toggle) -->
-      <div>
-        <div class="flex justify-between items-end mb-3 mt-6">
-          <h3 class="text-xs font-bold text-pink-300 uppercase tracking-widest">Los números del nombre</h3>
+    <!-- Navigation Tabs -->
+    <nav class="flex border-b border-white/5 bg-deep-indigo/30 sticky top-0 z-30 backdrop-blur-md">
+        <button onclick="switchTab('esencia')" id="tab-btn-esencia" class="flex-1 py-4 text-center font-serif text-xs tracking-[0.2em] transition-all tab-active uppercase">Esencia</button>
+        <button onclick="switchTab('ciclos')" id="tab-btn-ciclos" class="flex-1 py-4 text-center font-serif text-xs tracking-[0.2em] text-white/40 hover:text-white transition-all uppercase">Ciclos</button>
+        <button onclick="switchTab('sinergia')" id="tab-btn-sinergia" class="flex-1 py-4 text-center font-serif text-xs tracking-[0.2em] text-white/40 hover:text-white transition-all uppercase">Sinergia</button>
+    </nav>
 
-          <!-- SELECTOR DE NOMBRE (ORIGINAL / ACTUAL) -->
-          <div class="flex bg-black/30 rounded-lg p-0.5 border border-white/10">
-            <button onclick="toggleNameMode(true)" id="btn-name-orig"
-              class="px-2 py-1 text-[9px] font-bold text-white bg-blue-600 rounded shadow transition-all">ORIGINAL</button>
-            <button onclick="toggleNameMode(false)" id="btn-name-curr"
-              class="px-2 py-1 text-[9px] font-bold text-gray-500 hover:text-white rounded transition-all">ACTUAL</button>
-          </div>
+    <main class="flex-1 flex flex-col items-center p-4 max-w-5xl mx-auto w-full relative z-10 pb-24">
+        
+        <!-- SECCIÓN ESENCIA -->
+        <div class="w-full space-y-12 animate-fade-in" id="view-esencia">
+            <!-- Camino de Vida Hero -->
+            <div class="relative py-12 flex flex-col items-center text-center">
+                <div class="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none">
+                    <div class="sacred-geometry size-[300px] sm:size-[400px] rounded-full blur-[1px]"></div>
+                </div>
+                <p class="text-gold font-serif tracking-[0.4em] text-[10px] uppercase mb-4 relative z-10">Tu Número Maestro</p>
+                <h1 class="text-white text-3xl sm:text-5xl font-serif mb-12 tracking-wide relative z-10">Camino de Vida</h1>
+                <div class="relative size-48 sm:size-64 flex items-center justify-center mb-8" onclick="showLocalMeaning('Camino de Vida', 'lifepath')">
+                    <div class="absolute inset-0 bg-mystic-purple/30 rounded-full blur-3xl animate-pulse"></div>
+                    <span id="num-lifepath" class="relative z-10 font-serif text-[10rem] sm:text-[12rem] leading-none text-white gold-glow">?</span>
+                </div>
+                <h2 id="lp-title" class="text-xl sm:text-2xl font-serif text-white mb-3 italic tracking-widest relative z-10 uppercase">Sintonizando...</h2>
+                <div id="sun-sign-display" class="mb-6 px-4 py-1 rounded-full border border-gold/30 bg-gold/5 text-gold text-[10px] font-bold tracking-widest uppercase">Solar --</div>
+                
+                <p id="lp-description" class="text-white/70 font-body text-lg max-w-md leading-relaxed mb-10 relative z-10">
+                    Cargando tu vibración esencial...
+                </p>
+                
+                <button onclick="deepenWithAI('Camino de Vida', 'lifepath')" class="group relative flex items-center gap-3 bg-gradient-to-r from-primary to-mystic-purple text-white px-8 py-3 rounded-full font-bold tracking-widest transition-all hover:scale-105 shadow-[0_0_30px_rgba(236,19,91,0.3)] text-xs uppercase">
+                    <span class="material-symbols-outlined text-white animate-pulse">auto_awesome</span>
+                    Lectura con IA Cósmica
+                </button>
+            </div>
+
+            <!-- Numbers Sections Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Birth Numbers -->
+                <div class="glass-premium rounded-2xl p-6">
+                    <h3 class="font-serif text-sm text-gold mb-6 tracking-widest flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base">cake</span> VIBRACIÓN DE NACIMIENTO
+                    </h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="flex flex-col items-center p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition" onclick="showLocalMeaning('Actitud', 'attitude')">
+                            <p class="text-[9px] text-white/40 uppercase tracking-tighter mb-1">Actitud</p>
+                            <span id="num-attitude" class="font-serif text-2xl text-white">?</span>
+                        </div>
+                        <div class="flex flex-col items-center p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition" onclick="showLocalMeaning('Generación', 'generation')">
+                            <p class="text-[9px] text-white/40 uppercase tracking-tighter mb-1">Gen</p>
+                            <span id="num-generation" class="font-serif text-2xl text-white">?</span>
+                        </div>
+                        <div class="flex flex-col items-center p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition" onclick="showLocalMeaning('Día', 'birthday')">
+                            <p class="text-[9px] text-white/40 uppercase tracking-tighter mb-1">Día</p>
+                            <span id="num-birthday" class="font-serif text-2xl text-white">?</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Name Numbers -->
+                <div class="glass-premium rounded-2xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-serif text-sm text-gold tracking-widest flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">signature</span> ESENCIA DEL NOMBRE
+                        </h3>
+                        <div class="flex bg-white/5 p-1 rounded-lg border border-white/10">
+                            <button onclick="toggleNameMode(true)" id="btn-name-orig" class="px-2 py-1 text-[8px] font-bold text-white bg-primary rounded uppercase">Original</button>
+                            <button onclick="toggleNameMode(false)" id="btn-name-curr" class="px-2 py-1 text-[8px] font-bold text-white/40 uppercase">Actual</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="flex flex-col items-center p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition" onclick="showLocalMeaning('Expresión', 'expression')">
+                            <p class="text-[9px] text-white/40 uppercase tracking-tighter mb-1">Exp</p>
+                            <span id="num-expression" class="font-serif text-2xl text-white">?</span>
+                        </div>
+                        <div class="flex flex-col items-center p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition" onclick="showLocalMeaning('Alma', 'soul')">
+                            <p class="text-[9px] text-white/40 uppercase tracking-tighter mb-1">Alma</p>
+                            <span id="num-soul" class="font-serif text-2xl text-white">?</span>
+                        </div>
+                        <div class="flex flex-col items-center p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer hover:bg-white/10 transition" onclick="showLocalMeaning('Pers', 'personality')">
+                            <p class="text-[9px] text-white/40 uppercase tracking-tighter mb-1">Pers</p>
+                            <span id="num-personality" class="font-serif text-2xl text-white">?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Karmic Numbers -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center">
+                    <span class="text-[11px] uppercase tracking-widest text-white/40 font-bold">Lecciones Kármicas</span>
+                    <span id="karmic-lessons" class="font-serif text-white">--</span>
+                </div>
+                <div class="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center cursor-pointer hover:bg-red-900/10 transition" onclick="showKarmicDebt()">
+                    <span class="text-[11px] uppercase tracking-widest text-red-400 font-bold">Deudas Kármicas</span>
+                    <span id="karmic-debt" class="font-serif text-white">Ninguna</span>
+                </div>
+            </div>
         </div>
 
-        <div
-          class="bg-gradient-to-br from-blue-900/40 to-transparent border border-blue-500/20 rounded-xl overflow-hidden transition-all duration-300"
-          id="name-card-container">
-          <div class="p-4 border-b border-white/5 flex justify-between items-center hover:bg-white/5 cursor-pointer"
-            onclick="showLocalMeaning('Expresión', 'expression')">
-            <span class="text-sm text-blue-200">Expresión (Destino)</span>
-            <div class="flex items-center gap-3"><span class="font-cinzel text-2xl text-white"
-                id="num-expression">0</span><span
-                class="material-symbols-rounded text-xs text-blue-400">arrow_forward_ios</span></div>
-          </div>
-          <div class="p-4 border-b border-white/5 flex justify-between items-center hover:bg-white/5 cursor-pointer"
-            onclick="showLocalMeaning('Alma', 'soul')">
-            <span class="text-sm text-blue-200">Alma (Deseo)</span>
-            <div class="flex items-center gap-3"><span class="font-cinzel text-2xl text-white"
-                id="num-soul">0</span><span
-                class="material-symbols-rounded text-xs text-blue-400">arrow_forward_ios</span></div>
-          </div>
-          <div class="p-4 flex justify-between items-center hover:bg-white/5 cursor-pointer"
-            onclick="showLocalMeaning('Personalidad', 'personality')">
-            <span class="text-sm text-blue-200">Personalidad</span>
-            <div class="flex items-center gap-3"><span class="font-cinzel text-2xl text-white"
-                id="num-personality">0</span><span
-                class="material-symbols-rounded text-xs text-blue-400">arrow_forward_ios</span></div>
-          </div>
-        </div>
-        <p class="text-[9px] text-gray-500 mt-2 text-center italic" id="name-mode-hint">Mostrando vibración del nombre
-          de nacimiento (Misión de Vida)</p>
-      </div>
+        <!-- SECCIÓN CICLOS -->
+        <div class="hidden w-full space-y-8 animate-fade-in" id="view-ciclos">
+            <div class="text-center pt-8">
+                <h2 class="font-serif text-3xl text-white mb-2">Ciclos Temporales</h2>
+                <p class="font-body text-white/60 italic text-lg">Navegando las mareas del tiempo cósmico</p>
+            </div>
+            
+            <div class="flex justify-center gap-2 mb-4">
+                <button onclick="setCycleView('day')" id="cv-day" class="px-6 py-2 rounded-full text-[10px] font-bold tracking-widest bg-primary text-white uppercase transition-all">Hoy</button>
+                <button onclick="setCycleView('month')" id="cv-month" class="px-6 py-2 rounded-full text-[10px] font-bold tracking-widest bg-white/5 text-white/40 hover:text-white uppercase transition-all">Mes</button>
+                <button onclick="setCycleView('year')" id="cv-year" class="px-6 py-2 rounded-full text-[10px] font-bold tracking-widest bg-white/5 text-white/40 hover:text-white uppercase transition-all">Año</button>
+            </div>
 
-      <div class="mt-6">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Números Kármicos</h3>
-        <div class="flex gap-3">
-          <div class="flex-1 bg-[#1a103c] border border-white/10 rounded-xl p-4 flex items-center justify-between">
-            <div class="flex items-center gap-2"><span
-                class="material-symbols-rounded text-purple-400">school</span><span
-                class="text-xs text-gray-300">Lecciones</span></div>
-            <span class="font-bold text-white text-sm" id="karmic-lessons">-</span>
-          </div>
-          <div
-            class="flex-1 bg-[#1a103c] border border-white/10 rounded-xl p-4 flex items-center justify-between cursor-pointer"
-            onclick="showKarmicDebt()">
-            <div class="flex items-center gap-2"><span class="material-symbols-rounded text-red-400">warning</span><span
-                class="text-xs text-gray-300">Deudas</span></div>
-            <span class="font-bold text-white text-sm" id="karmic-debt">Ninguna</span>
-          </div>
+            <div class="grid grid-cols-1 gap-8">
+                <div class="glass-premium rounded-3xl p-10 flex flex-col items-center text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none"></div>
+                    <div class="relative size-48 mb-6">
+                        <svg class="size-full">
+                            <circle class="text-white/10" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="4"></circle>
+                            <circle id="cycle-progress" class="text-gold progress-ring" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.9" stroke-dashoffset="200" stroke-linecap="round" stroke-width="4"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="cycle-main-number" class="font-serif text-6xl text-white gold-glow">?</span>
+                            <span id="cycle-label" class="text-[9px] uppercase tracking-[0.3em] font-bold text-gold mt-2">Día Personal</span>
+                        </div>
+                    </div>
+                    <div class="max-w-md">
+                        <h4 id="cycle-date-text" class="font-serif text-white tracking-[0.2em] text-lg mb-4 uppercase">Hoy</h4>
+                        <p id="cycle-description" class="font-body text-base text-white/70 mb-8 leading-relaxed">
+                            Cargando interpretación del ciclo...
+                        </p>
+                        <div class="flex flex-col gap-3">
+                            <button onclick="deepenCurrentCycle()" class="w-full py-3 bg-gradient-to-r from-primary/80 to-mystic-purple/80 text-white rounded-xl text-[10px] font-bold tracking-widest hover:brightness-125 transition-all flex items-center justify-center gap-2 uppercase">
+                                <span class="material-symbols-outlined text-xs">auto_awesome</span> Profundizar Ciclo
+                            </button>
+                            <button onclick="deepenCyclesWithAI()" class="w-full py-3 bg-white/5 border border-white/10 text-white/60 hover:text-white transition rounded-xl text-[10px] font-bold tracking-widest uppercase">
+                                Consejo del Guía
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- B. CICLOS -->
-    <div id="view-ciclos" class="hidden space-y-6 animate-fade-in">
-      <div class="grid grid-cols-3 gap-2">
-        <button onclick="setCycleView('day')" id="cv-day"
-          class="py-3 rounded-lg text-xs font-bold text-center bg-blue-600 text-white shadow-lg transition-all">Diario</button>
-        <button onclick="setCycleView('month')" id="cv-month"
-          class="py-3 rounded-lg text-xs font-bold text-center bg-[#1a103c] text-gray-400 border border-white/10 transition-all">Mensual</button>
-        <button onclick="setCycleView('year')" id="cv-year"
-          class="py-3 rounded-lg text-xs font-bold text-center bg-[#1a103c] text-gray-400 border border-white/10 transition-all">Anual</button>
-      </div>
+        <!-- SECCIÓN SINERGIA -->
+        <div class="hidden w-full space-y-12 animate-fade-in" id="view-sinergia">
+            <div class="text-center pt-8">
+                <h2 class="font-serif text-3xl text-white mb-2 tracking-widest">Sinergia Cósmica</h2>
+                <p class="font-body text-white/60 italic text-lg">La danza de dos almas en números</p>
+            </div>
 
-      <div
-        class="bg-gradient-to-b from-[#2d1b4e] to-[#1a103c] p-6 rounded-2xl border border-white/10 text-center relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
-        <h4 class="font-cinzel text-2xl text-white mb-1" id="cycle-current-date">Hoy</h4>
-        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-4" id="cycle-label">Día Personal</p>
-        <div
-          class="w-24 h-24 mx-auto bg-white/5 rounded-full flex items-center justify-center border-2 border-white/10 shadow-[0_0_30px_rgba(124,58,237,0.3)]">
-          <span class="text-5xl font-cinzel text-white" id="cycle-main-number">0</span>
+            <div class="glass-premium rounded-3xl p-6 sm:p-10 max-w-2xl mx-auto relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full translate-x-10 -translate-y-10"></div>
+                
+                <!-- Rel Type Select -->
+                <div class="flex justify-center flex-wrap gap-2 mb-10">
+                    <button onclick="setRelType('romantic')" id="rel-romantic" class="px-4 py-1.5 rounded-full text-[10px] font-bold border border-primary bg-primary/10 text-primary uppercase">Amor</button>
+                    <button onclick="setRelType('friendship')" id="rel-friendship" class="px-4 py-1.5 rounded-full text-[10px] font-bold bg-white/5 text-white/40 uppercase">Amistad</button>
+                    <button onclick="setRelType('family')" id="rel-family" class="px-4 py-1.5 rounded-full text-[10px] font-bold bg-white/5 text-white/40 uppercase">Familia</button>
+                </div>
+
+                <div class="flex justify-between items-center mb-12 flex-col sm:flex-row gap-8">
+                    <div class="flex flex-col items-center gap-4">
+                        <div id="syn-p1-img" class="size-24 rounded-2xl overflow-hidden border-2 border-mystic-purple shadow-[0_0_20px_rgba(124,58,237,0.4)] flex items-center justify-center bg-mystic-purple/20 font-serif text-white text-2xl">
+                            --
+                        </div>
+                        <div class="text-center">
+                            <p id="syn-p1-name" class="font-serif text-white font-bold uppercase tracking-widest text-xs">Mila</p>
+                            <span id="syn-p1-lp" class="bg-mystic-purple/20 text-mystic-purple text-[8px] px-2 py-0.5 rounded font-bold uppercase">LP ?</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center relative">
+                        <span class="material-symbols-outlined text-gold text-5xl animate-pulse">favorite</span>
+                        <div class="absolute -bottom-6 flex flex-col items-center w-32">
+                            <span id="syn-result-num" class="font-serif text-4xl text-gold gold-glow">?</span>
+                            <span class="text-[8px] uppercase tracking-[0.2em] text-white/40">Fusión de Destino</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="size-24 rounded-2xl overflow-hidden border-2 border-dashed border-white/20 hover:border-gold/50 transition cursor-pointer relative group">
+                            <img id="syn-p2-img" alt="Otro" class="w-full h-full object-cover hidden"/>
+                            <div id="syn-p2-placeholder" class="bg-white/5 w-full h-full flex items-center justify-center text-white/20 group-hover:text-gold/50 transition">
+                                <span class="material-symbols-outlined">add</span>
+                            </div>
+                            <select id="syn-select" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="updateSynergy()">
+                                <!-- Options filled via JS -->
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <p id="syn-p2-name" class="font-serif text-white/40 font-bold uppercase tracking-widest text-xs">Elegir Llama</p>
+                            <span id="syn-p2-lp" class="hidden bg-gold/20 text-gold text-[8px] px-2 py-0.5 rounded font-bold uppercase">LP ?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="synergy-results" class="hidden space-y-4 animate-fade-in pt-4 border-t border-white/5">
+                    <p id="syn-ai-content" class="text-white/70 font-body italic text-center p-4 bg-white/5 rounded-xl border border-white/5">
+                        Elige una persona para ver vuestra compatibilidad estelar.
+                    </p>
+                    <button onclick="askAISynergy()" class="w-full py-4 bg-gradient-to-r from-mystic-purple to-primary hover:brightness-125 text-white font-serif tracking-[0.2em] rounded-xl transition-all shadow-lg uppercase text-[10px] font-bold">
+                        <span class="material-symbols-outlined text-sm align-middle mr-1">auto_awesome</span>
+                        Análisis Alquímico con IA
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="mt-6 text-left relative">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-[10px] uppercase text-gray-500 font-bold">Vibración</span>
-            <button class="text-[10px] text-yellow-300 flex items-center gap-1 hover:text-white"
-              onclick="deepenCurrentCycle()">
-              <span class="material-symbols-rounded text-sm">auto_awesome</span> Profundizar <span
-                id="cycle-btn-label">Día</span>
-            </button>
-          </div>
-          <p class="text-sm text-gray-300 leading-relaxed font-light" id="cycle-description">...</p>
-        </div>
-        <hr class="border-white/5 my-4">
-        <button onclick="deepenCyclesWithAI()"
-          class="w-full py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-widest text-purple-300 hover:bg-white/10 transition flex items-center justify-center gap-2">
-          <span>✨</span> Consejo Cósmico del Guía
+    </main>
+
+    <!-- El reproductor de audio ha sido removido de este módulo -->
+
+    <!-- Mobile Navigation Footer -->
+    <footer class="fixed bottom-0 left-0 w-full bg-deep-indigo/95 border-t border-white/10 px-8 py-3 flex justify-around items-center backdrop-blur-xl z-50 sm:hidden">
+        <button onclick="goHome()" class="flex flex-col items-center gap-1 text-white/40">
+            <span class="material-symbols-outlined">home</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Inicio</span>
         </button>
-        <p class="text-[9px] text-gray-600 mt-2 italic">Analiza Día + Mes + Año y la hora actual.</p>
-      </div>
-    </div>
-
-    <!-- C. SINERGIA -->
-    <div id="view-sinergia" class="hidden space-y-6 animate-fade-in pt-4">
-      <h3 class="font-cinzel text-white text-center text-lg mb-4">Fusión & Compatibilidad</h3>
-      <div class="bg-gray-800/50 p-4 rounded-xl mb-6 border border-white/5">
-        <label class="block text-[10px] text-gray-400 uppercase tracking-widest mb-2 text-center">Tipo de
-          Relación</label>
-        <div class="flex justify-center gap-2 flex-wrap">
-          <button onclick="setRelType('romantic')" id="rel-romantic"
-            class="rel-btn active px-3 py-1 text-xs border border-pink-500 bg-pink-900/30 text-pink-200 rounded-full">❤️
-            Romántica</button>
-          <button onclick="setRelType('friendship')" id="rel-friendship"
-            class="rel-btn px-3 py-1 text-xs border border-transparent bg-white/5 text-gray-400 rounded-full">🤝
-            Amistad</button>
-          <button onclick="setRelType('family')" id="rel-family"
-            class="rel-btn px-3 py-1 text-xs border border-transparent bg-white/5 text-gray-400 rounded-full">🏠
-            Familiar</button>
-          <button onclick="setRelType('business')" id="rel-business"
-            class="rel-btn px-3 py-1 text-xs border border-transparent bg-white/5 text-gray-400 rounded-full">💼
-            Negocios</button>
-        </div>
-      </div>
-      <div class="flex items-center justify-center gap-4 mb-4">
-        <div class="flex flex-col items-center">
-          <div
-            class="w-16 h-16 rounded-xl bg-pink-700 flex items-center justify-center text-white font-bold font-cinzel text-2xl shadow-lg border border-white/20"
-            id="syn-p1-badge">0</div>
-          <span class="text-xs font-bold mt-2 text-pink-200">Yo</span>
-        </div>
-        <span class="material-symbols-rounded text-white/20 text-3xl">favorite</span>
-        <div class="flex flex-col items-center relative group">
-          <div
-            class="w-16 h-16 rounded-xl bg-gray-800 border-2 border-dashed border-gray-600 flex items-center justify-center text-gray-500 group-hover:border-white/50 transition cursor-pointer relative overflow-hidden">
-            <span class="material-symbols-rounded text-2xl relative z-0">add</span>
-            <select id="syn-select" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="updateSynergy()">
-              <!-- Options filled via JS -->
-            </select>
-          </div>
-          <span class="text-xs font-bold mt-2 text-gray-400" id="syn-p2-name">Comparar</span>
-        </div>
-      </div>
-      <div id="manual-synergy-inputs" class="bg-white/5 p-4 rounded-xl border border-white/10 mb-6">
-        <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-3 text-center">Comparación Rápida (Sin Perfil)
-        </p>
-        <div class="flex gap-3">
-          <div class="flex-1">
-            <label class="text-[9px] text-gray-500 block mb-1">Número</label>
-            <select id="manual-lp" class="glass-select" onchange="updateSynergy()">
-              <option value="">Elegir...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="11">11</option>
-              <option value="22">22</option>
-              <option value="33">33</option>
-            </select>
-          </div>
-          <div class="flex-1">
-            <label class="text-[9px] text-gray-500 block mb-1">Signo (Opcional)</label>
-            <select id="manual-sign" class="glass-select" onchange="updateSynergy()">
-              <option value="">Ninguno</option>
-              <option value="Aries">Aries</option>
-              <option value="Tauro">Tauro</option>
-              <option value="Géminis">Géminis</option>
-              <option value="Cáncer">Cáncer</option>
-              <option value="Leo">Leo</option>
-              <option value="Virgo">Virgo</option>
-              <option value="Libra">Libra</option>
-              <option value="Escorpio">Escorpio</option>
-              <option value="Sagitario">Sagitario</option>
-              <option value="Capricornio">Capricornio</option>
-              <option value="Acuario">Acuario</option>
-              <option value="Piscis">Piscis</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div id="synergy-results" class="hidden">
-        <div class="bg-gradient-to-r from-pink-900/40 to-purple-900/40 border border-white/10 rounded-xl p-5 mb-4">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white font-bold"
-              id="syn-result-num">0</div>
-            <h4 class="font-cinzel text-sm text-white">Vibración Conjunta</h4>
-          </div>
-          <div id="syn-ai-content" class="text-xs text-gray-300 leading-relaxed space-y-2"></div>
-        </div>
-        <button
-          class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-xs text-white font-bold uppercase tracking-widest shadow-lg hover:shadow-purple-500/50 transition flex items-center justify-center gap-2"
-          onclick="askAISynergy()">
-          <span>✨</span> Análisis Numérico + Astral con IA
+        <button onclick="switchTab('esencia')" class="flex flex-col items-center gap-1 text-gold">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">auto_awesome</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Esencia</span>
         </button>
-      </div>
-    </div>
+        <button onclick="Universo.openModule('pergaminos.html')" class="flex flex-col items-center gap-1 text-white/40">
+            <span class="material-symbols-outlined">description</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Cartas</span>
+        </button>
+        <button onclick="toggleProfileDropdown()" class="flex flex-col items-center gap-1 text-white/40">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Almas</span>
+        </button>
+    </footer>
+</div>
 
-  </main>
-
-  <!-- MODAL LECTURA (TEXTOS) -->
-  <div id="reading-modal" class="sheet-modal">
+<!-- MODAL LECTURA -->
+<div id="reading-modal" class="sheet-modal">
     <div class="sheet-content">
-      <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6"></div>
-      <div class="flex justify-between items-start mb-4">
-        <h3 class="font-cinzel text-xl text-yellow-400 pr-4" id="reading-title">Interpretación</h3>
-        <button onclick="closeReadingModal()" class="text-gray-400 hover:text-white bg-white/10 rounded-full p-1"><span
-            class="material-symbols-rounded">close</span></button>
-      </div>
-      <div class="text-sm text-gray-200 leading-relaxed font-serif pb-8 space-y-3" id="reading-body">
-        <!-- Contenido dinámico -->
-      </div>
-      <!-- Botón flotante para regenerar dentro del modal si es lectura AI -->
-      <button id="regenerate-btn"
-        class="hidden w-full py-3 mt-4 bg-white/5 border border-white/10 rounded-lg text-xs text-yellow-200 hover:bg-white/10"
-        onclick="regenerateCurrentReading()">🔄 Regenerar Lectura</button>
+        <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6"></div>
+        <div class="flex justify-between items-start mb-4">
+            <h3 class="font-serif text-xl text-gold pr-4" id="reading-title">Interpretación</h3>
+            <button onclick="closeReadingModal()" class="text-white/40 hover:text-white bg-white/5 rounded-full p-1">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div id="reading-body" class="text-lg text-white/80 leading-relaxed font-body pb-8 space-y-4 max-h-[60vh] overflow-y-auto no-scrollbar">
+            <!-- Contenido dinámico -->
+        </div>
+        <button id="regenerate-btn" class="hidden w-full py-4 mt-4 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-gold hover:bg-white/10 uppercase tracking-widest">
+            🔄 Regenerar Lectura
+        </button>
     </div>
-  </div>
+</div>
 
-  <!-- MODAL: NUEVO REGISTRO (CON DATOS ASTRALES) -->
-  <div id="new-profile-modal"
-    class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[200] hidden flex items-center justify-center p-4">
-    <div
-      class="w-full max-w-md bg-[#151025] rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-      <div class="p-4 border-b border-white/10 flex justify-between items-center bg-[#0f0a1e]">
-        <h2 class="font-cinzel text-lg text-white" id="modal-title">Nuevo Perfil</h2>
-        <button onclick="closeNewProfileModal()" class="text-gray-500 hover:text-white"><span
-            class="material-symbols-rounded">close</span></button>
-      </div>
-      <form id="profile-form" class="flex-1 overflow-y-auto p-6 space-y-6">
-        <!-- SECCIÓN DE FOTOS DUAL -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <!-- FOTO DE PERFIL (UI) -->
-          <div class="flex flex-col items-center">
-            <label class="text-[9px] text-gray-500 uppercase mb-2 font-bold tracking-widest text-center">Foto de Perfil (App)</label>
-            <div id="profile-photo-preview" class="w-20 h-20 rounded-2xl bg-white/5 border border-dashed border-white/20 flex items-center justify-center overflow-hidden mb-2">
-               <span class="material-symbols-rounded text-2xl text-white/10">person</span>
-            </div>
-            <label class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[8px] font-bold text-gray-400 hover:text-white cursor-pointer transition">
-              CARGAR UI
-              <input type="file" id="input-photo" class="hidden" accept="image/*" onchange="previewPhoto(this, 'ui')">
-            </label>
-          </div>
-
-          <!-- PERFIL ALQUÍMICO (IA) -->
-          <div class="flex flex-col items-center">
-            <label class="text-[9px] text-purple-400/80 uppercase mb-2 font-bold tracking-widest text-center">Referencia Alquímica (IA)</label>
-            <div id="profile-ai-preview" class="w-20 h-20 rounded-2xl bg-purple-900/10 border border-dashed border-purple-500/20 flex items-center justify-center overflow-hidden mb-2">
-               <span class="material-symbols-rounded text-2xl text-purple-400/20">auto_awesome</span>
-            </div>
-            <label class="px-3 py-1.5 bg-purple-600/10 border border-purple-500/20 rounded-lg text-[8px] font-bold text-purple-400 hover:text-purple-300 cursor-pointer transition">
-              CONFIG IA
-              <input type="file" id="input-photo-ai" class="hidden" accept="image/*" onchange="previewPhoto(this, 'ai')">
-            </label>
-          </div>
+<!-- MODAL NUEVO PERFIL -->
+<div id="new-profile-modal" class="fixed inset-0 bg-background-dark/95 backdrop-blur-xl z-[100] hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-deep-indigo rounded-2xl border border-gold/20 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
+        <div class="p-4 border-b border-white/10 flex justify-between items-center bg-deep-indigo">
+            <h2 class="font-serif text-lg text-white tracking-widest" id="modal-title">NUEVA LLAMA</h2>
+            <button onclick="closeNewProfileModal()" class="text-white/40 hover:text-white"><span class="material-symbols-outlined">close</span></button>
         </div>
-
-        <!-- PASO 1 -->
-        <div class="space-y-4">
-          <label class="block text-center text-sm text-purple-300 font-bold uppercase tracking-widest mb-4">Fecha de Nacimiento</label>
-          <div class="flex gap-2 justify-center">
-            <input type="number" id="input-day" placeholder="DD" class="glass-input text-center w-16 text-xl" min="1" max="31" required>
-            <input type="number" id="input-month" placeholder="MM" class="glass-input text-center w-16 text-xl" min="1" max="12" required>
-            <input type="number" id="input-year" placeholder="AAAA" class="glass-input text-center w-24 text-xl" min="1900" max="2100" required>
-          </div>
-          <input type="hidden" id="editing-profile-id">
-
-          <!-- DATOS ASTRALES -->
-          <div class="grid grid-cols-2 gap-3 mt-4">
-            <div>
-              <label class="block text-[10px] text-gray-500 uppercase mb-1 text-center">Hora (00-24)</label>
-              <input type="time" id="input-time" class="glass-input text-center text-xs">
+        <form id="profile-form" class="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
+            <!-- FOTO -->
+            <div class="flex flex-col items-center mb-6">
+                <div id="profile-photo-preview" class="size-24 rounded-3xl bg-white/5 border-2 border-dashed border-gold/20 flex items-center justify-center overflow-hidden mb-4 relative group">
+                   <span class="material-symbols-outlined text-3xl text-white/10">person</span>
+                </div>
+                <label class="px-6 py-2 bg-white/5 border border-gold/30 rounded-full text-[10px] font-bold text-gold hover:bg-gold hover:text-deep-indigo cursor-pointer transition uppercase tracking-widest">
+                  Cargar Imagen
+                  <input type="file" id="input-photo" class="hidden" accept="image/*" onchange="previewPhoto(this)">
+                </label>
             </div>
-            <div>
-              <label class="block text-[10px] text-gray-500 uppercase mb-1 text-center">Lugar (País/Ciudad)</label>
-              <input type="text" id="input-place" placeholder="Ej: Caracas" class="glass-input text-center text-xs">
-            </div>
-          </div>
 
-          <div class="mt-6 text-center">
-            <label class="block text-xs text-gray-500 mb-2">GÉNERO</label>
-            <div class="radio-group flex justify-center gap-2">
-              <div><input type="radio" id="g-fem" name="gender" value="F" checked><label for="g-fem">Femenino</label>
-              </div>
-              <div><input type="radio" id="g-masc" name="gender" value="M"><label for="g-masc">Masculino</label></div>
+            <div class="space-y-4">
+                <label class="block text-center text-xs text-gold font-bold uppercase tracking-[0.3em]">Fecha de Nacimiento</label>
+                <div class="flex gap-2 justify-center">
+                    <input type="number" id="input-day" placeholder="DD" class="bg-white/5 border-white/10 text-white rounded-lg text-center w-16 px-0 focus:ring-gold" min="1" max="31">
+                    <input type="number" id="input-month" placeholder="MM" class="bg-white/5 border-white/10 text-white rounded-lg text-center w-16 px-0 focus:ring-gold" min="1" max="12">
+                    <input type="number" id="input-year" placeholder="AAAA" class="bg-white/5 border-white/10 text-white rounded-lg text-center w-24 px-0 focus:ring-gold" min="1900">
+                </div>
+                <input type="hidden" id="editing-profile-id">
+
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div>
+                        <label class="block text-[9px] text-white/40 uppercase mb-1 tracking-widest">Hora</label>
+                        <input type="time" id="input-time" class="bg-white/5 border-white/10 text-white rounded-lg text-xs w-full focus:ring-gold">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] text-white/40 uppercase mb-1 tracking-widest">Lugar</label>
+                        <input type="text" id="input-place" placeholder="Ciudad" class="bg-white/5 border-white/10 text-white rounded-lg text-xs w-full focus:ring-gold">
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <label class="block text-[9px] text-white/40 uppercase tracking-widest mb-1 font-bold">Nombre Completo (Acta)</label>
+                    <input type="text" id="input-fullname" class="bg-white/5 border-white/10 text-white rounded-lg w-full text-sm py-3 focus:ring-gold" placeholder="Tu nombre espiritual...">
+                </div>
+                <div>
+                    <label class="block text-[9px] text-white/40 uppercase tracking-widest mb-1 font-bold">Nombre Íntimo</label>
+                    <input type="text" id="input-name" class="bg-white/5 border-white/10 text-white rounded-lg w-full text-sm py-3 focus:ring-gold" placeholder="Mila / Miguelo...">
+                </div>
             </div>
-          </div>
+            
+            <div class="flex justify-center gap-4 pt-2">
+                <div class="flex items-center gap-2">
+                    <input type="radio" id="g-fem" name="gender" value="F" checked class="text-primary focus:ring-primary bg-transparent border-white/20">
+                    <label for="g-fem" class="text-xs text-white/60">Femenino</label>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="radio" id="g-masc" name="gender" value="M" class="text-mystic-purple focus:ring-mystic-purple bg-transparent border-white/20">
+                    <label for="g-masc" class="text-xs text-white/60">Masculino</label>
+                </div>
+            </div>
+        </form>
+        <div class="p-6 border-t border-white/10 bg-deep-indigo">
+            <button type="button" onclick="submitProfileForm()" class="w-full bg-gradient-to-r from-primary to-mystic-purple text-white font-serif font-bold py-4 rounded-xl shadow-lg hover:brightness-125 transition-all tracking-[0.2em] text-xs uppercase">
+                Consagrar Perfil
+            </button>
         </div>
-        <hr class="border-white/5">
-        <!-- PASO 2 -->
-        <div class="space-y-4">
-          <div>
-            <label class="block text-[10px] text-gray-400 uppercase tracking-widest mb-1">Nombre Completo
-              (Certificado)</label>
-            <input type="text" id="input-fullname" class="glass-input" placeholder="Tal cual como en el acta..."
-              required>
-          </div>
-          <div>
-            <label class="block text-[10px] text-gray-400 uppercase tracking-widest mb-1">Nombre Actual / Apodo</label>
-            <input type="text" id="input-name" class="glass-input" placeholder="¿Cómo te llaman hoy?" required>
-          </div>
-        </div>
-        <!-- PASO 3 -->
-        <div>
-          <label class="block text-[10px] text-gray-400 uppercase tracking-widest mb-2 text-center">Color del
-            Aura</label>
-          <input type="color" id="input-color" value="#a855f7"
-            class="w-full h-12 rounded-lg cursor-pointer bg-transparent border border-white/20">
-        </div>
-      </form>
-      <div class="p-4 border-t border-white/10 bg-[#0f0a1e]">
-        <button type="button" onclick="submitProfileForm()"
-          class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-cinzel font-bold py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-transform tracking-widest text-sm">GUARDAR
-          ENERGÍA</button>
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- MODAL RESPALDO -->
-  <div id="backup-modal"
-    class="fixed inset-0 bg-black/95 backdrop-blur-xl z-[250] hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-sm bg-[#1a103c] rounded-2xl border border-white/10 shadow-2xl p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="font-cinzel text-lg text-yellow-400">Respaldo</h2><button
-          onclick="document.getElementById('backup-modal').classList.add('hidden')"
-          class="text-gray-500 hover:text-white"><span class="material-symbols-rounded">close</span></button>
-      </div>
-      <div class="space-y-3">
-        <button onclick="downloadUniverse()"
-          class="w-full py-3 bg-white/5 border border-white/20 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition text-sm text-white"><span
-            class="material-symbols-rounded text-lg">download</span> Exportar</button>
-        <div class="relative"><input type="file" id="import-file" accept=".mila,.json"
-            class="absolute inset-0 opacity-0 cursor-pointer" onchange="uploadUniverse(this)"><button
-            class="w-full py-3 bg-purple-600 rounded-xl flex items-center justify-center gap-2 hover:bg-purple-500 transition text-sm text-white shadow-lg"><span
-              class="material-symbols-rounded text-lg">upload</span> Importar</button></div>
-      </div>
-    </div>
-  </div>
-
-  <script src="assets/js/universo.js"></script>
-  <script>
+<script src="assets/js/universo.js"></script>
+<script>
+    // --- DATOS Y ESTADO ---
     let KNOWLEDGE_BASE = {};
-    async function loadKnowledge() {
-      try {
-        const res = await fetch('assets/data/conocimiento.json');
-        KNOWLEDGE_BASE = await res.json();
-      } catch (e) { console.error("Error cargando base de conocimiento:", e); }
-    }
+    const calc = {
+        reduce: (n) => { while (n > 9 && n !== 11 && n !== 22 && n !== 33) n = String(n).split('').reduce((a, b) => parseInt(a) + parseInt(b), 0); return n; },
+        reduceStrict: (n) => { while (n > 9) n = String(n).split('').reduce((a, b) => parseInt(a) + parseInt(b), 0); return n; },
+        sumString: (str) => {
+            const table = { a: 1, j: 1, s: 1, b: 2, k: 2, t: 2, c: 3, l: 3, u: 3, d: 4, m: 4, v: 4, e: 5, n: 5, w: 5, f: 6, o: 6, x: 6, g: 7, p: 7, y: 7, h: 8, q: 8, z: 8, r: 9, i: 9 };
+            let sum = 0; if (!str) return 0;
+            str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, '').split('').forEach(char => sum += (table[char] || 0));
+            return sum;
+        }
+    };
 
-    let profiles = JSON.parse(localStorage.getItem('mila_profiles'));
-    if (!profiles || profiles.length === 0 || (profiles.length === 1 && profiles[0].id === '1')) {
-      profiles = DEFAULT_PROFILES;
-      localStorage.setItem('mila_profiles', JSON.stringify(profiles));
-    }
-
-    let currentProfile = profiles.find(p => p.active) || profiles[0];
-    if (!currentProfile.aiReadings) currentProfile.aiReadings = {};
-
+    let profiles = Universo.getProfiles();
+    let currentProfile = Universo.getActiveProfile();
     let currentData = null;
     let currentCycleView = 'day';
     let currentRelType = 'romantic';
-    let currentReadingKey = null;
-    let showBirthNameNumbers = true; // TOGGLE STATE
-    let tutStep = 1;
+    let showBirthNameNumbers = true;
+
+    // --- CARGA INICIAL ---
+    async function loadKnowledge() {
+        try {
+            const res = await fetch('assets/data/conocimiento.json');
+            KNOWLEDGE_BASE = await res.json();
+        } catch (e) { console.error("Error cargando base de conocimiento:", e); }
+    }
 
     async function init() {
-      await loadKnowledge();
-      renderAll();
-      checkTutorial();
+        await loadKnowledge();
+        if (!currentProfile || !currentProfile.dob) {
+            document.getElementById('header-name').innerText = 'Sin Perfil';
+            openNewProfileModal();
+            return;
+        }
+        currentData = calculateProfileData(currentProfile);
+        renderHeader();
+        renderEsencia();
+        renderCiclos();
+        renderSinergia();
+        renderProfilesList();
+        updateSynergySelect();
     }
 
-    function renderAll() {
-      calculateAll();
-      renderHeader();
-      renderCycles();
-      updateSynergySelect();
-    }
-
-    function checkTutorial() {
-      if (!localStorage.getItem('mila_tut_seen')) openTutorial();
-    }
-
-    const calc = {
-      reduce: (n) => { while (n > 9 && n !== 11 && n !== 22 && n !== 33) n = String(n).split('').reduce((a, b) => parseInt(a) + parseInt(b), 0); return n; },
-      reduceStrict: (n) => { while (n > 9) n = String(n).split('').reduce((a, b) => parseInt(a) + parseInt(b), 0); return n; },
-      sumString: (str) => {
-        const table = { a: 1, j: 1, s: 1, b: 2, k: 2, t: 2, c: 3, l: 3, u: 3, d: 4, m: 4, v: 4, e: 5, n: 5, w: 5, f: 6, o: 6, x: 6, g: 7, p: 7, y: 7, h: 8, q: 8, z: 8, r: 9, i: 9 };
-        let sum = 0; if (!str) return 0;
-        str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, '').split('').forEach(char => sum += (table[char] || 0));
-        return sum;
-      }
-    };
-
+    // --- CÁLCULOS ---
     function calculateProfileData(p) {
-      if (!p.dob) return { lp: 0 };
-      const date = new Date(p.dob + 'T12:00:00');
-      const day = date.getDate(); const month = date.getMonth() + 1; const year = date.getFullYear();
+        if (!p.dob) return null;
+        const date = new Date(p.dob + 'T12:00:00');
+        const d = date.getDate(); const m = date.getMonth() + 1; const y = date.getFullYear();
 
-      let lp = calc.reduce(calc.reduce(day) + calc.reduce(month) + calc.reduce(year));
+        let lp = calc.reduce(calc.reduce(d) + calc.reduce(m) + calc.reduce(y));
+        
+        let full = p.fullname || p.name;
+        let expO = calc.reduce(calc.sumString(full));
+        let soulO = calc.reduce(calc.sumString(full.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^aeiou]/gi, '')));
+        let persO = calc.reduce(calc.sumString(full.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[aeiou]/gi, '')));
+        
+        let clean = p.name;
+        let expC = calc.reduce(calc.sumString(clean));
+        let soulC = calc.reduce(calc.sumString(clean.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^aeiou]/gi, '')));
+        let persC = calc.reduce(calc.sumString(clean.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[aeiou]/gi, '')));
 
-      // NOMBRE DE NACIMIENTO (ORIGINAL)
-      let cleanFull = p.fullname || p.name;
-      let expOrig = calc.reduce(calc.sumString(cleanFull));
-      let soulOrig = calc.reduce(calc.sumString(cleanFull.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^aeiou]/gi, '')));
-      let persOrig = calc.reduce(calc.sumString(cleanFull.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[aeiou]/gi, '')));
+        const now = new Date();
+        let py = calc.reduceStrict(now.getFullYear() + calc.reduceStrict(d) + calc.reduceStrict(m));
+        
+        let debts = []; if([13,14,16,19].includes(d)) debts.push(d);
+        let nameChars = full.toLowerCase().replace(/[^a-z]/g, '').split('');
+        let foundNums = new Set(nameChars.map(c => calc.sumString(c)));
+        let lessons = []; for(let i=1; i<=9; i++) if(!foundNums.has(i)) lessons.push(i);
 
-      // NOMBRE ACTUAL (CURRENT)
-      let cleanName = p.name;
-      let expCurr = calc.reduce(calc.sumString(cleanName));
-      let soulCurr = calc.reduce(calc.sumString(cleanName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^aeiou]/gi, '')));
-      let persCurr = calc.reduce(calc.sumString(cleanName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[aeiou]/gi, '')));
-
-      let att = calc.reduce(day + month);
-      let gen = calc.reduce(year);
-      let bday = calc.reduce(day);
-
-      const now = new Date();
-      let py = calc.reduceStrict(now.getFullYear() + calc.reduceStrict(day) + calc.reduceStrict(month));
-      let pm = calc.reduceStrict(py + (now.getMonth() + 1));
-      let pd = calc.reduceStrict(pm + now.getDate());
-
-      let debts = []; if ([13, 14, 16, 19].includes(day)) debts.push(day);
-      let nameNums = new Set(); cleanFull.toLowerCase().replace(/[^a-z]/g, '').split('').forEach(c => { const v = calc.sumString(c); if (v > 0) nameNums.add(v); });
-      let lessons = []; for (let i = 1; i <= 9; i++) if (!nameNums.has(i)) lessons.push(i);
-
-      // Return both sets
-      return {
-        lp, att, gen, bday, py, pm, pd, debts, lessons,
-        orig: { exp: expOrig, soul: soulOrig, pers: persOrig },
-        curr: { exp: expCurr, soul: soulCurr, pers: persCurr }
-      };
+        return {
+            lp, att: calc.reduce(d+m), gen: calc.reduce(y), bday: calc.reduce(d),
+            py, pm: calc.reduceStrict(py + (now.getMonth()+1)), pd: calc.reduceStrict(calc.reduceStrict(py + (now.getMonth()+1)) + now.getDate()),
+            debts, lessons,
+            orig: { exp: expO, soul: soulO, pers: persO },
+            curr: { exp: expC, soul: soulC, pers: persC }
+        };
     }
 
-    function calculateAll() { currentData = calculateProfileData(currentProfile); renderMainView(); }
-
-    function toggleNameMode(isOriginal) {
-      showBirthNameNumbers = isOriginal;
-
-      // UI Toggle Styles
-      const btnOrig = document.getElementById('btn-name-orig');
-      const btnCurr = document.getElementById('btn-name-curr');
-      const hint = document.getElementById('name-mode-hint');
-
-      if (isOriginal) {
-        btnOrig.className = "px-2 py-1 text-[9px] font-bold text-white bg-blue-600 rounded shadow transition-all";
-        btnCurr.className = "px-2 py-1 text-[9px] font-bold text-gray-500 hover:text-white rounded transition-all";
-        hint.innerText = "Mostrando vibración del nombre de nacimiento (Misión de Vida)";
-      } else {
-        btnCurr.className = "px-2 py-1 text-[9px] font-bold text-white bg-green-600 rounded shadow transition-all";
-        btnOrig.className = "px-2 py-1 text-[9px] font-bold text-gray-500 hover:text-white rounded transition-all";
-        hint.innerText = "Mostrando vibración del nombre actual (Energía Proyectada)";
-      }
-
-      renderMainView(); // Re-render numbers
-    }
-
+    // --- RENDERS ---
     function renderHeader() {
-      document.getElementById('header-name').innerText = currentProfile.name;
-      document.getElementById('header-dob').innerText = currentProfile.dob.split('-').reverse().join('/');
-      
-      const badge = document.getElementById('header-badge');
-      if (currentProfile.photoUrl) {
-        badge.innerHTML = `<img src="${currentProfile.photoUrl}" class="w-full h-full object-cover rounded-lg">`;
-        badge.style.backgroundColor = 'transparent';
-      } else {
-        badge.innerText = currentData.lp;
-        badge.style.backgroundColor = currentProfile.color || '#a855f7';
-      }
-
-      const statusEl = document.getElementById('astro-status');
-      const locationText = document.getElementById('astro-location-text');
-      if (currentProfile.time && currentProfile.place) {
-        statusEl.classList.remove('hidden');
-        // Si place es objeto {country, city}, formatear
-        let loc = currentProfile.place;
-        // Compatibilidad con perfiles antiguos que tengan string
-        if (typeof loc === 'object') loc = `${loc.city}, ${loc.country}`;
-
-        locationText.innerText = loc || "Datos Astrales";
-      }
-      else statusEl.classList.add('hidden');
+        document.getElementById('header-name').innerText = currentProfile.name;
+        const badge = document.getElementById('header-badge');
+        if (currentProfile.photoUrl) {
+            badge.innerHTML = `<img src="${currentProfile.photoUrl}" class="w-full h-full object-cover">`;
+        } else {
+            badge.innerText = currentProfile.name[0].toUpperCase();
+            badge.style.backgroundColor = currentProfile.color || '#ec135b';
+        }
     }
 
-    function renderMainView() {
-      const d = currentData;
-      document.getElementById('num-lifepath').innerText = d.lp;
+    function renderEsencia() {
+        const d = currentData;
+        document.getElementById('num-lifepath').innerText = d.lp;
+        
+        // Uso de conocimiento local
+        const destiny = KNOWLEDGE_BASE.numerologia?.destinos_del_alma?.[d.lp] || {};
+        const archetype = KNOWLEDGE_BASE.numerologia?.arquetipos_vibracionales?.[d.lp] || "";
+        document.getElementById('lp-title').innerText = destiny.titulo || "Vibración Elevada";
+        document.getElementById('lp-description').innerText = destiny.resumen || "Posees una vibración única que el universo celebra hoy.";
+        
+        const bd = new Date(currentProfile.dob + 'T12:00:00');
+        const sign = getSunSign(bd.getDate(), bd.getMonth()+1);
+        document.getElementById('sun-sign-display').innerText = `Solar ${sign}`;
 
-      // Get Sun Sign
-      const date = new Date(currentProfile.dob + 'T12:00:00');
-      const sign = getSunSign(date.getDate(), date.getMonth() + 1);
-      document.getElementById('sun-sign-display').innerText = `Sol en ${sign}`;
+        document.getElementById('num-attitude').innerText = d.att;
+        document.getElementById('num-generation').innerText = d.gen;
+        document.getElementById('num-birthday').innerText = d.bday;
 
-      document.getElementById('num-attitude').innerText = d.att;
-      document.getElementById('num-generation').innerText = d.gen;
-      document.getElementById('num-birthday').innerText = d.bday;
+        const n = showBirthNameNumbers ? d.orig : d.curr;
+        document.getElementById('num-expression').innerText = n.exp;
+        document.getElementById('num-soul').innerText = n.soul;
+        document.getElementById('num-personality').innerText = n.pers;
 
-      // Name Numbers Toggle Logic
-      const nameData = showBirthNameNumbers ? d.orig : d.curr;
-      document.getElementById('num-expression').innerText = nameData.exp;
-      document.getElementById('num-soul').innerText = nameData.soul;
-      document.getElementById('num-personality').innerText = nameData.pers;
-
-      document.getElementById('karmic-debt').innerText = d.debts.length ? d.debts.join(', ') : 'Ninguna';
-      document.getElementById('karmic-lessons').innerText = d.lessons.length ? d.lessons.join(', ') : 'Ninguna';
-      document.getElementById('syn-p1-badge').innerText = d.lp;
-      document.getElementById('syn-p1-badge').style.backgroundColor = currentProfile.color;
+        document.getElementById('karmic-lessons').innerText = d.lessons.length ? d.lessons.join(', ') : 'Ninguna';
+        document.getElementById('karmic-debt').innerText = d.debts.length ? d.debts.join(', ') : 'Ninguna';
     }
 
-    function getSunSign(d, m) {
-      const days = [21, 20, 21, 21, 22, 22, 23, 23, 23, 23, 23, 22];
-      const signs = ["Acuario", "Piscis", "Aries", "Tauro", "Géminis", "Cáncer", "Leo", "Virgo", "Libra", "Escorpio", "Sagitario", "Capricornio"];
-      let index = m - 1;
-      if (d < days[index]) index--;
-      if (index < 0) index = 11;
-      return signs[index];
+    function renderCiclos() {
+        const d = currentData;
+        const now = new Date();
+        const cfg = {
+            day: { num: d.pd, label: "Día Personal", ring: 100, date: now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric' }) },
+            month: { num: d.pm, label: "Mes Personal", ring: 400, date: now.toLocaleDateString('es-ES', { month: 'long' }) },
+            year: { num: d.py, label: "Año Personal", ring: 552.9, date: now.getFullYear() }
+        }[currentCycleView];
+
+        document.getElementById('cycle-main-number').innerText = cfg.num;
+        document.getElementById('cycle-label').innerText = cfg.label;
+        document.getElementById('cycle-date-text').innerText = cfg.date;
+        
+        const ring = document.getElementById('cycle-progress');
+        const offset = 552.9 - (cfg.num / 9 * 552.9);
+        ring.style.strokeDashoffset = offset;
+
+        // Uso de conocimiento local para ciclos
+        const cycleInterp = KNOWLEDGE_BASE.numerologia?.rueda_del_tiempo?.[currentCycleView]?.[cfg.num] || "La energía del universo te rodea en este ciclo particular.";
+        document.getElementById('cycle-description').innerText = cycleInterp;
     }
 
-    // TUTORIAL LOGIC
-    function openTutorial() {
-      document.getElementById('tutorial-overlay').classList.remove('hidden');
-      document.getElementById('tutorial-overlay').classList.add('active');
-      tutStep = 1;
-      showTutSlide(1);
-    }
-    function closeTutorial() {
-      document.getElementById('tutorial-overlay').classList.remove('active');
-      setTimeout(() => document.getElementById('tutorial-overlay').classList.add('hidden'), 500);
-      localStorage.setItem('mila_tut_seen', 'true');
-    }
-    function nextTutorial() {
-      if (tutStep < 4) {
-        tutStep++;
-        showTutSlide(tutStep);
-      } else {
-        closeTutorial();
-      }
-    }
-    function showTutSlide(step) {
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById(`tut-slide-${i}`).classList.add('hidden');
-        document.getElementById(`dot-${i}`).classList.remove('active');
-      }
-      document.getElementById(`tut-slide-${step}`).classList.remove('hidden');
-      document.getElementById(`dot-${step}`).classList.add('active');
-      document.getElementById('tut-btn').innerText = step === 4 ? "COMENZAR" : "SIGUIENTE";
-    }
-
-    function renderCycles() {
-      const d = currentData;
-      const now = new Date();
-      const days = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-      const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-      let val, label, dateTxt, labelBtn;
-
-      if (currentCycleView === 'day') { val = d.pd; label = "Día Personal"; labelBtn = "Día"; dateTxt = `${days[now.getDay()]} ${now.getDate()}`; }
-      else if (currentCycleView === 'month') { val = d.pm; label = "Mes Personal"; labelBtn = "Mes"; dateTxt = months[now.getMonth()]; }
-      else { val = d.py; label = "Año Personal"; labelBtn = "Año"; dateTxt = now.getFullYear(); }
-
-      document.getElementById('cycle-main-number').innerText = val;
-      document.getElementById('cycle-label').innerText = label;
-      document.getElementById('cycle-current-date').innerText = dateTxt;
-      document.getElementById('cycle-btn-label').innerText = labelBtn;
-
-      // Descripción base
-      document.getElementById('cycle-description').innerText = `Estás vibrando en un ciclo número ${val}.`;
-    }
-
-    function toggleProfileDropdown() {
-      const d = document.getElementById('profile-dropdown');
-      d.classList.toggle('hidden');
-      if (!d.classList.contains('hidden')) renderProfilesList();
+    function renderSinergia() {
+        const b = document.getElementById('syn-p1-img');
+        if (currentProfile.photoUrl) b.innerHTML = `<img src="${currentProfile.photoUrl}" class="w-full h-full object-cover">`;
+        else { b.innerText = currentProfile.name[0]; b.style.backgroundColor = currentProfile.color || '#7c3aed'; }
+        
+        document.getElementById('syn-p1-name').innerText = currentProfile.name;
+        document.getElementById('syn-p1-lp').innerText = `LP ${currentData.lp}`;
     }
 
     function renderProfilesList() {
-      const c = document.getElementById('profiles-list-container');
-      c.innerHTML = '';
-      profiles.forEach(p => {
-        const pData = calculateProfileData(p);
-        const item = document.createElement('div');
-        item.className = "flex items-center gap-3 p-3 hover:bg-white/5 rounded-lg cursor-pointer transition-colors group relative";
-
-        // Click en item para cambiar
-        item.onclick = (e) => {
-          if (e.target.closest('.edit-btn')) return;
-          switchProfile(p.id); toggleProfileDropdown();
-        };
-
-        const badgeColor = [11, 22, 33].includes(pData.lp) ? 'border-yellow-500 text-yellow-400' : 'border-white/20 text-white';
-        const photoContent = p.photoUrl ? `<img src="${p.photoUrl}" class="w-full h-full object-cover rounded-lg">` : pData.lp;
-
-        item.innerHTML = `
-                    <div class="profile-badge border ${badgeColor}" style="${p.photoUrl ? 'background:transparent' : ''}">${photoContent}</div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center"><span class="font-bold text-gray-200 text-sm">${p.name}</span><span class="text-[10px] text-gray-500">${p.dob.split('-')[0]}</span></div>
-                        <div class="text-[10px] text-gray-500 truncate w-32">${p.fullname}</div>
-                    </div>
-                    <button class="edit-btn p-2 text-gray-500 hover:text-white transition" onclick="openNewProfileModal('${p.id}')">
-                        <span class="material-symbols-rounded text-sm">edit</span>
-                    </button>
-                `;
-        if (p.id === currentProfile.id) item.classList.add('bg-white/5', 'border', 'border-white/10');
-        c.appendChild(item);
-      });
+        const c = document.getElementById('profiles-list-container');
+        c.innerHTML = '';
+        profiles.forEach(p => {
+            const item = document.createElement('div');
+            item.className = `flex items-center gap-3 p-3 rounded-lg transition ${p.active ? 'bg-white/10 border border-gold/20' : 'hover:bg-white/5'}`;
+            
+            const ava = p.photoUrl ? `<img src="${p.photoUrl}" class="size-8 rounded-full object-cover">` : 
+                                    `<div class="size-8 rounded-full flex items-center justify-center text-[10px] font-bold" style="background:${p.color || '#ec135b'}">${p.name[0]}</div>`;
+            
+            item.innerHTML = `
+                <div class="flex-1 flex items-center gap-3 cursor-pointer" onclick="Universo.setActiveProfile('${p.id}'); location.reload();">
+                    ${ava} <p class="text-[11px] text-white font-bold uppercase">${p.name}</p>
+                </div>
+                <button onclick="openNewProfileModal('${p.id}')" class="p-2 text-white/20 hover:text-gold transition">
+                    <span class="material-symbols-outlined text-sm">edit</span>
+                </button>
+            `;
+            c.appendChild(item);
+        });
     }
 
-    function switchProfile(id) {
-      profiles.forEach(p => p.active = false);
-      const p = profiles.find(x => x.id === id);
-      p.active = true;
-      if (!p.aiReadings) p.aiReadings = {};
-      currentProfile = p;
-      saveData();
-      init();
-      window.parent.postMessage({ type: 'PROFILE_UPDATED', name: p.name }, '*');
+    function updateSynergySelect() {
+        const s = document.getElementById('syn-select');
+        s.innerHTML = '<option value="">Elegir Llama...</option>';
+        profiles.filter(p => p.id !== currentProfile.id).forEach(p => {
+            s.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+        });
     }
 
+    function updateSynergy() {
+        const pid = document.getElementById('syn-select').value;
+        if (!pid) return;
+        const p2 = profiles.find(p => p.id === pid);
+        const d2 = calculateProfileData(p2);
+        
+        const img = document.getElementById('syn-p2-img');
+        const placeholder = document.getElementById('syn-p2-placeholder');
+        if (p2.photoUrl) { img.src = p2.photoUrl; img.classList.remove('hidden'); placeholder.classList.add('hidden'); }
+        else { img.classList.add('hidden'); placeholder.classList.remove('hidden'); placeholder.innerText = p2.name[0]; }
+        
+        document.getElementById('syn-p2-name').innerText = p2.name;
+        document.getElementById('syn-p2-lp').innerText = `LP ${d2.lp}`;
+        document.getElementById('syn-p2-lp').classList.remove('hidden');
+        
+        const resultNum = calc.reduce(currentData.lp + d2.lp);
+        document.getElementById('syn-result-num').innerText = resultNum;
+        document.getElementById('synergy-results').classList.remove('hidden');
+        
+        // Uso de conocimiento local para sinergia
+        const localMeaning = KNOWLEDGE_BASE.numerologia?.alquimia_vincular?.[resultNum] || "Vuestra unión crea una frecuencia única.";
+        document.getElementById('syn-ai-content').innerText = `Propósito de Unión ${resultNum}: ${localMeaning}`;
+    }
+
+    // --- ACCIONES UI ---
+    function switchTab(t) {
+        ['esencia', 'ciclos', 'sinergia'].forEach(v => {
+            document.getElementById('view-' + v).classList.add('hidden');
+            document.getElementById('tab-btn-' + v).classList.remove('tab-active');
+            document.getElementById('tab-btn-' + v).classList.add('text-white/40');
+        });
+        document.getElementById('view-' + t).classList.remove('hidden');
+        document.getElementById('tab-btn-' + t).classList.add('tab-active');
+        document.getElementById('tab-btn-' + t).classList.remove('text-white/40');
+    }
+
+    function toggleNameMode(isO) {
+        showBirthNameNumbers = isO;
+        document.getElementById('btn-name-orig').className = isO ? 'px-2 py-1 text-[8px] font-bold text-white bg-primary rounded uppercase' : 'px-2 py-1 text-[8px] font-bold text-white/40 uppercase';
+        document.getElementById('btn-name-curr').className = !isO ? 'px-2 py-1 text-[8px] font-bold text-white bg-primary rounded uppercase' : 'px-2 py-1 text-[8px] font-bold text-white/40 uppercase';
+        renderEsencia();
+    }
+
+    function toggleProfileDropdown() { document.getElementById('profile-dropdown').classList.toggle('hidden'); }
+
+    function goHome() { Universo.goHome(); }
+    function setCycleView(v) { currentCycleView = v; renderCiclos(); ['day', 'month', 'year'].forEach(b => {
+        const el = document.getElementById('cv-' + b);
+        if(b === v) el.classList.add('bg-primary'); else el.classList.remove('bg-primary');
+    }); }
+
+    // --- IA Y MODALES ---
     async function callGeminiAPI(prompt) {
-      try {
-        const rawText = await Universo.callGemini(prompt);
-        return cleanText(rawText);
-      } catch (error) {
-        console.error("API Error", error);
-        return "La conexión con el Oráculo es débil.";
-      }
+        try { return await Universo.callGemini(prompt); } 
+        catch { return "El oráculo está en silencio por ahora."; }
     }
-    function cleanText(text) { if (!text) return ""; return text.replace(/\*\*/g, '').replace(/##/g, '').replace(/\*/g, '').replace(/_/g, '').trim(); }
 
     function showLocalMeaning(title, key) {
-      currentReadingKey = key;
-      const num = (key === 'lifepath') ? currentData.lp :
-        (key === 'expression') ? (showBirthNameNumbers ? currentData.orig.exp : currentData.curr.exp) :
-          (key === 'soul') ? (showBirthNameNumbers ? currentData.orig.soul : currentData.curr.soul) :
-            (key === 'personality') ? (showBirthNameNumbers ? currentData.orig.pers : currentData.curr.pers) :
-              (key === 'attitude') ? currentData.att :
-                (key === 'generation') ? currentData.gen :
-                  (key === 'birthday') ? currentData.bday : 0;
-
-      const baseText = KNOWLEDGE_BASE.general[num] || "Energía única.";
-      const savedReading = currentProfile.aiReadings[key];
-      openReadingModal(title, baseText, savedReading);
+        if (!currentData) return;
+        const val = (key === 'lifepath') ? currentData.lp : 
+                    (key === 'attitude') ? currentData.att :
+                    (key === 'generation') ? currentData.gen :
+                    (key === 'birthday') ? currentData.bday :
+                    (key === 'expression') ? (showBirthNameNumbers ? currentData.orig.exp : currentData.curr.exp) :
+                    (key === 'soul') ? (showBirthNameNumbers ? currentData.orig.soul : currentData.curr.soul) :
+                    (key === 'personality') ? (showBirthNameNumbers ? currentData.orig.pers : currentData.curr.pers) : 0;
+        
+        let interp = KNOWLEDGE_BASE.numerologia?.destinos_del_alma?.[val]?.resumen || 
+                     KNOWLEDGE_BASE.numerologia?.arquetipos_vibracionales?.[val] || 
+                     "Esta vibración posee una frecuencia única en tu diseño álmico.";
+        
+        openReadingModal(`${title} ${val}`, interp);
+        
+        // Mostrar botón de IA para profundizar
+        const regen = document.getElementById('regenerate-btn');
+        if (regen) {
+            regen.classList.remove('hidden');
+            regen.innerText = "✨ Profundizar con IA";
+            regen.onclick = () => deepenWithAI(title, key);
+        }
     }
 
-    function openReadingModal(title, baseText, savedReading) {
-      document.getElementById('reading-title').innerText = title;
-      const body = document.getElementById('reading-body');
-      const regenBtn = document.getElementById('regenerate-btn');
-
-      if (savedReading) {
-        body.innerHTML = `<p class="text-yellow-100 font-bold mb-2">Lectura del Guía:</p><p>${savedReading.replace(/\n/g, '<br>')}</p>`;
-        regenBtn.innerText = "🔄 Regenerar con el Guía";
-        regenBtn.onclick = () => deepenWithAI(title, currentReadingKey, true);
-        regenBtn.classList.remove('hidden');
-      } else {
-        body.innerHTML = `<p class="font-bold text-gray-400 mb-2">Significado General:</p><p>${baseText}</p>`;
-        regenBtn.innerText = "✨ Profundizar con IA";
-        regenBtn.onclick = () => deepenWithAI(title, currentReadingKey, false);
-        regenBtn.classList.remove('hidden');
-      }
-      document.getElementById('reading-modal').classList.add('active');
-    }
-    function closeReadingModal() { document.getElementById('reading-modal').classList.remove('active'); currentReadingKey = null; }
-
-    async function deepenWithAI(title, key, force = false) {
-      const body = document.getElementById('reading-body');
-      body.innerHTML = '<div class="flex justify-center p-8"><div class="loader-dots"><span></span><span></span><span></span></div></div>';
-      document.getElementById('regenerate-btn').classList.add('hidden');
-
-      let val = currentData.lp;
-      // Logic for name numbers based on toggle
-      if (['expression', 'soul', 'personality'].includes(key)) {
-        if (key === 'expression') val = showBirthNameNumbers ? currentData.orig.exp : currentData.curr.exp;
-        if (key === 'soul') val = showBirthNameNumbers ? currentData.orig.soul : currentData.curr.soul;
-        if (key === 'personality') val = showBirthNameNumbers ? currentData.orig.pers : currentData.curr.pers;
-      } else {
-        // Static numbers
-        if (key === 'lifepath') val = currentData.lp;
-        if (key === 'attitude') val = currentData.att;
-        if (key === 'generation') val = currentData.gen;
-        if (key === 'birthday') val = currentData.bday;
-      }
-
-      const nameUsed = ['expression', 'soul', 'personality'].includes(key)
-        ? (showBirthNameNumbers ? "Nombre de Nacimiento" : "Nombre Actual")
-        : "Fecha de Nacimiento";
-
-      const prompt = `Numerología para ${currentProfile.name}. Explica el significado del ${title} número ${val} (Basado en ${nameUsed}). Tono espiritual.`;
-      const text = await callGeminiAPI(prompt);
-      currentProfile.aiReadings[key] = text;
-      saveData();
-      body.innerHTML = `<p class="text-yellow-100 font-bold mb-2">Lectura del Guía:</p><p>${text.replace(/\n/g, '<br>')}</p>`;
-      const regenBtn = document.getElementById('regenerate-btn');
-      regenBtn.innerText = "🔄 Regenerar";
-      regenBtn.onclick = () => deepenWithAI(title, key, true);
-      regenBtn.classList.remove('hidden');
+    function showKarmicDebt() {
+        if (!currentData || !currentData.debts.length) {
+            openReadingModal("Deudas Kármicas", "No posees deudas kármicas en esta encarnación. Tu camino es libre para crear nuevas realidades.");
+            return;
+        }
+        const debts = currentData.debts.join(', ');
+        openReadingModal("Deudas Kármicas", `Posees las siguientes frecuencias kármicas: ${debts}. Estas son oportunidades de maestría y equilibrio que tu alma ha elegido para este tiempo.`);
     }
 
-    // --- PROFUNDIZAR CICLO ACTUAL (ESPECÍFICO) ---
+    async function deepenWithAI(title, key) {
+        openReadingModal(title, "Consultando Registros Akáshicos...");
+        const d = currentData;
+        const val = (key === 'lifepath') ? d.lp : 
+                    (key === 'attitude') ? d.att :
+                    (key === 'generation') ? d.gen :
+                    (key === 'birthday') ? d.bday :
+                    (key === 'expression') ? (showBirthNameNumbers ? d.orig.exp : d.curr.exp) :
+                    (key === 'soul') ? (showBirthNameNumbers ? d.orig.soul : d.curr.soul) :
+                    (key === 'personality') ? (showBirthNameNumbers ? d.orig.pers : d.curr.pers) : d.lp;
+        
+        // Enviar contexto local para que la IA enriquezca
+        const localContext = KNOWLEDGE_BASE.numerologia?.arquetipos_vibracionales?.[val] || "";
+        const destiny = KNOWLEDGE_BASE.numerologia?.destinos_del_alma?.[val]?.resumen || "";
+        const contextStr = localContext ? `\nContexto base: ${localContext.substring(0, 200)}...` : "";
+        
+        const prompt = `Numerología sagrada para ${currentProfile.name}. Profundiza el significado del número ${val} en su ${title}. ${contextStr}\nTono místico, íntimo y profundo. Evita asteriscos. Máximo 300 palabras.`;
+        const text = await callGeminiAPI(prompt);
+        document.getElementById('reading-body').innerText = text;
+    }
+
     async function deepenCurrentCycle() {
-      let label = "";
-      let num = 0;
-      if (currentCycleView === 'day') { label = "Día Personal"; num = currentData.pd; }
-      else if (currentCycleView === 'month') { label = "Mes Personal"; num = currentData.pm; }
-      else { label = "Año Personal"; num = currentData.py; }
-
-      const key = `cycle_${currentCycleView}_${num}`;
-      currentReadingKey = key;
-
-      // Check cache
-      if (currentProfile.aiReadings[key]) {
-        openReadingModal(label, "", currentProfile.aiReadings[key]);
-        return;
-      }
-
-      openReadingModal(label, "Conectando...", null);
-      const body = document.getElementById('reading-body');
-      body.innerHTML = '<div class="flex justify-center p-8"><div class="loader-dots"><span></span><span></span><span></span></div></div>';
-
-      const prompt = `Numerología para ${currentProfile.name}. Análisis del ${label} número ${num}. ¿Cuál es la energía disponible y el consejo clave? Tono espiritual.`;
-      const text = await callGeminiAPI(prompt);
-
-      currentProfile.aiReadings[key] = text;
-      saveData();
-
-      body.innerHTML = `<p class="text-yellow-100 font-bold mb-2">Lectura del Guía:</p><p>${text.replace(/\n/g, '<br>')}</p>`;
-      const regenBtn = document.getElementById('regenerate-btn');
-      regenBtn.innerText = "🔄 Regenerar";
-      regenBtn.onclick = () => deepenWithAI(label, key, true);
-      regenBtn.classList.remove('hidden');
+        const dateStr = document.getElementById('cycle-date-text').innerText;
+        const num = document.getElementById('cycle-main-number').innerText;
+        const type = document.getElementById('cycle-label').innerText;
+        openReadingModal(`${type} (${num})`, "Analizando transmutación temporal...");
+        const prompt = `Interpreta el ${type} número ${num} para ${currentProfile.name} en la fecha ${dateStr}. ¿Cuáles son los desafíos y regalos de esta energía?`;
+        const text = await callGeminiAPI(prompt);
+        document.getElementById('reading-body').innerText = text;
     }
 
     async function deepenCyclesWithAI() {
-      const prompt = `Consejo Cósmico Integral para ${currentProfile.name}. 
-            Día Personal: ${currentData.pd}, Mes: ${currentData.pm}, Año: ${currentData.py}.
-            Hora actual: ${new Date().toLocaleTimeString()}. 
-            Integra estos números en un consejo único y potente para AHORA.`;
-
-      openReadingModal("Consejo Cósmico del Guía", "Sintonizando...", null);
-      const body = document.getElementById('reading-body');
-      body.innerHTML = '<div class="flex justify-center p-8"><div class="loader-dots"><span></span><span></span><span></span></div></div>';
-
-      const text = await callGeminiAPI(prompt);
-      document.getElementById('reading-body').innerHTML = `<p>${text.replace(/\n/g, '<br>')}</p>`;
+        const d = currentData;
+        openReadingModal("Consejo del Guía", "Sintonizando frecuencias...");
+        const prompt = `Analiza los ciclos combinados de ${currentProfile.name}: Año ${d.py}, Mes ${d.pm} y Día ${d.pd}. Da un consejo integral y místico. Sin asteriscos.`;
+        const text = await callGeminiAPI(prompt);
+        document.getElementById('reading-body').innerText = text;
     }
 
-    // --- EDICIÓN Y GESTIÓN DE PERFILES ---
-    function openNewProfileModal(editId = null) {
-      const modal = document.getElementById('new-profile-modal');
-      const title = document.getElementById('modal-title');
-      const btn = document.querySelector('#new-profile-modal button[type="button"]'); // Botón de guardar
-      const hiddenId = document.getElementById('editing-profile-id');
-      const form = document.getElementById('profile-form');
-      const photoPreview = document.getElementById('profile-photo-preview');
-      const aiPreview = document.getElementById('profile-ai-preview');
-
-      form.reset();
-      photoPreview.innerHTML = '<span class="material-symbols-rounded text-2xl text-white/10">person</span>';
-      aiPreview.innerHTML = '<span class="material-symbols-rounded text-2xl text-purple-400/20">auto_awesome</span>';
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-
-      if (editId) {
-        const p = profiles.find(x => x.id === editId);
-        if (p) {
-          title.innerText = "Editar Perfil";
-          btn.innerText = "ACTUALIZAR ENERGÍA";
-          hiddenId.value = editId;
-
-          if (p.photoUrl) {
-            photoPreview.innerHTML = `<img src="${p.photoUrl}" class="w-full h-full object-cover">`;
-          }
-          if (p.aiReferenceUrl) {
-            aiPreview.innerHTML = `<img src="${p.aiReferenceUrl}" class="w-full h-full object-cover">`;
-          }
-
-          const [y, m, d] = p.dob.split('-');
-          document.getElementById('input-year').value = y;
-          document.getElementById('input-month').value = m;
-          document.getElementById('input-day').value = d;
-
-          document.getElementById('input-fullname').value = p.fullname || "";
-          document.getElementById('input-name').value = p.name || "";
-          document.getElementById('input-time').value = p.time || "";
-          document.getElementById('input-place').value = (typeof p.place === 'object') ? (p.place.city || "") : (p.place || "");
-
-          document.getElementById('input-color').value = p.color || "#a855f7";
-
-          if (p.gender === 'M') document.getElementById('g-masc').checked = true;
-          else document.getElementById('g-fem').checked = true;
-        }
-      } else {
-        title.innerText = "Nuevo Perfil";
-        btn.innerText = "GUARDAR ENERGÍA";
-        hiddenId.value = "";
-      }
-    }
-
-    function previewPhoto(input, type) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          if (type === 'ui') {
-            document.getElementById('profile-photo-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-            document.getElementById('profile-form').dataset.photoBase64 = e.target.result;
-          } else {
-            document.getElementById('profile-ai-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
-            document.getElementById('profile-form').dataset.aiBase64 = e.target.result;
-          }
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-    function closeNewProfileModal() { document.getElementById('new-profile-modal').classList.add('hidden'); document.getElementById('new-profile-modal').classList.remove('flex'); }
-    function saveData() { localStorage.setItem('mila_profiles', JSON.stringify(profiles)); }
-
-    function submitProfileForm() {
-      const d = document.getElementById('input-day').value.padStart(2, '0');
-      const m = document.getElementById('input-month').value.padStart(2, '0');
-      const y = document.getElementById('input-year').value;
-      const fn = document.getElementById('input-fullname').value;
-      const n = document.getElementById('input-name').value;
-      const g = document.querySelector('input[name="gender"]:checked').value;
-      const c = document.getElementById('input-color').value;
-      const t = document.getElementById('input-time').value;
-      const pl = document.getElementById('input-place').value;
-      const editId = document.getElementById('editing-profile-id').value;
-      const photoB64 = document.getElementById('profile-form').dataset.photoBase64;
-      const aiB64 = document.getElementById('profile-form').dataset.aiBase64;
-
-      if (!d || !m || !y || !fn || !n) return alert("Faltan datos esenciales.");
-
-      const placeObj = { city: pl, country: "" };
-
-      if (editId) {
-        const p = profiles.find(p => p.id === editId);
-        if (p) {
-          p.name = n; p.fullname = fn; p.dob = `${y}-${m}-${d}`;
-          p.time = t; p.place = placeObj; p.gender = g; p.color = c;
-          if (photoB64) p.photoUrl = photoB64;
-          if (aiB64) p.aiReferenceUrl = aiB64;
-          currentProfile = p;
-        }
-      } else {
-        const np = {
-          id: Date.now().toString(),
-          name: n, fullname: fn, dob: `${y}-${m}-${d}`,
-          time: t, place: placeObj, gender: g, color: c, 
-          photoUrl: photoB64 || "",
-          aiReferenceUrl: aiB64 || "",
-          active: true, aiReadings: {}
-        };
-        profiles.forEach(p => p.active = false);
-        profiles.push(np);
-        currentProfile = np;
-      }
-
-      delete document.getElementById('profile-form').dataset.photoBase64;
-      delete document.getElementById('profile-form').dataset.aiBase64;
-      saveData();
-      closeNewProfileModal();
-      init();
-      window.parent.postMessage({ type: 'PROFILE_UPDATED', name: currentProfile.name }, '*');
-    }
-
-    // IMPORT/EXPORT
-    function openBackupModal() { document.getElementById('backup-modal').classList.remove('hidden'); }
-    function downloadUniverse() {
-      const data = { profiles: JSON.parse(localStorage.getItem('mila_profiles')), version: '2.0', timestamp: new Date().toISOString() };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = `universo_mila_${new Date().toISOString().slice(0, 10)}.mila`;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    }
-    function uploadUniverse(input) {
-      if (input.files[0]) {
-        const r = new FileReader();
-        r.onload = (e) => {
-          try {
-            const imp = JSON.parse(e.target.result);
-            if (imp.profiles && confirm(`Restaurar ${imp.profiles.length} perfiles?`)) {
-              localStorage.setItem('mila_profiles', JSON.stringify(imp.profiles));
-              location.reload();
-            }
-          } catch (err) { alert("Archivo inválido."); }
-        };
-        r.readAsText(input.files[0]);
-      }
-    }
-
-    function setCycleView(v) {
-      currentCycleView = v;
-      ['day', 'month', 'year'].forEach(id => {
-        const btn = document.getElementById('cv-' + id);
-        if (id === v) btn.className = "py-3 rounded-lg text-xs font-bold text-center bg-blue-600 text-white shadow-lg transition-all";
-        else btn.className = "py-3 rounded-lg text-xs font-bold text-center bg-[#1a103c] text-gray-400 border border-white/10 transition-all";
-      });
-      renderCycles();
-    }
-
-    function switchTab(t) {
-      ['carta', 'ciclos', 'sinergia'].forEach(id => document.getElementById('view-' + id).classList.add('hidden'));
-      ['tab-carta', 'tab-ciclos', 'tab-sinergia'].forEach(id => {
-        const el = document.getElementById(id);
-        el.classList.remove('text-yellow-400', 'border-yellow-400');
-        el.classList.add('text-gray-500', 'border-transparent');
-      });
-      document.getElementById('view-' + t).classList.remove('hidden');
-      const activeBtn = document.getElementById('tab-' + t);
-      activeBtn.classList.remove('text-gray-500', 'border-transparent');
-      activeBtn.classList.add('text-yellow-400', 'border-yellow-400');
-      if (t === 'ciclos') renderCycles();
-    }
-
-    function goToAstrology() {
-      saveData();
-      if (!currentProfile.time) alert("Falta hora de nacimiento");
-      window.parent.postMessage({ type: 'OPEN_MODULE', url: 'astrologia.html' }, '*');
-    }
-
-    function goHome() {
-      saveData();
-      window.parent.postMessage({ type: 'CLOSE_MODULE' }, '*');
-    }
-
-    // Funciones de Sinergia (Simplificadas para mantener)
-    function setRelType(t) { currentRelType = t; document.querySelectorAll('.rel-btn').forEach(b => { b.classList.remove('active', 'border-pink-500', 'bg-pink-900/30', 'text-pink-200'); b.classList.add('border-transparent', 'bg-white/5', 'text-gray-400'); }); document.getElementById('rel-' + t).classList.add('active', 'border-pink-500', 'bg-pink-900/30', 'text-pink-200'); if (document.getElementById('syn-select').value) updateSynergy(); }
-    function updateSynergySelect() { const s = document.getElementById('syn-select'); s.innerHTML = '<option value="">Elegir...</option>'; profiles.forEach(p => { if (p.id !== currentProfile.id) s.innerHTML += `<option value="${p.id}">${p.name}</option>`; }); s.innerHTML += `<option value="manual">-- MANUAL --</option>`; }
-    function updateSynergy() {
-      const pid = document.getElementById('syn-select').value;
-      const manualDiv = document.getElementById('manual-synergy-inputs');
-      if (pid === 'manual') { manualDiv.classList.remove('hidden'); document.getElementById('syn-p2-name').innerText = "Manual"; }
-      else { manualDiv.classList.add('hidden'); const p2 = profiles.find(p => p.id === pid); if (p2) { const d2 = calculateProfileData(p2); document.getElementById('syn-p2-name').innerText = p2.name; document.getElementById('syn-result-num').innerText = calc.reduce(currentData.lp + d2.lp); document.getElementById('synergy-results').classList.remove('hidden'); } }
-    }
     async function askAISynergy() {
-      const pid = document.getElementById('syn-select').value;
-      let prompt = "";
-      const relMap = { 'romantic': 'Pareja Romántica', 'friendship': 'Amistad', 'family': 'Familiar', 'business': 'Socios de Negocios' };
-      const contentEl = document.getElementById('syn-ai-content');
-      contentEl.innerHTML = '<span class="animate-pulse">Consultando...</span>';
-
-      if (pid === 'manual') {
-        const manNum = document.getElementById('manual-lp').value;
-        if (!manNum) return alert("Selecciona un número");
-        prompt = `Compatibilidad numerológica entre Sendero ${currentData.lp} y ${manNum}. Relación ${currentRelType}.`;
-      } else {
+        const body = document.getElementById('syn-ai-content');
+        body.innerHTML = '<span class="animate-pulse">Calculando fusión mística...</span>';
+        const pid = document.getElementById('syn-select').value;
         const p2 = profiles.find(p => p.id === pid);
         const d2 = calculateProfileData(p2);
-        let astro = ""; if (currentProfile.time && currentProfile.place && p2.time && p2.place) astro = `Datos astrales disponibles: ${currentProfile.time} ${currentProfile.place} vs ${p2.time} ${p2.place}.`;
-        prompt = `Compatibilidad entre ${currentProfile.name} (SV ${currentData.lp}) y ${p2.name} (SV ${d2.lp}). Relación ${currentRelType}. ${astro}`;
-      }
-      const text = await callGeminiAPI(prompt);
-      contentEl.innerHTML = text.replace(/\n/g, '<br>');
+        const prompt = `Analiza la sinergia numerológica entre ${currentProfile.name} (LP ${currentData.lp}) y ${p2.name} (LP ${d2.lp}) para una relación ${currentRelType}. Da una interpretación mística de su vibración conjunta ${calc.reduce(currentData.lp + d2.lp)}.`;
+        const text = await callGeminiAPI(prompt);
+        body.innerText = text;
     }
 
-    function renderOverview() {
-      const container = document.getElementById('numerology-overview');
-      if (!currentProfile || !container) return;
+    function openReadingModal(t, b) { document.getElementById('reading-title').innerText = t; document.getElementById('reading-body').innerText = b; document.getElementById('reading-modal').classList.add('active'); }
+    function closeReadingModal() { document.getElementById('reading-modal').classList.remove('active'); }
 
-      const isMila = currentProfile.id === 'mila_admin';
-      const isMiguelo = currentProfile.id === 'miguelo_admin';
-      
-      let title = `Hola, ${currentProfile.name}`;
-      let message = "Tu vibración se manifiesta a través de estas frecuencias sagradas.";
-
-      if (isMila) {
-        title = "Bienvenida, Mila";
-        message = "He alineado los números de este santuario para que guíen cada uno de tus pasos hoy. Tu luz es la fuente de este código.";
-      } else if (isMiguelo) {
-        title = "Hola, Miguelo";
-        message = "Guardián, los números revelan la estructura del universo que hemos construido. Todo está en sincronía.";
-      }
-
-      container.innerHTML = `
-        <div class="animate-fadeIn">
-          <h2 class="text-2xl font-cinzel text-white mb-2 tracking-widest uppercase">${title}</h2>
-          <p class="font-garamond text-slate-400 italic text-base leading-relaxed">${message}</p>
-        </div>
-      `;
+    // --- GESTIÓN DE PERFILES ---
+    function openNewProfileModal(editId = null) {
+        const modal = document.getElementById('new-profile-modal');
+        const title = document.getElementById('modal-title');
+        const form = document.getElementById('profile-form');
+        const hiddenId = document.getElementById('editing-profile-id');
+        
+        form.reset();
+        modal.classList.remove('hidden');
+        
+        if (editId) {
+            const p = profiles.find(x => x.id === editId);
+            if (p) {
+                title.innerText = "EDITAR LLAMA";
+                hiddenId.value = editId;
+                document.getElementById('input-name').value = p.name;
+                document.getElementById('input-fullname').value = p.fullname || "";
+                if (p.dob) {
+                    const [y, m, d] = p.dob.split('-');
+                    document.getElementById('input-year').value = y;
+                    document.getElementById('input-month').value = parseInt(m);
+                    document.getElementById('input-day').value = parseInt(d);
+                }
+                document.getElementById('input-time').value = p.time || "";
+                document.getElementById('input-place').value = (typeof p.place === 'object' ? p.place.city : p.place) || "";
+                if (p.photoUrl) document.getElementById('profile-photo-preview').innerHTML = `<img src="${p.photoUrl}" class="w-full h-full object-cover">`;
+            }
+        } else {
+            title.innerText = "NUEVA LLAMA";
+            hiddenId.value = "";
+            document.getElementById('profile-photo-preview').innerHTML = '<span class="material-symbols-outlined text-3xl text-white/10">person</span>';
+        }
     }
-  </script>
+    
+    function closeNewProfileModal() { document.getElementById('new-profile-modal').classList.add('hidden'); }
+    
+    function previewPhoto(input) {
+        if (input.files && input.files[0]) {
+            const r = new FileReader();
+            r.onload = (e) => {
+                document.getElementById('profile-photo-preview').innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                document.getElementById('profile-form').dataset.photoB64 = e.target.result;
+            };
+            r.readAsDataURL(input.files[0]);
+        }
+    }
 
-  <script src="assets/js/universo.js"></script>
-  <script>
-    function init() {
-      // Sincronizar perfiles con el núcleo global
-      profiles = Universo.getProfiles();
-      currentProfile = Universo.getActiveProfile();
-      currentData = calculateProfileData(currentProfile);
+    function submitProfileForm() {
+        const editId = document.getElementById('editing-profile-id').value;
+        const d = {
+            name: document.getElementById('input-name').value,
+            fullname: document.getElementById('input-fullname').value,
+            dob: `${document.getElementById('input-year').value}-${document.getElementById('input-month').value.padStart(2,'0')}-${document.getElementById('input-day').value.padStart(2,'0')}`,
+            time: document.getElementById('input-time').value,
+            place: document.getElementById('input-place').value,
+            gender: document.querySelector('input[name="gender"]:checked').value,
+            photoUrl: document.getElementById('profile-form').dataset.photoB64 || ""
+        };
+        if (!d.name || !d.dob) return alert("Nombre y fecha son obligatorios");
+        
+        if (editId) Universo.updateProfile(editId, d);
+        else Universo.createNewProfile(d);
+        
+        location.reload();
+    }
 
-      renderOverview();
-      renderStats();
-      renderCycles();
-      updateProfileDisplay();
+    function getSunSign(d, m) {
+        const sigs = ["Capricornio", "Acuario", "Piscis", "Aries", "Tauro", "Géminis", "Cáncer", "Leo", "Virgo", "Libra", "Escorpio", "Sagitario"];
+        const cutoff = [19, 18, 20, 19, 20, 20, 22, 22, 22, 22, 21, 21];
+        return d > cutoff[m % 12] ? sigs[m % 12] : sigs[(m - 1) % 12];
     }
 
     init();
-  </script>
+</script>
 </body>
-
 </html>

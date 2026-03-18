@@ -1,365 +1,973 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html class="dark" lang="es">
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Bóveda Celeste | Mila</title>
+    
     <!-- PWA -->
-    <meta name="theme-color" content="#d4af37">
+    <meta name="theme-color" content="#ec135b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
-    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
-    <title>Bóveda Celeste</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&family=Playfair+Display:ital@0;1&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="/assets/images/icons/icon-192.png">
 
-    <!-- ESTILOS COMPARTIDOS -->
-    <link rel="stylesheet" href="assets/css/style.css">
-
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec135b",
+                        "gold": "#f2b90d",
+                        "mystic-purple": "#7c3aed",
+                        "deep-indigo": "#0a061e",
+                        "background-dark": "#050312",
+                    },
+                    fontFamily: {
+                        "sans": ["Plus Jakarta Sans", "sans-serif"],
+                        "serif": ["Cinzel", "serif"],
+                        "body": ["EB Garamond", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
     <style>
-        /* Estilos específicos de Astrología */
         body {
-            background-image: radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.1) 0%, transparent 60%);
+            background-color: #050312;
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .cosmic-bg {
+            background: radial-gradient(circle at 50% 50%, #110a2e 0%, #050312 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .stars {
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 50px 160px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            opacity: 0.4;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .gold-glow {
+            text-shadow: 0 0 20px rgba(242, 185, 13, 0.5);
+        }
+        .tab-active {
+            border-bottom: 2px solid #f2b90d;
+            color: #f2b90d;
         }
 
-        .planet-card {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 16px;
-        }
-
-        .planet-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .planet-icon {
-            font-size: 1.5rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-        }
-
-        .loader-stars span {
-            display: inline-block;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            animation: blink 1.4s infinite both;
-            margin: 0 2px;
-        }
-
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 0.2;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        /* Rueda Zodiacal (Simplificada para mobile) */
+        /* Zodiac Wheel */
         .zodiac-wheel {
             position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
             border-radius: 50%;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border: 1px dashed rgba(242, 185, 13, 0.15);
         }
-
+        @media (min-width: 640px) {
+            .zodiac-wheel { width: 360px; height: 360px; }
+        }
+        .sign-label {
+            position: absolute;
+            font-family: 'Cinzel', serif;
+            font-size: 8px;
+            color: rgba(242, 185, 13, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+        }
         .planet-marker {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 2px;
-            height: 45%;
+            height: 42%;
             transform-origin: top center;
             pointer-events: none;
             transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         .planet-dot {
             position: absolute;
             bottom: 0;
-            left: -9px;
-            width: 20px;
-            height: 20px;
-            background: #0f172a;
-            border: 1px solid currentColor;
+            left: -11px;
+            width: 22px;
+            height: 22px;
+            background: #0a061e;
+            border: 1.5px solid currentColor;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 11px;
             cursor: pointer;
             pointer-events: auto;
             z-index: 10;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .planet-dot:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 12px currentColor;
+        }
+
+        /* Elemental Bars */
+        .element-bar {
+            height: 6px;
+            border-radius: 999px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Sheet Modal */
+        .sheet-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .sheet-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sheet-content {
+            background: linear-gradient(to top, #0a061e, #1a1535);
+            border-top: 1px solid rgba(242, 185, 13, 0.2);
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sheet-modal.active .sheet-content {
+            transform: translateY(0);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* Fade in animation */
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-delay {
+            animation: fadeIn 0.6s ease-out 0.2s both;
         }
     </style>
 </head>
+<body class="font-sans min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col cosmic-bg">
+    <div class="stars absolute inset-0 pointer-events-none"></div>
+    
+    <!-- Header -->
+    <header class="flex items-center gap-6 px-6 py-4 border-b border-white/10 bg-deep-indigo/50 backdrop-blur-md relative z-40">
+        <button onclick="goHome()" class="p-2 rounded-full hover:bg-white/10 transition-colors text-white">
+            <span class="material-symbols-outlined">home</span>
+        </button>
+        
+        <div class="flex items-center gap-3 pr-4 border-r border-white/10">
+            <span class="material-symbols-outlined text-gold">auto_awesome</span>
+            <h2 class="font-serif text-lg font-bold tracking-[0.2em] text-white uppercase hidden sm:block">Mila</h2>
+        </div>
 
-<body class="pb-20 sm:pb-32">
-
-    <!-- HEADER -->
-    <header
-        class="p-4 sticky top-0 z-40 bg-[#0a0a19]/90 backdrop-blur-md border-b border-white/5 flex justify-between items-center">
-        <div class="flex gap-2">
-            <button onclick="goHome()"
-                class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 text-gray-400"><span
-                    class="material-symbols-rounded text-lg">home</span></button>
-            <div class="flex items-center gap-3 cursor-pointer" onclick="toggleProfileSelector()">
-                <div id="header-avatar"
-                    class="w-9 h-9 rounded-full border-2 border-blue-500/50 bg-black/40 flex items-center justify-center font-bold text-white">
-                </div>
-                <div>
-                    <h2 id="header-name" class="font-cinzel text-sm text-white">Cargando...</h2>
-                    <p id="header-sign" class="text-[9px] text-blue-300 uppercase tracking-widest">--</p>
-                </div>
-                <span class="material-symbols-rounded text-gray-500 text-sm">expand_more</span>
+        <div class="flex items-center gap-2 cursor-pointer flex-1" onclick="toggleProfileDropdown()">
+            <div id="header-badge" class="size-10 rounded-full border-2 border-gold/50 overflow-hidden bg-primary/20 flex items-center justify-center font-serif text-white">
+                --
+            </div>
+            <div class="text-left">
+                <p id="header-name" class="text-xs text-gold font-bold italic">Cargando...</p>
+                <p id="header-sign" class="text-[9px] text-white/40 font-medium uppercase tracking-widest">Bóveda Celeste</p>
             </div>
         </div>
+
         <div class="flex gap-2">
-            <button onclick="Universo.exportUniverse()"
-                class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/20 text-gray-400"><span
-                    class="material-symbols-rounded text-lg">save</span></button>
-            <button onclick="goToNumerology()"
-                class="w-8 h-8 rounded-full bg-purple-900/30 border border-purple-500/30 flex items-center justify-center text-purple-200 hover:bg-purple-800 transition"><span
-                    class="material-symbols-rounded text-base">tag</span></button>
+            <button onclick="Universo.openModule('numerologia.html')" class="p-2 rounded-full bg-mystic-purple/20 border border-mystic-purple/30 hover:bg-mystic-purple/40 transition text-mystic-purple" title="Numerología">
+                <span class="material-symbols-outlined text-lg">tag</span>
+            </button>
+        </div>
+        
+        <!-- Dropdown de Perfiles -->
+        <div id="profile-dropdown" class="hidden absolute top-16 left-28 bg-deep-indigo border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden w-64 transform origin-top transition-all">
+            <div class="p-3 border-b border-white/5 text-[10px] uppercase text-gray-400 tracking-widest font-bold">Mis Perfiles</div>
+            <div id="profile-list" class="max-h-64 overflow-y-auto p-2 space-y-1 no-scrollbar"></div>
         </div>
     </header>
 
-    <!-- SELECTOR -->
-    <div id="profile-selector"
-        class="hidden fixed top-16 left-4 right-4 bg-[#1e1b4b] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
-        <div id="profile-list" class="max-h-48 overflow-y-auto"></div>
-    </div>
-
-    <!-- TABS -->
-    <nav class="flex justify-center p-2 gap-4 my-2">
-        <button onclick="switchTab('carta')" id="tab-carta"
-            class="px-4 py-1 text-xs font-bold uppercase tracking-widest text-blue-300 border-b-2 border-blue-400">Carta
-            Natal</button>
-        <button onclick="switchTab('transitos')" id="tab-transitos"
-            class="px-4 py-1 text-xs font-bold uppercase tracking-widest text-gray-500 border-b-2 border-transparent">Tránsitos</button>
+    <!-- Navigation Tabs -->
+    <nav class="flex border-b border-white/5 bg-deep-indigo/30 sticky top-0 z-30 backdrop-blur-md">
+        <button onclick="switchTab('carta')" id="tab-btn-carta" class="flex-1 py-4 text-center font-serif text-xs tracking-[0.2em] transition-all tab-active uppercase">Carta Natal</button>
+        <button onclick="switchTab('transitos')" id="tab-btn-transitos" class="flex-1 py-4 text-center font-serif text-xs tracking-[0.2em] text-white/40 hover:text-white transition-all uppercase">Tránsitos</button>
     </nav>
 
-    <!-- MAIN -->
-    <main class="px-4 py-2 relative min-h-[60vh]">
-        <!-- CARTA NATAL -->
-        <div id="view-carta" class="animate-fade-in space-y-6">
-            <div class="relative py-4">
-                <div class="zodiac-wheel">
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center"><span
-                            class="text-4xl">☀️</span>
-                        <h3 class="font-cinzel text-xl text-white" id="main-sun-sign">--</h3>
+    <main class="flex-1 flex flex-col items-center p-4 max-w-5xl mx-auto w-full relative z-10 pb-24">
+        
+        <!-- SECCIÓN CARTA NATAL -->
+        <div class="w-full space-y-10 animate-fade-in" id="view-carta">
+            
+            <!-- Zodiac Wheel -->
+            <div class="relative py-6 flex flex-col items-center text-center">
+                <p class="text-gold font-serif tracking-[0.4em] text-[10px] uppercase mb-2 relative z-10">Tu Mapa Celeste</p>
+                <div class="zodiac-wheel" id="zodiac-wheel">
+                    <!-- Sign labels rendered by JS -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20">
+                        <span class="text-3xl">☀️</span>
+                        <h3 class="font-serif text-lg text-white" id="main-sun-sign">--</h3>
                     </div>
                     <div id="planet-orbit-container"></div>
                 </div>
             </div>
-            <div class="space-y-4" id="planet-cards-container"></div>
+
+            <!-- Los Tres Pilares (Sol / Luna / Ascendente) -->
+            <div class="w-full">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent to-gold/30"></div>
+                    <h2 class="font-serif text-xs font-bold tracking-[0.3em] text-gold uppercase">Los Tres Pilares</h2>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent to-gold/30"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="big-three-container">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Elemental Balance -->
+            <div class="glass-premium rounded-2xl p-6 animate-fade-in-delay">
+                <h3 class="font-serif text-sm text-gold mb-5 tracking-widest flex items-center gap-2">
+                    <span class="material-symbols-outlined text-base">local_fire_department</span> BALANCE ELEMENTAL
+                </h3>
+                <div class="grid grid-cols-2 gap-x-6 gap-y-4" id="elemental-balance">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+            <!-- Planet Cards -->
+            <div class="w-full">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent to-white/10"></div>
+                    <h2 class="font-serif text-xs font-bold tracking-[0.3em] text-white/50 uppercase">Posiciones Planetarias</h2>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent to-white/10"></div>
+                </div>
+                <div class="space-y-3" id="planet-cards-container"></div>
+            </div>
+
+            <!-- Casas Kármicas (only if time is available) -->
+            <div id="casas-section" class="hidden w-full">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent to-mystic-purple/30"></div>
+                    <h2 class="font-serif text-xs font-bold tracking-[0.3em] text-mystic-purple uppercase">Casas del Karma</h2>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent to-mystic-purple/30"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="casas-container"></div>
+            </div>
         </div>
 
-        <!-- TRÁNSITOS -->
-        <div id="view-transitos" class="hidden animate-fade-in space-y-6">
-            <div class="text-center mb-4">
-                <h3 class="font-cinzel text-lg text-white">Clima Astral Hoy</h3>
-                <p class="text-xs text-gray-400" id="current-date-display">--</p>
+        <!-- SECCIÓN TRÁNSITOS -->
+        <div class="hidden w-full space-y-8 animate-fade-in" id="view-transitos">
+            <div class="text-center pt-8">
+                <h2 class="font-serif text-3xl text-white mb-2">Clima Astral</h2>
+                <p id="transit-date" class="font-body text-white/60 italic text-lg">--</p>
             </div>
-            <div class="glass-card p-5 border-l-4 border-blue-500">
-                <h4 class="font-bold text-sm text-blue-200 mb-2">Energía Global</h4>
-                <div id="transit-summary" class="text-xs text-gray-300 leading-relaxed">Calculando posiciones...</div>
-                <button class="mt-3 text-[10px] text-yellow-300 flex items-center gap-1 hover:text-white"
-                    onclick="askAIGuide('¿Cómo me afectan los tránsitos de hoy?')"><span
-                        class="material-symbols-rounded text-sm">auto_awesome</span> Interpretación Personal</button>
+
+            <!-- Transit Summary -->
+            <div class="glass-premium rounded-2xl p-6 border-l-4 border-gold">
+                <h4 class="font-serif text-sm text-gold mb-3 tracking-widest uppercase">Energía Global del Día</h4>
+                <div id="transit-summary" class="font-body text-base text-white/70 leading-relaxed space-y-2">
+                    Calculando posiciones actuales...
+                </div>
             </div>
+
+            <!-- Active Aspects -->
+            <div id="transit-aspects-container" class="space-y-3">
+                <!-- Rendered by JS -->
+            </div>
+
+            <!-- AI Interpretation -->
+            <button onclick="askTransitAI()" class="w-full py-4 bg-gradient-to-r from-primary to-mystic-purple text-white font-serif tracking-[0.2em] rounded-xl transition-all hover:brightness-125 shadow-lg uppercase text-[10px] font-bold flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                Interpretación Personal con IA
+            </button>
         </div>
     </main>
 
-    <!-- MODAL LECTURA -->
-    <div id="reading-modal" class="sheet-modal">
-        <div class="sheet-content flex flex-col h-[70vh]">
-            <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-4 flex-none"></div>
-            <div class="flex justify-between items-center mb-4 flex-none px-2">
-                <h3 class="font-cinzel text-lg text-blue-300" id="reading-title">Oráculo</h3><button
-                    onclick="closeReadingModal()" class="text-gray-400"><span
-                        class="material-symbols-rounded">close</span></button>
+    <!-- Mobile Navigation Footer -->
+    <footer class="fixed bottom-0 left-0 w-full bg-deep-indigo/95 border-t border-white/10 px-8 py-3 flex justify-around items-center backdrop-blur-xl z-50 sm:hidden">
+        <button onclick="goHome()" class="flex flex-col items-center gap-1 text-white/40">
+            <span class="material-symbols-outlined">home</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Inicio</span>
+        </button>
+        <button onclick="switchTab('carta')" class="flex flex-col items-center gap-1 text-gold">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">auto_awesome</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Bóveda</span>
+        </button>
+        <button onclick="Universo.openModule('pergaminos.html')" class="flex flex-col items-center gap-1 text-white/40">
+            <span class="material-symbols-outlined">description</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Cartas</span>
+        </button>
+        <button onclick="Universo.openModule('numerologia.html')" class="flex flex-col items-center gap-1 text-white/40">
+            <span class="material-symbols-outlined">tag</span>
+            <span class="text-[9px] uppercase tracking-tighter font-serif">Números</span>
+        </button>
+    </footer>
+</div>
+
+<!-- MODAL LECTURA SAGRADA -->
+<div id="reading-modal" class="sheet-modal" onclick="if(event.target===this)closeReadingModal()">
+    <div class="sheet-content">
+        <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6 cursor-grab" onclick="closeReadingModal()"></div>
+        <div class="flex justify-between items-start mb-5">
+            <div>
+                <p id="reading-subtitle" class="text-[10px] text-gold/60 uppercase tracking-[0.3em] font-bold mb-1"></p>
+                <h3 class="font-serif text-xl text-gold" id="reading-title">Oráculo Estelar</h3>
             </div>
-            <div id="reading-body"
-                class="flex-1 overflow-y-auto custom-scrollbar px-2 pb-4 text-sm text-gray-300 leading-relaxed font-serif">
-            </div>
+            <button onclick="closeReadingModal()" class="text-white/40 hover:text-white bg-white/5 rounded-full p-1.5">
+                <span class="material-symbols-outlined text-lg">close</span>
+            </button>
+        </div>
+        <div id="reading-body" class="text-base text-white/80 leading-relaxed font-body pb-4 max-h-[65vh] overflow-y-auto no-scrollbar space-y-5">
+        </div>
+        <!-- IA Deepen Button (hidden until local reading is displayed) -->
+        <div id="reading-ai-section" class="hidden pt-4 border-t border-white/5">
+            <button id="reading-ai-btn" onclick="deepenCurrentReadingWithAI()" class="w-full py-3.5 bg-gradient-to-r from-primary to-mystic-purple text-white font-serif tracking-[0.2em] rounded-xl transition-all hover:brightness-125 shadow-lg uppercase text-[10px] font-bold flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                Profundizar con IA Cósmica
+            </button>
         </div>
     </div>
+</div>
 
-    <script src="assets/js/universo.js"></script>
-    <script>
-        let KNOWLEDGE_BASE = {};
-        async function loadKnowledge() {
-            try {
-                const res = await fetch('assets/data/conocimiento.json');
-                KNOWLEDGE_BASE = await res.json();
-            } catch (e) { console.error("Error cargando base de conocimiento:", e); }
+<script src="assets/js/universo.js"></script>
+<script>
+    // --- DATA & STATE ---
+    let KNOWLEDGE_BASE = {};
+    
+    async function loadKnowledge() {
+        try {
+            const res = await fetch('assets/data/conocimiento.json');
+            KNOWLEDGE_BASE = await res.json();
+        } catch (e) { console.error("Error cargando base de conocimiento:", e); }
+    }
+
+    const Planets = [
+        { id: 'sun', name: 'Sol', icon: '☉', color: '#fbbf24', speed: 0.9856, element: null },
+        { id: 'moon', name: 'Luna', icon: '☽', color: '#e2e8f0', speed: 13.176, element: null },
+        { id: 'mercury', name: 'Mercurio', icon: '☿', color: '#a5f3fc', speed: 1.383, element: null },
+        { id: 'venus', name: 'Venus', icon: '♀', color: '#f9a8d4', speed: 1.602, element: null },
+        { id: 'mars', name: 'Marte', icon: '♂', color: '#f87171', speed: 0.524, element: null },
+        { id: 'jupiter', name: 'Júpiter', icon: '♃', color: '#fb923c', speed: 0.083, element: null },
+        { id: 'saturn', name: 'Saturno', icon: '♄', color: '#fcd34d', speed: 0.033, element: null },
+        { id: 'uranus', name: 'Urano', icon: '♅', color: '#22d3ee', speed: 0.011, element: null },
+        { id: 'neptune', name: 'Neptuno', icon: '♆', color: '#818cf8', speed: 0.006, element: null },
+        { id: 'pluto', name: 'Plutón', icon: '♇', color: '#94a3b8', speed: 0.004, element: null },
+        { id: 'node', name: 'Nodo Norte', icon: '☊', color: '#c084fc', speed: -0.053, element: null },
+        { id: 'chiron', name: 'Quirón', icon: '⚷', color: '#4ade80', speed: 0.02, element: null }
+    ];
+    const Signs = ["Aries", "Tauro", "Géminis", "Cáncer", "Leo", "Virgo", "Libra", "Escorpio", "Sagitario", "Capricornio", "Acuario", "Piscis"];
+    const SignEmoji = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"];
+    const ElementMap = {
+        "Aries": "Fuego", "Leo": "Fuego", "Sagitario": "Fuego",
+        "Tauro": "Tierra", "Virgo": "Tierra", "Capricornio": "Tierra",
+        "Géminis": "Aire", "Libra": "Aire", "Acuario": "Aire",
+        "Cáncer": "Agua", "Escorpio": "Agua", "Piscis": "Agua"
+    };
+    const ElementColors = {
+        "Fuego": { bar: "bg-red-500", text: "text-red-400", icon: "local_fire_department" },
+        "Tierra": { bar: "bg-emerald-500", text: "text-emerald-400", icon: "landscape" },
+        "Aire": { bar: "bg-cyan-400", text: "text-cyan-300", icon: "air" },
+        "Agua": { bar: "bg-blue-500", text: "text-blue-400", icon: "water_drop" }
+    };
+
+    let currentProfile = Universo.getActiveProfile();
+    let natalPositions = [];
+
+    // --- ASTRO CALCULATIONS ---
+    const AstroCalc = {
+        calculatePos: (planet, date) => {
+            const J2000 = new Date('2000-01-01T12:00:00Z');
+            const days = (date - J2000) / (1000 * 60 * 60 * 24);
+            const basePos = { sun: 280.46, moon: 218.31, mercury: 252.25, venus: 181.97, mars: 355.45, jupiter: 34.40, saturn: 49.94, uranus: 313.23, neptune: 304.88, pluto: 238.92, node: 125.04, chiron: 255.0 };
+            let pos = basePos[planet.id] + (days * planet.speed);
+            if (planet.id === 'moon') pos += 6.289 * Math.sin((134.96 + 13.064 * days) * Math.PI / 180);
+            pos = pos % 360; if (pos < 0) pos += 360; return pos;
+        },
+        getAscendant: (date, timeStr) => {
+            if (!timeStr) return null;
+            const [h, m] = timeStr.split(':').map(Number);
+            const sunPos = AstroCalc.calculatePos(Planets[0], date);
+            const hoursFrom6 = (h + m / 60) - 6;
+            let asc = sunPos + (hoursFrom6 * 15); return asc % 360;
+        },
+        getDegData: (deg) => {
+            const idx = Math.floor(deg / 30);
+            const degree = Math.floor(deg % 30);
+            return { sign: Signs[idx], degree: degree, index: idx, element: ElementMap[Signs[idx]] };
+        },
+        getAspect: (deg1, deg2) => {
+            let diff = Math.abs(deg1 - deg2);
+            if (diff > 180) diff = 360 - diff;
+            if (diff <= 8) return { name: "Conjunción", icon: "●", color: "text-gold", quality: "Fusión intensa" };
+            if (Math.abs(diff - 180) <= 8) return { name: "Oposición", icon: "◐", color: "text-red-400", quality: "Tensión creativa" };
+            if (Math.abs(diff - 120) <= 6) return { name: "Trígono", icon: "△", color: "text-emerald-400", quality: "Armonía fluida" };
+            if (Math.abs(diff - 90) <= 6) return { name: "Cuadratura", icon: "□", color: "text-orange-400", quality: "Desafío evolutivo" };
+            if (Math.abs(diff - 60) <= 4) return { name: "Sextil", icon: "✶", color: "text-cyan-300", quality: "Oportunidad sutil" };
+            return null;
         }
-        const Planets = [
-            { id: 'sun', name: 'Sol', icon: '☉', color: '#fbbf24', speed: 0.9856 }, { id: 'moon', name: 'Luna', icon: '☽', color: '#e2e8f0', speed: 13.176 },
-            { id: 'mercury', name: 'Mercurio', icon: '☿', color: '#a5f3fc', speed: 1.383 }, { id: 'venus', name: 'Venus', icon: '♀', color: '#f9a8d4', speed: 1.602 },
-            { id: 'mars', name: 'Marte', icon: '♂', color: '#f87171', speed: 0.524 }, { id: 'jupiter', name: 'Júpiter', icon: '♃', color: '#fb923c', speed: 0.083 },
-            { id: 'saturn', name: 'Saturno', icon: '♄', color: '#fcd34d', speed: 0.033 }, { id: 'uranus', name: 'Urano', icon: '♅', color: '#22d3ee', speed: 0.011 },
-            { id: 'neptune', name: 'Neptuno', icon: '♆', color: '#818cf8', speed: 0.006 }, { id: 'pluto', name: 'Plutón', icon: '♇', color: '#94a3b8', speed: 0.004 },
-            { id: 'node', name: 'Nodo Norte', icon: '☊', color: '#c084fc', speed: -0.053 }, { id: 'chiron', name: 'Quirón', icon: '⚷', color: '#4ade80', speed: 0.02 }
-        ];
-        const Signs = ["Aries", "Tauro", "Géminis", "Cáncer", "Leo", "Virgo", "Libra", "Escorpio", "Sagitario", "Capric", "Acuario", "Piscis"];
+    };
 
-        let currentProfile = Universo.getActiveProfile();
+    // --- INIT ---
+    async function init() {
+        await loadKnowledge();
+        if (!currentProfile || !currentProfile.dob) {
+            document.getElementById('header-name').innerText = 'Sin Perfil';
+            document.getElementById('main-sun-sign').innerText = '?';
+            document.getElementById('planet-cards-container').innerHTML = 
+                '<div class="text-center py-10 opacity-50"><p class="text-xs text-white/40 italic font-body">Agrega tu fecha de nacimiento en Perfil de Luz primero.</p></div>';
+            setupProfileSelector();
+            return;
+        }
+        renderAll();
+        setupProfileSelector();
+    }
 
-        async function init() {
-            await loadKnowledge();
-            renderAll();
-            // Setup selector
-            Universo.renderProfileSelector('profile-list', (p) => {
-                currentProfile = p;
-                renderAll();
-                document.getElementById('profile-selector').classList.add('hidden');
-            });
+    function setupProfileSelector() {
+        Universo.renderProfileSelector('profile-list', (p) => {
+            currentProfile = p;
+            if (currentProfile.dob) renderAll();
+            document.getElementById('profile-dropdown').classList.add('hidden');
+        });
+    }
+
+    // --- MAIN RENDER ---
+    function renderAll() {
+        if (!currentProfile || !currentProfile.dob) return;
+        renderHeader();
+        
+        const date = new Date(currentProfile.dob + 'T' + (currentProfile.time || '12:00'));
+        natalPositions = Planets.map(p => {
+            const deg = AstroCalc.calculatePos(p, date);
+            return { ...p, deg, data: AstroCalc.getDegData(deg) };
+        });
+
+        if (currentProfile.time) {
+            const ascDeg = AstroCalc.getAscendant(date, currentProfile.time);
+            const ascObj = { id: 'asc', name: 'Ascendente', icon: 'ASC', color: '#ffffff', deg: ascDeg, data: AstroCalc.getDegData(ascDeg) };
+            natalPositions.push(ascObj);
         }
 
-        const AstroCalc = {
-            calculatePos: (planet, date) => {
-                const J2000 = new Date('2000-01-01T12:00:00Z');
-                const days = (date - J2000) / (1000 * 60 * 60 * 24);
-                const basePos = { sun: 280.46, moon: 218.31, mercury: 252.25, venus: 181.97, mars: 355.45, jupiter: 34.40, saturn: 49.94, uranus: 313.23, neptune: 304.88, pluto: 238.92, node: 125.04, chiron: 255.0 };
-                let pos = basePos[planet.id] + (days * planet.speed);
-                if (planet.id === 'moon') pos += 6.289 * Math.sin((134.96 + 13.064 * days) * Math.PI / 180);
-                pos = pos % 360; if (pos < 0) pos += 360; return pos;
-            },
-            getAscendant: (date, timeStr) => {
-                if (!timeStr) return null;
-                const [h, m] = timeStr.split(':').map(Number);
-                const sunPos = AstroCalc.calculatePos(Planets[0], date);
-                const hoursFrom6 = (h + m / 60) - 6;
-                let asc = sunPos + (hoursFrom6 * 15); return asc % 360;
-            },
-            getDegData: (deg) => { const idx = Math.floor(deg / 30); const degree = Math.floor(deg % 30); return { sign: Signs[idx], degree: degree, index: idx }; }
-        };
+        renderZodiacWheel();
+        renderBigThree();
+        renderElementalBalance();
+        renderPlanetCards();
+        renderCasas();
+        renderTransits();
+    }
 
-        function renderAll() {
-            renderHeader();
-            const date = new Date(currentProfile.dob + 'T' + (currentProfile.time || '12:00'));
-            const positions = Planets.map(p => { const deg = AstroCalc.calculatePos(p, date); return { ...p, deg, data: AstroCalc.getDegData(deg) }; });
-
-            if (currentProfile.time) {
-                const ascDeg = AstroCalc.getAscendant(date, currentProfile.time);
-                const ascObj = { id: 'asc', name: 'Ascendente', icon: 'ASC', color: '#ffffff', deg: ascDeg, data: AstroCalc.getDegData(ascDeg) };
-                positions.push(ascObj);
-            }
-
-            // Rueda
-            const orbitContainer = document.getElementById('planet-orbit-container');
-            orbitContainer.innerHTML = '';
-            positions.forEach(p => {
-                const el = document.createElement('div'); el.className = 'planet-marker';
-                const visAngle = p.deg + 180; el.style.transform = `translate(-50%, -50%) rotate(${visAngle}deg)`; el.style.top = '50%'; el.style.left = '50%';
-                const dot = document.createElement('div'); dot.className = 'planet-dot'; dot.innerHTML = p.icon; dot.style.color = p.color; dot.style.boxShadow = `0 0 5px ${p.color}`; dot.style.transform = `rotate(-${visAngle}deg)`;
-                // dot.onclick = () => interpretPlanet(p);
-                el.appendChild(dot); orbitContainer.appendChild(el);
-            });
-
-            // Tarjetas
-            const list = document.getElementById('planet-cards-container');
-            list.innerHTML = '';
-            const order = ['Sol', 'Luna', 'Ascendente', 'Mercurio', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Neptuno', 'Plutón', 'Quirón', 'Nodo Norte'];
-            positions.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
-
-            positions.forEach(p => {
-                if (p.id === 'node') return;
-                const knowledge = KNOWLEDGE_BASE.astrologia || {};
-                const planetDesc = knowledge.planetas ? knowledge.planetas[p.name] : "Energía cósmica.";
-                const signDesc = knowledge.signos ? knowledge.signos[p.data.sign] : "";
-
-                const card = document.createElement('div');
-                card.className = "glass-card group";
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center gap-3">
-                            <div class="planet-icon" style="color:${p.color}; border-color:${p.color}">${p.icon}</div>
-                            <div><h4 class="font-cinzel text-white text-base">${p.name}</h4><span class="text-[10px] text-gray-400 uppercase tracking-widest">en ${p.data.sign} ${p.data.degree}°</span></div>
-                        </div>
-                        <button class="text-xs text-yellow-300 hover:text-white flex items-center gap-1 bg-white/5 px-2 py-1 rounded-full transition" onclick="interpretPlanetWithAI('${p.name}', '${p.data.sign}', ${p.data.degree})"><span class="material-symbols-rounded text-sm">auto_awesome</span> IA</button>
-                    </div>
-                    <div class="space-y-2">
-                        <p class="text-xs text-blue-200 font-bold italic line-clamp-1">${signDesc}</p>
-                        <p class="text-xs text-gray-300 leading-relaxed font-serif">${planetDesc}</p>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-
-            const sun = positions.find(x => x.id === 'sun');
+    function renderHeader() {
+        document.getElementById('header-name').innerText = currentProfile.name || 'Perfil';
+        const badge = document.getElementById('header-badge');
+        if (currentProfile.photoUrl) {
+            badge.innerHTML = `<img src="${currentProfile.photoUrl}" class="w-full h-full object-cover">`;
+        } else {
+            badge.innerText = (currentProfile.name || 'P')[0];
+            badge.style.backgroundColor = currentProfile.color || '#ec135b';
+        }
+        const sun = natalPositions.find(x => x.id === 'sun');
+        if (sun) {
             document.getElementById('header-sign').innerText = `Sol en ${sun.data.sign}`;
             document.getElementById('main-sun-sign').innerText = sun.data.sign;
         }
+        document.getElementById('transit-date').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
 
-        function renderHeader() {
-            document.getElementById('header-name').innerText = currentProfile.name;
-            const ava = document.getElementById('header-avatar');
-            ava.style.backgroundColor = currentProfile.color || '#3b82f6';
-            ava.innerText = currentProfile.name[0];
-            document.getElementById('current-date-display').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    // --- ZODIAC WHEEL WITH SIGN SEGMENTS ---
+    function renderZodiacWheel() {
+        const wheel = document.getElementById('zodiac-wheel');
+        // Remove old labels and markers
+        wheel.querySelectorAll('.sign-label, .planet-marker').forEach(el => el.remove());
+        
+        const r = wheel.offsetWidth / 2;
+        const labelR = r + 14;
+        
+        // Add sign labels around the wheel
+        Signs.forEach((sign, i) => {
+            const angle = (i * 30 + 15) * Math.PI / 180 - Math.PI / 2;
+            const x = r + labelR * Math.cos(angle);
+            const y = r + labelR * Math.sin(angle);
+            const label = document.createElement('span');
+            label.className = 'sign-label';
+            label.style.left = x + 'px';
+            label.style.top = y + 'px';
+            label.innerText = SignEmoji[i];
+            label.title = sign;
+            wheel.appendChild(label);
+        });
+
+        // Planet markers
+        const orbitContainer = document.getElementById('planet-orbit-container');
+        orbitContainer.innerHTML = '';
+        natalPositions.forEach(p => {
+            if (p.id === 'node') return;
+            const el = document.createElement('div');
+            el.className = 'planet-marker';
+            const visAngle = p.deg + 180;
+            el.style.transform = `translate(-50%, -50%) rotate(${visAngle}deg)`;
+            el.style.top = '50%'; el.style.left = '50%';
+            const dot = document.createElement('div');
+            dot.className = 'planet-dot';
+            dot.innerHTML = p.icon;
+            dot.style.color = p.color;
+            dot.style.boxShadow = `0 0 5px ${p.color}`;
+            dot.style.transform = `rotate(-${visAngle}deg)`;
+            dot.onclick = () => showLocalReading(p.name, p.data.sign, p.data.degree, p.data.element);
+            el.appendChild(dot);
+            orbitContainer.appendChild(el);
+        });
+    }
+
+    // --- BIG THREE ---
+    function renderBigThree() {
+        const container = document.getElementById('big-three-container');
+        const knowledge = KNOWLEDGE_BASE.astrologia || {};
+        
+        const bigThree = [
+            { id: 'sun', label: 'Sol', subtitle: 'Tu Identidad Luminosa', matIcon: 'light_mode', accentColor: 'gold' },
+            { id: 'moon', label: 'Luna', subtitle: 'Tu Refugio Emocional', matIcon: 'bedtime', accentColor: 'mystic-purple' },
+            { id: 'asc', label: 'Ascendente', subtitle: 'Tu Máscara Sagrada', matIcon: 'expand_less', accentColor: 'primary' }
+        ];
+
+        container.innerHTML = bigThree.map(b => {
+            const pos = natalPositions.find(x => x.id === b.id);
+            if (!pos) {
+                if (b.id === 'asc') {
+                    return `<div class="glass-premium rounded-2xl p-6 flex flex-col items-center text-center opacity-50">
+                        <div class="size-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-3xl text-white/30">${b.matIcon}</span>
+                        </div>
+                        <h3 class="font-serif text-base text-white/40 mb-1 uppercase">${b.label}</h3>
+                        <p class="text-[10px] text-white/30 italic font-body">Necesitas hora de nacimiento</p>
+                    </div>`;
+                }
+                return '';
+            }
+            const planetDesc = knowledge.astros_y_luminarias?.[pos.name] || "";
+            const shortDesc = planetDesc.split('.').slice(0, 2).join('.') + '.';
+            
+            return `<div class="glass-premium rounded-2xl p-6 flex flex-col items-center text-center group hover:border-${b.accentColor}/30 transition-all cursor-pointer" onclick="showLocalReading('${pos.name}', '${pos.data.sign}', ${pos.data.degree}, '${pos.data.element}')">
+                <div class="size-14 rounded-full bg-white/5 border border-${b.accentColor}/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-3xl text-${b.accentColor}">${b.matIcon}</span>
+                </div>
+                <h3 class="font-serif text-lg text-white mb-1 uppercase tracking-widest">${b.label}</h3>
+                <p class="text-[10px] text-${b.accentColor} tracking-widest mb-3 uppercase font-bold">${pos.data.sign} ${pos.data.degree}°</p>
+                <p class="font-body text-sm text-white/60 leading-relaxed italic line-clamp-3">${shortDesc}</p>
+            </div>`;
+        }).join('');
+    }
+
+    // --- ELEMENTAL BALANCE ---
+    function renderElementalBalance() {
+        const container = document.getElementById('elemental-balance');
+        const counts = { "Fuego": 0, "Tierra": 0, "Aire": 0, "Agua": 0 };
+        const total = natalPositions.filter(p => p.id !== 'node' && p.id !== 'asc').length;
+        
+        natalPositions.forEach(p => {
+            if (p.id === 'node' || p.id === 'asc') return;
+            const el = ElementMap[p.data.sign];
+            if (el) counts[el]++;
+        });
+
+        const knowledge = KNOWLEDGE_BASE.astrologia?.elementos_sagrados || {};
+
+        container.innerHTML = Object.entries(counts).map(([el, count]) => {
+            const pct = Math.round((count / total) * 100);
+            const cfg = ElementColors[el];
+            const desc = knowledge[el] || "";
+            const shortDesc = desc.split('.')[0] + '.';
+            return `<div class="flex flex-col gap-2 cursor-pointer" onclick="showElementDetail('${el}')">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm ${cfg.text}">${cfg.icon}</span>
+                        <span class="text-[10px] ${cfg.text} font-bold uppercase tracking-widest">${el}</span>
+                    </div>
+                    <span class="text-[10px] text-white/40 font-bold">${count} · ${pct}%</span>
+                </div>
+                <div class="w-full bg-white/5 rounded-full h-1.5">
+                    <div class="element-bar ${cfg.bar}" style="width: ${pct}%"></div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // --- PLANET CARDS ---
+    function renderPlanetCards() {
+        const list = document.getElementById('planet-cards-container');
+        const knowledge = KNOWLEDGE_BASE.astrologia || {};
+        list.innerHTML = '';
+        
+        const order = ['Sol', 'Luna', 'Ascendente', 'Mercurio', 'Venus', 'Marte', 'Júpiter', 'Saturno', 'Urano', 'Neptuno', 'Plutón', 'Quirón', 'Nodo Norte'];
+        const sorted = [...natalPositions].sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+
+        sorted.forEach(p => {
+            if (p.id === 'node') return;
+            const planetDesc = knowledge.astros_y_luminarias?.[p.name] || "Energía cósmica.";
+            const signDesc = knowledge.signos_zodiacales?.[p.data.sign] || "";
+            const shortPlanet = planetDesc.split('.').slice(0, 1).join('.') + '.';
+            const shortSign = signDesc.split('.').slice(0, 1).join('.') + '.';
+
+            const card = document.createElement('div');
+            card.className = "glass-premium rounded-xl p-4 group hover:border-gold/20 transition-all cursor-pointer";
+            card.onclick = () => showLocalReading(p.name, p.data.sign, p.data.degree, p.data.element);
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-lg" style="color:${p.color}; border-color: ${p.color}40">${p.icon}</div>
+                        <div>
+                            <h4 class="font-serif text-white text-sm uppercase tracking-widest">${p.name}</h4>
+                            <span class="text-[10px] text-gold uppercase tracking-widest font-bold">en ${p.data.sign} ${p.data.degree}°</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[11px] text-primary font-bold italic mb-1">${shortPlanet}</p>
+                <p class="text-xs text-white/50 leading-relaxed font-body">${shortSign}</p>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    // --- CASAS KÁRMICAS ---
+    function renderCasas() {
+        const section = document.getElementById('casas-section');
+        const container = document.getElementById('casas-container');
+        
+        if (!currentProfile.time) {
+            section.classList.add('hidden');
+            return;
         }
 
-        // --- IA Calls (via Universo) ---
-        async function interpretPlanetWithAI(planet, sign, deg) {
-            openReadingModal(`Lectura: ${planet}`);
-            const body = document.getElementById('reading-body');
-            body.innerHTML = '<span class="loader-stars"><span></span><span></span><span></span></span>';
-            const prompt = `Interpreta ${planet} en ${sign} (Grado ${deg}) para ${currentProfile.name}. Significado psicológico.`;
+        const knowledge = KNOWLEDGE_BASE.astrologia?.casas_del_karma || {};
+        if (Object.keys(knowledge).length === 0) { section.classList.add('hidden'); return; }
+        
+        section.classList.remove('hidden');
+        
+        const asc = natalPositions.find(p => p.id === 'asc');
+        if (!asc) return;
+
+        // Simple house calculation: each house starts 30° after previous, from Ascendant
+        const houses = [];
+        for (let i = 0; i < 12; i++) {
+            const deg = (asc.deg + i * 30) % 360;
+            const data = AstroCalc.getDegData(deg);
+            houses.push({ num: i + 1, sign: data.sign, degree: data.degree });
+        }
+
+        const keyHouses = [1, 4, 7, 10]; // Angular houses for initial display
+        container.innerHTML = houses.filter(h => keyHouses.includes(h.num)).map(h => {
+            const casaKey = `Casa ${h.num}`;
+            const desc = knowledge[casaKey] || "";
+            const shortDesc = desc.split('.').slice(0, 2).join('.') + '.';
+            const labels = { 1: "Yo", 4: "Hogar", 7: "Relaciones", 10: "Destino" };
+            return `<div class="glass-premium rounded-xl p-4 cursor-pointer hover:border-mystic-purple/20 transition" onclick="showCasaDetail('${casaKey}')">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] bg-mystic-purple/20 text-mystic-purple px-2 py-0.5 rounded font-bold">${casaKey}</span>
+                    <span class="text-[10px] text-gold font-bold">${h.sign}</span>
+                    <span class="text-[10px] text-white/30">${labels[h.num] || ""}</span>
+                </div>
+                <p class="text-xs text-white/50 font-body leading-relaxed line-clamp-2">${shortDesc}</p>
+            </div>`;
+        }).join('');
+    }
+
+    // --- TRÁNSITOS REALES ---
+    function renderTransits() {
+        const now = new Date();
+        const currentPositions = Planets.map(p => {
+            const deg = AstroCalc.calculatePos(p, now);
+            return { ...p, deg, data: AstroCalc.getDegData(deg) };
+        });
+
+        // Summary: current sign positions
+        const sunNow = currentPositions.find(x => x.id === 'sun');
+        const moonNow = currentPositions.find(x => x.id === 'moon');
+        const summary = document.getElementById('transit-summary');
+        summary.innerHTML = `
+            <p>☉ Sol transitando <strong class="text-gold">${sunNow.data.sign}</strong> ${sunNow.data.degree}°</p>
+            <p>☽ Luna transitando <strong class="text-white">${moonNow.data.sign}</strong> ${moonNow.data.degree}°</p>
+        `;
+
+        // Find active aspects between current planets and natal positions
+        const aspectsContainer = document.getElementById('transit-aspects-container');
+        const aspects = [];
+
+        // Only check major planets for transits
+        const transitPlanets = currentPositions.filter(p => !['node', 'chiron'].includes(p.id));
+        const natalMajor = natalPositions.filter(p => !['node', 'chiron', 'asc'].includes(p.id));
+
+        transitPlanets.forEach(tp => {
+            natalMajor.forEach(np => {
+                if (tp.id === np.id && ['sun', 'moon', 'mercury'].includes(tp.id)) return; // Skip same fast planet
+                const aspect = AstroCalc.getAspect(tp.deg, np.deg);
+                if (aspect) {
+                    aspects.push({ transit: tp, natal: np, aspect });
+                }
+            });
+        });
+
+        // Show top 6 most important aspects
+        const important = aspects.slice(0, 6);
+        if (important.length === 0) {
+            aspectsContainer.innerHTML = '<p class="text-center text-white/30 text-xs font-body italic py-4">Los astros descansan en silencio hoy.</p>';
+            return;
+        }
+
+        aspectsContainer.innerHTML = `
+            <h4 class="font-serif text-sm text-gold mb-3 tracking-widest uppercase">Aspectos Activos</h4>
+            ${important.map(a => `
+                <div class="glass-premium rounded-xl p-4 flex items-center gap-4">
+                    <div class="flex items-center gap-1 min-w-[80px]">
+                        <span style="color:${a.transit.color}" class="text-lg">${a.transit.icon}</span>
+                        <span class="text-white/30 text-xs">${a.aspect.icon}</span>
+                        <span style="color:${a.natal.color}" class="text-lg">${a.natal.icon}</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] text-white font-bold">${a.transit.name} <span class="${a.aspect.color}">${a.aspect.name}</span> ${a.natal.name} natal</p>
+                        <p class="text-[10px] text-white/40">${a.aspect.quality}</p>
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    // --- UI ACTIONS ---
+    function switchTab(t) {
+        ['carta', 'transitos'].forEach(v => {
+            document.getElementById('view-' + v).classList.add('hidden');
+            document.getElementById('tab-btn-' + v).classList.remove('tab-active');
+            document.getElementById('tab-btn-' + v).classList.add('text-white/40');
+        });
+        document.getElementById('view-' + t).classList.remove('hidden');
+        document.getElementById('tab-btn-' + t).classList.add('tab-active');
+        document.getElementById('tab-btn-' + t).classList.remove('text-white/40');
+    }
+
+    function toggleProfileDropdown() { document.getElementById('profile-dropdown').classList.toggle('hidden'); }
+    function goHome() { Universo.goHome(); }
+
+    // --- PUENTE DIVINO DE LA SABIDURÍA ---
+    // State for current reading (used by AI deepening)
+    let currentReadingCtx = {};
+
+    function showLocalReading(planet, sign, degree, element) {
+        const knowledge = KNOWLEDGE_BASE.astrologia || {};
+        const planetDesc = knowledge.astros_y_luminarias?.[planet] || "";
+        const signDesc = knowledge.signos_zodiacales?.[sign] || "";
+        const elementKey = element || ElementMap[sign] || "";
+        const elementDesc = knowledge.elementos_sagrados?.[elementKey] || "";
+        const signIdx = Signs.indexOf(sign);
+        const signEmoji = signIdx >= 0 ? SignEmoji[signIdx] : "✦";
+
+        // Store context for AI deepening
+        currentReadingCtx = { planet, sign, degree, element: elementKey, planetDesc, signDesc };
+
+        // Build rich modal content
+        const body = document.getElementById('reading-body');
+        body.innerHTML = `
+            <!-- Planet Section -->
+            <div class="mb-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-gold text-lg">stars</span>
+                    <h4 class="font-serif text-sm text-gold tracking-[0.2em] uppercase">El Astro</h4>
+                </div>
+                <p class="text-base text-white/85 leading-relaxed font-body">${planetDesc || '<span class="text-white/30 italic">Descripción no disponible offline.</span>'}</p>
+            </div>
+
+            <!-- Sign Section -->
+            <div class="mb-6 pt-5 border-t border-white/5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-lg">${signEmoji}</span>
+                    <h4 class="font-serif text-sm text-primary tracking-[0.2em] uppercase">${sign}</h4>
+                    <span class="text-[10px] text-white/30 ml-auto">Grado ${degree}°</span>
+                </div>
+                <p class="text-base text-white/85 leading-relaxed font-body">${signDesc || '<span class="text-white/30 italic">Descripción no disponible offline.</span>'}</p>
+            </div>
+
+            ${elementDesc ? `
+            <!-- Element Section -->
+            <div class="pt-5 border-t border-white/5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-sm ${ElementColors[elementKey]?.text || 'text-white/40'}">${ElementColors[elementKey]?.icon || 'circle'}</span>
+                    <h4 class="font-serif text-sm ${ElementColors[elementKey]?.text || 'text-white/40'} tracking-[0.2em] uppercase">Elemento ${elementKey}</h4>
+                </div>
+                <p class="text-sm text-white/60 leading-relaxed font-body">${elementDesc}</p>
+            </div>` : ''}
+        `;
+
+        // Set title and subtitle
+        document.getElementById('reading-subtitle').innerText = planet;
+        document.getElementById('reading-title').innerText = `en ${sign} ${degree}°`;
+        
+        // Show AI deepening button
+        document.getElementById('reading-ai-section').classList.remove('hidden');
+        document.getElementById('reading-ai-btn').innerHTML = '<span class="material-symbols-outlined text-sm">auto_awesome</span> Profundizar con IA Cósmica';
+        document.getElementById('reading-ai-btn').disabled = false;
+        
+        document.getElementById('reading-modal').classList.add('active');
+    }
+
+    function showElementDetail(el) {
+        const knowledge = KNOWLEDGE_BASE.astrologia || {};
+        const desc = knowledge.elementos_sagrados?.[el] || "Energía elemental.";
+        
+        // Find which planets are in this element
+        const planetsInElement = natalPositions.filter(p => 
+            p.id !== 'node' && p.id !== 'asc' && ElementMap[p.data.sign] === el
+        );
+        const planetList = planetsInElement.map(p => `${p.icon} ${p.name} en ${p.data.sign}`).join('<br>');
+
+        currentReadingCtx = { planet: `Elemento ${el}`, sign: el, degree: 0, element: el };
+
+        const body = document.getElementById('reading-body');
+        body.innerHTML = `
+            <div class="mb-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-lg ${ElementColors[el]?.text || ''}">${ElementColors[el]?.icon || 'circle'}</span>
+                    <h4 class="font-serif text-sm ${ElementColors[el]?.text || ''} tracking-[0.2em] uppercase">${el}</h4>
+                </div>
+                <p class="text-base text-white/85 leading-relaxed font-body">${desc}</p>
+            </div>
+            ${planetList ? `
+            <div class="pt-5 border-t border-white/5">
+                <h4 class="font-serif text-[10px] text-white/40 tracking-[0.2em] uppercase mb-3">Tus astros en ${el}</h4>
+                <p class="text-sm text-white/60 font-body leading-loose">${planetList}</p>
+            </div>` : ''}
+        `;
+
+        document.getElementById('reading-subtitle').innerText = 'Elemento';
+        document.getElementById('reading-title').innerText = el;
+        document.getElementById('reading-ai-section').classList.remove('hidden');
+        document.getElementById('reading-ai-btn').innerHTML = '<span class="material-symbols-outlined text-sm">auto_awesome</span> Profundizar con IA Cósmica';
+        document.getElementById('reading-ai-btn').disabled = false;
+        document.getElementById('reading-modal').classList.add('active');
+    }
+
+    function showCasaDetail(casaKey) {
+        const knowledge = KNOWLEDGE_BASE.astrologia || {};
+        const desc = knowledge.casas_del_karma?.[casaKey] || "Casa kármica.";
+
+        currentReadingCtx = { planet: casaKey, sign: '', degree: 0, element: '' };
+
+        const body = document.getElementById('reading-body');
+        body.innerHTML = `
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-mystic-purple text-lg">temple_hindu</span>
+                    <h4 class="font-serif text-sm text-mystic-purple tracking-[0.2em] uppercase">${casaKey}</h4>
+                </div>
+                <p class="text-base text-white/85 leading-relaxed font-body">${desc}</p>
+            </div>
+        `;
+
+        document.getElementById('reading-subtitle').innerText = 'Casas del Karma';
+        document.getElementById('reading-title').innerText = casaKey;
+        document.getElementById('reading-ai-section').classList.remove('hidden');
+        document.getElementById('reading-ai-btn').innerHTML = '<span class="material-symbols-outlined text-sm">auto_awesome</span> Profundizar con IA Cósmica';
+        document.getElementById('reading-ai-btn').disabled = false;
+        document.getElementById('reading-modal').classList.add('active');
+    }
+
+    // --- AI DEEPENING (only after local knowledge is shown) ---
+    async function deepenCurrentReadingWithAI() {
+        const btn = document.getElementById('reading-ai-btn');
+        btn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">progress_activity</span> Consultando Registros Akáshicos...';
+        btn.disabled = true;
+
+        const ctx = currentReadingCtx;
+        const localCtx = ctx.planetDesc ? `\nContexto del astro: ${ctx.planetDesc.substring(0, 200)}` : "";
+        const signCtx = ctx.signDesc ? `\nContexto del signo: ${ctx.signDesc.substring(0, 200)}` : "";
+        
+        const prompt = `Astrología sagrada para ${currentProfile.name}. Interpreta ${ctx.planet} en ${ctx.sign} (Grado ${ctx.degree}°). ${localCtx}${signCtx}\nSignificado psicológico y espiritual profundo. Tono místico e íntimo. Evita asteriscos. Máximo 300 palabras.`;
+        
+        try {
             const text = await Universo.callGemini(prompt);
-            body.innerHTML = text.replace(/\n/g, '<br>');
+            // Append AI response below existing content
+            const body = document.getElementById('reading-body');
+            body.innerHTML += `
+                <div class="pt-5 mt-5 border-t border-gold/20">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-symbols-outlined text-gold text-lg">auto_awesome</span>
+                        <h4 class="font-serif text-sm text-gold tracking-[0.2em] uppercase">Guía Espiritual</h4>
+                    </div>
+                    <p class="text-base text-white/85 leading-relaxed font-body">${text.replace(/\n/g, '<br>')}</p>
+                </div>
+            `;
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> Lectura Completa';
+            // Scroll to the AI section
+            body.scrollTop = body.scrollHeight;
+        } catch (e) {
+            btn.innerHTML = '<span class="material-symbols-outlined text-sm">wifi_off</span> Sin conexión — tu Cerebro Local ya habló';
         }
+    }
 
-        async function askAIGuide(q) {
-            openReadingModal("Oráculo Estelar");
-            document.getElementById('reading-body').innerHTML = '<span class="loader-stars"><span></span><span></span><span></span></span>';
-            const text = await Universo.callGemini(`Usuario: ${currentProfile.name}. Pregunta: ${q}`);
-            document.getElementById('reading-body').innerHTML = text.replace(/\n/g, '<br>');
-        }
+    async function askTransitAI() {
+        document.getElementById('reading-subtitle').innerText = 'Tránsitos del Día';
+        document.getElementById('reading-title').innerText = 'Oráculo de Tránsitos';
+        document.getElementById('reading-ai-section').classList.add('hidden');
+        document.getElementById('reading-modal').classList.add('active');
+        
+        const body = document.getElementById('reading-body');
+        body.innerHTML = '<p class="animate-pulse text-gold font-body italic">Leyendo el clima astral...</p>';
+        
+        const now = new Date();
+        const sunNow = AstroCalc.getDegData(AstroCalc.calculatePos(Planets[0], now));
+        const moonNow = AstroCalc.getDegData(AstroCalc.calculatePos(Planets[1], now));
+        const sunNatal = natalPositions.find(x => x.id === 'sun');
+        
+        const prompt = `Tránsitos astrológicos de hoy para ${currentProfile.name} (Sol natal en ${sunNatal?.data.sign || '?'}). El Sol transita ${sunNow.sign} y la Luna ${moonNow.sign}. ¿Cómo afectan estas energías? Consejo personalizado. Tono místico. Evita asteriscos. Máximo 300 palabras.`;
+        const text = await Universo.callGemini(prompt);
+        body.innerHTML = text.replace(/\n/g, '<br>');
+    }
 
-        function openReadingModal(t) { document.getElementById('reading-title').innerText = t; document.getElementById('reading-modal').classList.add('active'); }
-        function closeReadingModal() { document.getElementById('reading-modal').classList.remove('active'); }
+    function openReadingModal(t) {
+        document.getElementById('reading-subtitle').innerText = '';
+        document.getElementById('reading-title').innerText = t;
+        document.getElementById('reading-ai-section').classList.add('hidden');
+        document.getElementById('reading-modal').classList.add('active');
+    }
+    function closeReadingModal() {
+        document.getElementById('reading-modal').classList.remove('active');
+    }
 
-        // Navigation / Utils
-        function goHome() { Universo.goHome(); }
-        function goToNumerology() { Universo.openModule('numerologia.html'); }
-        function toggleProfileSelector() { document.getElementById('profile-selector').classList.toggle('hidden'); }
-        function switchTab(t) {
-            ['carta', 'transitos'].forEach(id => document.getElementById('view-' + id).classList.add('hidden'));
-            ['tab-carta', 'tab-transitos'].forEach(id => { document.getElementById(id).classList.remove('text-blue-300', 'border-blue-400'); document.getElementById(id).classList.add('text-gray-500', 'border-transparent'); });
-            document.getElementById('view-' + t).classList.remove('hidden'); document.getElementById('tab-' + t).classList.add('text-blue-300', 'border-blue-400');
-        }
-
-        init();
-    </script>
+    init();
+</script>
 </body>
-
 </html>

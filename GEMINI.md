@@ -14,13 +14,9 @@ Mila es un espacio íntimo digital creado para dos personas.
 Es:
 
 Refugio
-
 Ritual
-
 Memoria
-
 Correspondencia
-
 Crecimiento compartido
 
 La tecnología existe para sostener la experiencia emocional.
@@ -33,31 +29,21 @@ Mila ha evolucionado desde una herramienta espiritual personal a un ecosistema c
 Actualmente incluye:
 
 Index (Templo central con Aura de Cursor)
-
-Numerología (Conocimiento Local + IA)
-
-Astrología (Bóveda Celeste + IA)
-
+Numerología (STITCH Design + Cerebro Local)
+Astrología (Sincronización de Bóveda + IA)
+Emily Books (Musa IA + STITCH)
 Diario
-
 Hipnosis
-
 Biblioteca
-
 Billetera de Luz (Cheques de Poder con firmas de oro)
-
-🎴 Pergaminos de Amor (módulo central actual con Sello de Cera Realista)
+🎴 Pergaminos de Amor (Corazón compartido con Sello de Cera)
 
 La aplicación está diseñada para:
 
 Uso privado
-
 Sin publicación en tiendas
-
 Instalación tipo PWA
-
 Sincronización en tiempo real
-
 IA integrada como Guía Espiritual (Gemini)
 
 3. Principios No Negociables
@@ -68,26 +54,20 @@ Nada está diseñado para viralidad.
 
 🌑 Offline-first
 
-Lo esencial funciona sin internet mediante una **Base de Conocimiento Local** (`conocimiento.json`):
+Lo esencial funciona sin internet mediante el **Cerebro Espiritual Local** (`conocimiento.json`):
 
-Numerología (Interpretación completa 1-33)
-
-Astrología (Signos y Planetas detallados)
-
+Numerología (Descripciones 1-33, Ciclos y Sinergia inmediata)
+Astrología (Signos y Planetas con interpretaciones psicológicas)
+Emily Books (Estructura de capítulos y musa local)
 Diario
-
 Biblioteca
-
 Billetera
-
 Audio
-
 Visualización
 
 Internet solo amplifica:
 
 Guía Espiritual (Gemini para profundización personalizada)
-
 Pergaminos sincronizados (Firebase)
 
 🤖 IA como Guía
@@ -99,13 +79,9 @@ No impone.
 Solo:
 
 Refina lenguaje
-
 Profundiza expresión
-
 Eleva tono
-
 Traduce estilos históricos
-
 Co-crea intenciones en cheques y pergaminos
 
 🕯 Ritmo lento
@@ -126,37 +102,25 @@ con estética de cartas del siglo XIX.
 Características
 
 Solo dos perfiles: yo y mila
-
 Sin login complejo
-
 Sin burbujas modernas
-
 Fondo pergamino (Texturas JPG realistas)
-
 Fecha editable
-
 Año emulado seleccionable
 
 Estilos:
 
 Español siglo XIX (inspirado en Bolívar)
-
 Inglés victoriano (Emily Brontë)
-
 Español poético actual
 
 Funcionalidad técnica
 
 Sincronización con Firebase Realtime Database
-
 Respaldo local (.mila / .json)
-
 Estado leído / no leído
-
 Animaciones elegantes al enviar y recibir (Ritual de enrollado/desenrollado)
-
 Exportación de cada carta en PNG/PDF
-
 Traducción reversible (antiguo ↔ actual)
 
 Regla de oro
@@ -174,9 +138,7 @@ Frontend → Backend intermedio (Python/Serverless) → Gemini → Respuesta
 Nunca:
 
 API key expuesta en frontend
-
 Dependencia absoluta
-
 Automatización emocional
 
 La Guía solo se activa por decisión consciente (Botón ✨).
@@ -186,17 +148,13 @@ La Guía solo se activa por decisión consciente (Botón ✨).
 Se utiliza Firebase Realtime Database para:
 
 Pergaminos de Amor
-
 Indicadores de cartas nuevas
-
 Estado leído
 
 No se utiliza:
 
 Autenticación pesada
-
 Multiusuario abierto
-
 Registro público
 
 Base diseñada solo para dos personas.
@@ -206,13 +164,9 @@ Base diseñada solo para dos personas.
 El reproductor evoluciona hacia:
 
 Playlists configurables
-
 Posibilidad de moverlo en pantalla
-
 Minimizable
-
 No intrusivo
-
 Compatible con lectura y escritura
 
 El audio es entorno terapéutico, no entretenimiento.
@@ -220,15 +174,10 @@ El audio es entorno terapéutico, no entretenimiento.
 8. No Se Hará Por Ahora
 
 Publicación en Play Store
-
 Monetización
-
 Cuentas públicas
-
 Escalabilidad masiva
-
 Framework pesado
-
 Reescritura total
 
 Mila está en etapa de profundidad, no expansión.
@@ -238,21 +187,19 @@ Mila está en etapa de profundidad, no expansión.
 Frontend:
 
 HTML / CSS / JS puro (Tailwind CSS como apoyo)
-
 Navegación **Multi-Pestaña** (Independencia total de módulos)
-
-Diseño **UI STITCH** (Glassmorphism, Aura de Cursor, Sellos de Cera)
+Diseño **UI STITCH** (Cosmic Glassmorphism, Aura de Cursor, Sellos de Cera)
+Estándar de **Alineación Global**: Home y Perfil anclados a la izquierda para orden visual.
 
 Backend mínimo:
 
 Función serverless para Gemini
-
 Firebase Realtime Database
+Lógica Centralizada: `universo.js` gestiona el estado y sincronización de perfiles.
 
 Instalación:
 
 PWA privada
-
 Acceso directo desde teléfono
 
 10. Filosofía de Evolución
@@ -260,9 +207,7 @@ Acceso directo desde teléfono
 Cada nueva función debe pasar tres filtros:
 
 ¿Aumenta la intimidad?
-
 ¿Aumenta la calma?
-
 ¿Aumenta la profundidad?
 
 Si no cumple al menos dos, no entra.

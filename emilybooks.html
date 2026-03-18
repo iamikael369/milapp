@@ -7,48 +7,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- PWA -->
-    <meta name="theme-color" content="#d4af37">
+    <meta name="theme-color" content="#1A1513">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="MilApp">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
     <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});}</script>
-    <title>Emily Books • Diario de las Almas</title>
+    <title>Emily Books • STITCH Studio</title>
 
     <!-- FUENTES PREMIUM -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=Lora:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&family=Pinyon+Script&family=Inter:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,200,0,0" />
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#8B1E1E", // Rojo elegante de Stitch
+                        "primary": "#8B1E1E", // Deep elegant red
                         "gold": {
                             400: "#D4AF37",
                             500: "#B8860B",
                             600: "#996515",
                         },
+                        "candlelight": "#1A1513",
                         "parchment": {
                             100: "#FDFBF7",
                             200: "#F5F0E6",
                             300: "#E8DFCD",
                             800: "#4A3B32",
-                            900: "#1A1513", // Lomo de cuero
+                            900: "#1A1513",
                         }
                     },
                     fontFamily: {
                         "display": ["Cinzel", "serif"],
-                        "serif": ["Playfair Display", "serif"],
-                        "body": ["Lora", "serif"],
+                        "body": ["EB Garamond", "serif"],
                         "script": ["Great Vibes", "cursive"],
+                        "accent": ["Dancing Script", "cursive"],
+                        "lora": ["Lora", "serif"],
                     },
                     backgroundImage: {
                         'parchment-texture': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.08%22/%3E%3C/svg%3E')",
@@ -59,18 +61,45 @@
     </script>
 
     <style type="text/tailwindcss">
-        :root {
-            --paper-texture: #F5F0E6;
-            --ink-color: #2c1a16;
-            --bg-paper: url("assets/images/parchment-texture.jpg");
+        @layer components {
+            .parchment-bg {
+                background-color: #F5F0E6;
+                background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.08%22/%3E%3C/svg%3E');
+            }
+            .safe-bottom {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .touch-target {
+                min-height: 44px;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .glass-panel {
+                background-color: rgba(26, 21, 19, 0.9);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-top: 1px solid rgba(153, 101, 21, 0.3);
+            }
+            /* Hide scrollbar but keep functionality */
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
         }
 
-        [data-theme="dark"] {
-            --paper-texture: #2a241c;
-            --ink-color: #f4ecd8;
-            --bg-paper: url("assets/images/parchment-texture-dark.jpg");
+        [data-theme="dark"] .parchment-bg {
+            background-color: #2a241c;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E');
         }
+        [data-theme="dark"] .text-parchment-800 { color: #f4ecd8; }
+        [data-theme="dark"] .text-parchment-900 { color: #ffffff; }
 
+        .font-lora { font-family: 'Lora', serif !important; }
         .font-garamond { font-family: 'EB Garamond', serif !important; }
         .font-dancing { font-family: 'Dancing Script', cursive !important; }
         .font-cinzel { font-family: 'Cinzel', serif !important; }
@@ -79,150 +108,18 @@
         .font-plus { font-family: 'Plus Jakarta Sans', sans-serif !important; }
         .font-playfair { font-family: 'Playfair Display', serif !important; }
         .font-vibes { font-family: 'Great Vibes', cursive !important; }
-        .font-lora { font-family: 'Lora', serif !important; }
-
-        body {
-            background-color: #1a1513;
-            color: var(--ink-color);
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .book-layout {
-            height: 100vh;
-            display: grid;
-            grid-template-columns: 280px 1fr 340px;
-            width: 100%;
-        }
-
-        @media (max-width: 1400px) {
-            .book-layout { grid-template-columns: 260px 1fr 300px; }
-        }
-
-        @media (max-width: 1100px) {
-            .book-layout { grid-template-columns: 80px 1fr 0px; }
-            .sidebar-right { display: none !important; }
-            .sidebar-left span:not(.material-symbols-rounded) { display: none; }
-        }
-
-        @media (max-width: 768px) {
-            .book-layout { grid-template-columns: 1fr; }
-            .sidebar-left { display: none !important; }
-        }
-
-        .leather-texture {
-            background-color: #1A1513;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
-        }
-
-        .sidebar-left {
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid rgba(153, 101, 21, 0.2);
-            z-index: 30;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.3);
-            padding: 2rem;
-        }
-
-        .main-canvas {
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.1);
-            background-color: var(--paper-texture);
-            background-image: var(--bg-paper);
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        .sidebar-right {
-            background-color: rgba(253, 251, 247, 0.9);
-            border-left: 1px solid rgba(153, 101, 21, 0.2);
-            display: flex;
-            flex-direction: column;
-            z-index: 30;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .gold-emboss {
-            text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.3), 0px -1px 1px rgba(0, 0, 0, 0.8);
-        }
-
-        .chapter-card {
-            cursor: pointer;
-            padding: 1.25rem;
-            border-bottom: 1px solid rgba(153, 101, 21, 0.1);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chapter-card:hover { background-color: rgba(212, 175, 55, 0.05); }
-        .chapter-card.active { 
-            background-color: rgba(212, 175, 55, 0.1); 
-            border-left: 4px solid #D4AF37;
-        }
-
-        .editor-field {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            resize: none;
-            padding: 1.5rem 1.25rem;
-            font-size: 1rem;
-            line-height: 2.2;
-            color: var(--ink-color);
-            font-family: 'Lora', serif;
-            text-align: justify;
-        }
-        @media (max-width: 767px) {
-            .editor-field {
-                padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + 70px);
-            }
-        }
-        @media (min-width: 768px) {
-            .editor-field {
-                padding: 4rem 5rem;
-                font-size: 1.15rem;
-            }
-        }
-        @media (min-width: 1100px) {
-            .editor-field {
-                padding: 5rem 6rem;
-                font-size: 1.25rem;
-            }
-        }
-
-        .floating-toolbar {
-            position: absolute;
-            top: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 40;
-            background-color: #FDFBF7;
-            border-radius: 9999px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 1px solid rgba(153, 101, 21, 0.2);
-            padding: 0.5rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            opacity: 0.9;
-        }
 
         .musa-bubble {
-            background-color: #FDFBF7;
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background-color: rgba(26, 21, 19, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 1rem;
-            padding: 1.25rem 1.5rem;
-            font-size: 0.875rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            color: var(--ink-color);
+            padding: 1rem 1.25rem;
+            font-size: 0.75rem;
+            font-style: italic;
+            color: #FDFBF7;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             position: relative;
             overflow: hidden;
         }
@@ -230,146 +127,205 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(212, 175, 55, 0.05);
+            background-color: rgba(212, 175, 55, 0.05);
             pointer-events: none;
         }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 10px; }
-
-        @keyframes pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(184, 134, 11, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0); }
+        /* Cursor Aura Effect */
+        #cursor-aura {
+            position: fixed; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none;
+            z-index: 1; transform: translate(-50%, -50%);
+            transition: opacity 1s ease; opacity: 0;
         }
-        .animate-pulse-gold { animation: pulse-gold 2s infinite; }
+        body:hover #cursor-aura { opacity: 1; }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .ink-splatter {
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle, #4A3B32 10%, transparent 20%);
-            background-size: 4px 4px;
-            opacity: 0.1;
-            pointer-events: none;
+        .animate-pulse-gold { animation: pulse-gold 2s infinite; }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* LIBRO ENCUADERNADO (PORTADA) */
+        /* Leather Book Cover */
         .book-cover {
             position: absolute;
             inset: 0;
-            z-index: 50;
+            z-index: 70;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.7s ease-in-out;
             transform: translateY(100%);
             opacity: 0;
             pointer-events: none;
         }
-
         .book-cover.active {
             transform: translateY(0);
             opacity: 1;
             pointer-events: auto;
         }
-
         .cover-visual {
-            width: 400px;
+            width: 320px;
             aspect-ratio: 2/3;
-            background-color: #1a1513;
-            border: 2px solid rgba(184, 134, 11, 0.5);
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background-color: #1A1513;
+            border: 2px solid rgba(153, 101, 21, 0.4);
+            border-radius: 2px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3rem;
+            padding: 2rem;
             text-align: center;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
         }
-
-        .cover-spine-shadow {
+        @media (min-width: 768px) {
+            .cover-visual { width: 400px; }
+        }
+        .cover-spine {
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 40px;
+            width: 2.5rem;
             background: linear-gradient(to right, rgba(0,0,0,0.6), transparent);
             border-right: 1px solid rgba(0,0,0,0.3);
             z-index: 10;
         }
 
-        .cover-deco-border {
-            position: absolute;
-            inset: 20px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 2px;
-            pointer-events: none;
-        }
-
-        .cover-deco-inner {
-            position: absolute;
-            inset: 30px;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 2px;
+        /* Placeholder for contenteditable */
+        [contenteditable][placeholder]:empty:before {
+            content: attr(placeholder);
+            color: rgba(153, 101, 21, 0.3);
+            font-style: italic;
             pointer-events: none;
         }
     </style>
 </head>
 
-<body class="font-body selection:bg-gold-400/30">
-
-    <div class="book-layout">
-        <!-- BIBLIOTECA (IZQUIERDA) -->
-        <aside class="sidebar-left p-8 text-parchment-200">
-            <header class="mb-12">
-                <div class="flex items-center gap-4 mb-3">
-                    <button onclick="window.location.href='pergaminos.html'" class="hover:text-gold-400 transition-colors">
-                        <span class="material-symbols-rounded text-3xl">history_edu</span>
-                    </button>
-                    <h1 class="font-display text-2xl font-bold tracking-[0.2em] text-gold-400 gold-emboss uppercase">Emily Books</h1>
-                </div>
-                <div class="flex items-center gap-2">
-                    <div class="size-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <p class="text-[10px] uppercase tracking-[0.25em] text-gold-600/70 font-display">Mila Universe • 2026</p>
-                </div>
-            </header>
-
-            <button onclick="createNewChapter()" class="w-full flex items-center justify-center gap-3 border border-gold-600/40 rounded-lg py-4 mb-12 hover:bg-gold-400/10 transition-all group">
-                <span class="material-symbols-rounded text-gold-400 group-hover:scale-110 transition-transform">post_add</span>
-                <span class="font-display text-xs font-bold tracking-[0.2em] text-gold-400 uppercase">Nuevo Escrito</span>
+<body class="bg-candlelight text-parchment-200 font-body h-screen flex flex-col overflow-hidden select-none">
+    
+    <div id="cursor-aura"></div>
+    <!-- Mobile Header -->
+    <header class="flex items-center justify-between px-4 h-16 border-b border-gold-600/20 bg-candlelight relative z-50 shrink-0">
+        <button class="touch-target text-gold-400" onclick="toggleSidebar()">
+            <span class="material-symbols-outlined text-2xl">menu</span>
+        </button>
+        <div class="flex flex-col items-center">
+            <h2 class="text-xs font-display font-bold tracking-[0.2em] text-gold-400">EMILY BOOKS</h2>
+            <span id="save-status" class="text-[9px] uppercase tracking-widest text-gold-600/60">Sincronizado</span>
+        </div>
+        <div class="flex items-center gap-1">
+            <button class="touch-target text-gold-400" onclick="toggleCover()">
+                <span class="material-symbols-outlined text-2xl">menu_book</span>
             </button>
+            <div id="user-avatar" class="size-8 rounded-full border-2 border-gold-400 bg-cover bg-center ml-1 shadow-md transition-all duration-500" style='background-image: url("");'></div>
+        </div>
+    </header>
 
-            <div class="flex items-center justify-between mb-6 pb-2 border-b border-gold-600/20">
-                <h2 class="text-xs font-display font-bold text-gold-400/60 uppercase tracking-widest">Índice</h2>
-                <span class="material-symbols-rounded text-gold-600/40 text-sm">filter_list</span>
-            </div>
-
-            <div id="index-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
-                <!-- Se poblará por JS -->
-                <div class="text-center py-20 opacity-20 italic text-sm">Invocando el saber...</div>
-            </div>
-
-            <footer class="mt-8 pt-6 border-t border-gold-600/20 flex justify-between items-center opacity-60">
-                <div class="flex items-center gap-4">
-                    <button onclick="toggleTheme()" class="hover:text-gold-400 transition-all">
-                        <span id="theme-icon" class="material-symbols-rounded text-xl">dark_mode</span>
-                    </button>
-                    <span class="material-symbols-rounded text-xl cursor-not-allowed">settings</span>
+    <div class="flex-1 flex overflow-hidden relative">
+        <!-- Collapsible Sidebar Overlay -->
+        <div class="fixed inset-0 bg-black/60 z-40 hidden opacity-0 transition-opacity duration-300" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        
+        <!-- Sidebar -->
+        <aside class="fixed inset-y-0 left-0 w-72 bg-candlelight border-r border-gold-600/20 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl" id="sidebar">
+            <div class="p-6 border-b border-gold-600/20 flex justify-between items-center">
+                <div class="font-display">
+                    <h2 class="text-lg font-bold text-gold-400 tracking-widest uppercase">Biblioteca</h2>
                 </div>
-                <div class="bg-center bg-cover rounded-full size-10 border-2 border-gold-400/50 shadow-lg" 
-                    id="user-avatar" style='background-image: url("");'></div>
-            </footer>
+                <button class="touch-target text-gold-600" onclick="toggleSidebar()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-6 scrollbar-hide flex flex-col">
+                <div class="flex gap-4 items-center mb-8 p-3 bg-gold-400/5 rounded-lg border border-gold-600/20">
+                    <div class="size-12 rounded border border-gold-600/40 bg-cover bg-center flex items-center justify-center text-gold-600" style="background-color: rgba(212, 175, 55, 0.05);">
+                        <span class="material-symbols-outlined text-2xl">history_edu</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[9px] text-gold-600 uppercase tracking-widest">Leyendo</p>
+                        <h1 id="sidebar-current-title" class="text-sm font-display text-parchment-200 truncate italic">...</h1>
+                    </div>
+                </div>
+
+                <div class="mb-6 flex-1">
+                    <h3 class="text-[10px] font-display font-bold text-gold-600 uppercase tracking-widest mb-4">Índice de Almas</h3>
+                    <nav id="index-list" class="space-y-1">
+                        <!-- Se poblará por JS -->
+                        <div class="text-center py-10 opacity-20 italic text-xs text-parchment-400">Invocando el saber...</div>
+                    </nav>
+                </div>
+                
+                <button onclick="createNewChapter(); toggleSidebar()" class="w-full flex items-center justify-center gap-2 border border-gold-600/40 rounded py-3 text-gold-400 hover:bg-gold-400/10 mt-4 transition-all group">
+                    <span class="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">post_add</span>
+                    <span class="font-display text-[10px] font-bold tracking-widest uppercase">Nuevo Escrito</span>
+                </button>
+            </div>
+            
+            <div class="p-6 border-t border-gold-600/10 flex justify-between items-center">
+                <div class="flex gap-4">
+                    <button onclick="toggleTheme()" class="text-gold-600 hover:text-gold-400 transition-colors">
+                        <span id="theme-icon" class="material-symbols-outlined text-xl">dark_mode</span>
+                    </button>
+                    <button onclick="window.location.href='pergaminos.html'" class="text-gold-600 hover:text-gold-400 transition-colors">
+                        <span class="material-symbols-outlined text-xl">arrow_back</span>
+                    </button>
+                </div>
+                <div class="text-[9px] uppercase tracking-[0.2em] text-gold-600/50 font-display">
+                    Mila Universe • 2026
+                </div>
+            </div>
         </aside>
 
-        <!-- LIENZO CENTRAL (EDITOR) -->
-        <main class="main-canvas">
-            <!-- Barra de Herramientas Flotante -->
-            <div class="floating-toolbar">
-                <select id="font-selector" onchange="changeFont(this.value)" class="bg-transparent border-none text-[10px] font-display text-parchment-800 focus:ring-0 cursor-pointer mr-2 outline-none uppercase tracking-widest">
+        <!-- Main Content (Parchment) -->
+        <main class="flex-1 relative overflow-y-auto parchment-bg scrollbar-hide flex flex-col items-center transition-colors duration-500">
+            <!-- Writing Canvas -->
+            <div class="w-full max-w-2xl min-h-full px-6 py-20 pb-40">
+                <div id="musa-motto" class="text-lg font-script text-gold-600/60 mb-10 text-center fade-in">Deja que tu alma dicte a la pluma...</div>
+                
+                <h1 id="chapter-title" class="text-4xl md:text-5xl font-display text-center text-parchment-900 mb-12 tracking-wide leading-tight outline-none" contenteditable="true" spellcheck="false" placeholder="Título del Escrito">
+                    Nuevo Susurro
+                </h1>
+                
+                <div id="editor-canvas" class="text-lg leading-[2.2] text-parchment-800 space-y-8 outline-none font-lora text-justify select-text min-h-[400px]" contenteditable="true" spellcheck="false">
+                    <p>...</p>
+                </div>
+                
+                <div class="flex justify-center my-16 text-gold-400/40">
+                    <span class="material-symbols-outlined text-3xl mx-2">auto_awesome</span>
+                </div>
+            </div>
+            
+            <!-- Cover View Overlay -->
+            <div id="book-cover-overlay" class="book-cover" onclick="toggleCover()">
+                <div class="cover-visual">
+                    <div class="cover-spine"></div>
+                    <div class="relative z-20 flex flex-col items-center justify-center h-full">
+                        <span class="text-gold-400/40 text-[10px] font-display uppercase tracking-[0.4em] mb-12">Volumen Privado</span>
+                        <h2 id="cover-title" class="text-gold-400 text-3xl md:text-4xl font-display font-bold leading-tight uppercase tracking-wider mb-14 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Título del Escrito</h2>
+                        <div class="w-12 h-px bg-gold-600/30 mb-12"></div>
+                        <span id="cover-author" class="text-gold-600/80 text-lg font-script italic">Mila Universe</span>
+                        
+                        <div class="absolute bottom-8 opacity-20">
+                            <span class="material-symbols-outlined text-gold-400 text-4xl">history_edu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Formatting Bar (Horizontal Scroll) - Visible on all but adapted -->
+        <div id="bottomToolbar" class="fixed bottom-0 left-0 right-0 z-30 glass-panel safe-bottom flex flex-col items-center">
+            <div class="w-full flex items-center justify-center gap-1 p-2 border-b border-gold-600/10 overflow-x-auto scrollbar-hide">
+                <select id="font-selector" onchange="changeFont(this.value)" class="bg-transparent border-none text-[10px] font-display text-gold-400 focus:ring-0 cursor-pointer mr-2 outline-none uppercase tracking-widest">
                     <option value="font-lora">Clásico Diario</option>
                     <option value="font-garamond">Eb Garamond</option>
                     <option value="font-playfair">Playfair Display</option>
@@ -379,184 +335,86 @@
                     <option value="font-pinyon">Pinyon Script</option>
                     <option value="font-inter">Inter Moderno</option>
                 </select>
-                <div class="w-px h-5 bg-gold-600/30"></div>
-                <button onclick="toggleCover()" id="bind-btn" class="p-1.5 text-parchment-800 hover:text-gold-600 transition-colors flex items-center gap-2" title="Encuadernar / Abrir">
-                    <span class="material-symbols-rounded text-[20px]">menu_book</span>
-                    <span class="text-[9px] uppercase font-bold tracking-widest hidden md:inline">Encuadernar</span>
-                </button>
-                <div class="w-px h-5 bg-gold-600/30"></div>
-                <button class="p-1.5 text-parchment-800 hover:text-gold-600 transition-colors"><span class="material-symbols-rounded text-[20px]">format_bold</span></button>
-                <button class="p-1.5 text-primary bg-primary/5 rounded-full"><span class="material-symbols-rounded text-[20px]">format_italic</span></button>
+                <div class="w-px h-6 bg-gold-600/30 mx-2"></div>
+                <button onclick="document.execCommand('bold', false, null)" class="touch-target text-parchment-200 hover:text-gold-400 transition-colors"><span class="material-symbols-outlined">format_bold</span></button>
+                <button onclick="document.execCommand('italic', false, null)" class="touch-target text-parchment-200 hover:text-gold-400 transition-colors"><span class="material-symbols-outlined">format_italic</span></button>
+                <div class="w-px h-6 bg-gold-600/30 mx-2"></div>
+                <button onclick="toggleMusa()" class="touch-target text-gold-400 animate-pulse-gold rounded-full"><span class="material-symbols-outlined">auto_fix_high</span></button>
+                <button onclick="deleteChapter()" class="touch-target text-gold-600 hover:text-primary transition-colors"><span class="material-symbols-outlined">delete</span></button>
+                <button onclick="toggleCover()" class="touch-target text-gold-400"><span class="material-symbols-outlined">menu_book</span></button>
             </div>
-
-            <!-- Header de Documento -->
-            <nav class="shrink-0 flex items-center justify-between p-4 md:p-10 pb-0 relative z-20">
-                <div class="flex-1 group">
-                    <input id="chapter-title" type="text" placeholder="Título del Escrito..." 
-                        class="w-full bg-transparent border-none text-xl md:text-4xl font-display tracking-widest text-parchment-900 focus:ring-0 placeholder:opacity-20 transition-all font-bold">
-                    <div id="save-status" class="text-[9px] uppercase tracking-[0.3em] text-gold-500 font-bold ml-1 opacity-0 group-hover:opacity-100 transition-opacity">Historial Preservado</div>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <div class="hidden md:flex flex-col items-end mr-6">
-                        <span id="sync-text" class="text-[10px] font-display font-bold text-gold-600 uppercase tracking-widest">Sincronizado</span>
-                        <span class="text-[8px] text-parchment-800/40 uppercase font-bold">Cloud V3 • Realtime</span>
-                    </div>
-                    
-                    <button onclick="getInspiration()" class="size-14 rounded-full bg-primary text-parchment-100 flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all group relative animate-pulse-gold">
-                        <span class="material-symbols-rounded text-2xl group-hover:rotate-45 transition-transform">auto_fix_high</span>
-                    </button>
-                    
-                    <div class="flex gap-2 ml-4">
-                        <button onclick="deleteChapter()" class="size-10 rounded-full border border-gold-600/20 text-gold-600/40 hover:text-primary hover:border-primary transition-all">
-                            <span class="material-symbols-rounded text-xl">delete</span>
-                        </button>
-                        <button class="size-10 rounded-full border border-gold-600/20 text-gold-600/40 hover:text-gold-600 transition-all">
-                            <span class="material-symbols-rounded text-xl">file_download</span>
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Editor de Texto -->
-            <div class="flex-1 relative overflow-hidden mt-6">
-                <div class="absolute inset-0 ink-splatter"></div>
-                <textarea id="editor-field" class="editor-field custom-scrollbar font-lora" 
-                    placeholder="Deja que tu alma dicte a la pluma..."></textarea>
-                
-                <!-- PORTADA DE LIBRO (MODO ENCUADERNACIÓN) -->
-                <div id="book-cover-overlay" class="book-cover leather-texture">
-                    <div class="cover-visual">
-                        <div class="cover-spine-shadow"></div>
-                        <div class="cover-deco-border"></div>
-                        <div class="cover-deco-inner"></div>
-                        
-                        <div class="relative z-20 flex flex-col items-center justify-center">
-                            <span class="text-gold-400 text-xs font-cinzel uppercase tracking-[0.3em] mb-8 gold-emboss opacity-60">Volumen Privado</span>
-                            <h2 id="cover-title" class="text-gold-400 text-4xl font-display font-bold leading-tight uppercase gold-emboss tracking-[0.1em] drop-shadow-2xl mb-12">
-                                Título del Escrito
-                            </h2>
-                            <div class="w-16 h-px bg-gold-600/30 mb-12"></div>
-                            <span class="text-gold-600/70 text-sm font-script tracking-widest italic gold-emboss" id="cover-author">Mila Universe</span>
-                        </div>
-                        
-                        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 opacity-20">
-                            <span class="material-symbols-rounded text-gold-400 text-4xl">history_edu</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- MOBILE CHAPTER DRAWER (shown on mobile when toggled) -->
-        <div id="mobile-chapter-drawer" class="fixed inset-0 z-50 md:hidden hidden">
-            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeMobileDrawer()"></div>
-            <div class="absolute left-0 top-0 bottom-0 w-72 bg-parchment-900 border-r border-gold-600/20 flex flex-col p-6 overflow-y-auto shadow-2xl">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="font-display text-sm tracking-[0.2em] text-gold-400 uppercase">Mis Escritos</h2>
-                    <button onclick="closeMobileDrawer()" class="text-gold-600/60 hover:text-gold-400">
-                        <span class="material-symbols-rounded">close</span>
-                    </button>
-                </div>
-                <button onclick="createNewChapter(); closeMobileDrawer()" class="w-full flex items-center justify-center gap-3 border border-gold-600/40 rounded-lg py-3 mb-6 hover:bg-gold-400/10 transition-all group">
-                    <span class="material-symbols-rounded text-gold-400 text-lg">post_add</span>
-                    <span class="font-display text-xs font-bold tracking-[0.2em] text-gold-400 uppercase">Nuevo Escrito</span>
+            
+            <!-- Quick Actions Mobile -->
+            <div class="absolute -top-14 right-4 md:hidden">
+                <button onclick="toggleMusa()" class="size-12 rounded-full bg-primary flex items-center justify-center text-parchment-200 shadow-lg border border-gold-400/30">
+                    <span class="material-symbols-outlined text-2xl">history_edu</span>
                 </button>
-                <div id="mobile-index-list" class="flex-1 space-y-2">
-                    <div class="text-center py-10 opacity-20 italic text-sm text-parchment-200">Cargando...</div>
-                </div>
             </div>
         </div>
 
-        <!-- MOBILE BOTTOM BAR (shown on mobile only) -->
-        <nav class="fixed bottom-0 left-0 right-0 md:hidden bg-parchment-900/95 backdrop-blur-xl border-t border-gold-600/20 flex items-center justify-around px-4 z-40" style="padding-bottom: env(safe-area-inset-bottom, 12px); padding-top: 12px;">
-            <button onclick="window.location.href='pergaminos.html'" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
-                <span class="material-symbols-rounded text-xl">history_edu</span>
-                <span class="text-[8px] font-display uppercase tracking-wider">Volver</span>
-            </button>
-            <button onclick="openMobileDrawer()" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
-                <span class="material-symbols-rounded text-xl">menu_book</span>
-                <span class="text-[8px] font-display uppercase tracking-wider">Capítulos</span>
-            </button>
-            <button onclick="createNewChapter()" class="flex flex-col items-center gap-1">
-                <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-lg">
-                    <span class="material-symbols-rounded text-parchment-100 text-xl">post_add</span>
-                </div>
-            </button>
-            <button onclick="getInspiration()" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
-                <span class="material-symbols-rounded text-xl">auto_fix_high</span>
-                <span class="text-[8px] font-display uppercase tracking-wider">Musa</span>
-            </button>
-            <button onclick="toggleTheme()" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
-                <span class="material-symbols-rounded text-xl" id="theme-icon-mobile">dark_mode</span>
-                <span class="text-[8px] font-display uppercase tracking-wider">Tema</span>
-            </button>
-        </nav>
-
-        <!-- LA MUSA (DERECHA) -->
-        <aside class="sidebar-right overflow-hidden flex flex-col">
-            <header class="p-8 border-b border-gold-600/20 flex items-center justify-between bg-parchment-200/50">
-                <div class="flex items-center gap-5">
-                    <div class="size-12 rounded-full border border-gold-400 flex items-center justify-center text-gold-600 shadow-md bg-parchment-100">
-                        <span class="material-symbols-rounded text-2xl">history_edu</span>
-                    </div>
+        <!-- Musa Bottom Sheet / Sidebar depending on view -->
+        <div id="musaSheet" class="fixed inset-x-0 bottom-0 z-[60] glass-panel transition-transform duration-500 transform translate-y-full flex flex-col max-h-[85vh] md:max-h-[70vh] rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+            <div class="h-1.5 w-12 bg-gold-600/30 rounded-full mx-auto my-3 cursor-pointer" onclick="toggleMusa()"></div>
+            
+            <div class="px-6 py-2 border-b border-gold-600/20 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-gold-400">auto_awesome</span>
                     <div>
-                        <h3 class="text-base font-display font-bold text-parchment-900 tracking-wider">Inspiración Divina</h3>
-                        <p class="text-[10px] font-display italic text-gold-600 uppercase tracking-widest font-bold">Esencia de Emily</p>
+                        <h3 class="text-sm font-display font-bold text-gold-400 tracking-wider uppercase">Musa Divina</h3>
+                        <p class="text-[10px] font-lora italic text-parchment-400">Esencia de Emily</p>
                     </div>
                 </div>
-            </header>
-
-            <div id="musa-chat" class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
-                <!-- Bienvenida -->
-                <div class="flex flex-col items-start">
+                <button class="touch-target text-gold-600" onclick="toggleMusa()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <div id="musa-chat" class="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+                <div class="flex flex-col items-start translate-y-2 opacity-0 fade-in">
                     <div class="musa-bubble">
-                        <p class="leading-relaxed italic">"Bienvenida, querida Mila. En este espacio, las palabras no son solo tinta, sino latidos del alma. ¿Qué historia debemos tejer hoy?"</p>
+                        <p class="leading-relaxed">"Bienvenida, querida alma. En este rincón del universo, tus palabras son constelaciones. ¿Qué debemos tejer hoy en el lienzo del tiempo?"</p>
                     </div>
                     <span class="text-[9px] text-gold-600/40 mt-3 ml-2 font-display tracking-widest uppercase">Emily • Ahora</span>
                 </div>
-                
                 <div id="musa-responses"></div>
             </div>
-
-            <div class="p-6 bg-parchment-200/80 border-t border-gold-600/10">
-                <div class="flex gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar">
-                    <button class="whitespace-nowrap px-4 py-2 bg-parchment-100 hover:bg-gold-400/10 rounded-full text-[10px] font-display text-gold-600 transition-colors border border-gold-600/30 uppercase tracking-widest shadow-sm">Rimas Sutiles</button>
-                    <button class="whitespace-nowrap px-4 py-2 bg-parchment-100 hover:bg-gold-400/10 rounded-full text-[10px] font-display text-gold-600 transition-colors border border-gold-600/30 uppercase tracking-widest shadow-sm">Metáforas de Luz</button>
+            
+            <div class="p-6 bg-candlelight/80 border-t border-gold-600/20 safe-bottom">
+                <div class="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide">
+                    <button onclick="musaQuickTag('rimas')" class="whitespace-nowrap px-4 py-2 bg-gold-400/5 border border-gold-600/30 rounded-full text-[10px] font-display text-gold-400 uppercase tracking-widest hover:bg-gold-400/10 transition-colors">Rimas Sutiles</button>
+                    <button onclick="musaQuickTag('metaforas')" class="whitespace-nowrap px-4 py-2 bg-gold-400/5 border border-gold-600/30 rounded-full text-[10px] font-display text-gold-400 uppercase tracking-widest hover:bg-gold-400/10 transition-colors">Metáforas de Luz</button>
                 </div>
                 <div class="relative group">
-                    <textarea id="musa-input" class="w-full bg-parchment-100 border border-gold-600/30 rounded-2xl pl-5 pr-14 py-4 text-sm font-body focus:ring-1 focus:ring-gold-500 focus:border-gold-500 resize-none shadow-inner text-parchment-900 placeholder-gold-600/30 italic" 
-                        placeholder="Susurra a la Musa..." rows="2"></textarea>
-                    <button onclick="getInspiration()" class="absolute right-3 bottom-3 size-10 rounded-full bg-primary hover:bg-primary-dark text-parchment-100 flex items-center justify-center transition-all shadow-lg">
-                        <span class="material-symbols-rounded text-xl">send</span>
+                    <textarea id="musa-input" class="w-full bg-gold-400/5 border border-gold-600/30 rounded-2xl pl-5 pr-14 py-4 text-sm font-lora focus:ring-1 focus:ring-gold-500 focus:border-gold-500 resize-none shadow-inner text-parchment-200 placeholder-gold-600/30 italic" 
+                        placeholder="Susurra a la Musa..." rows="1"></textarea>
+                    <button onclick="getInspiration()" class="absolute right-3 bottom-3 size-10 rounded-full bg-primary hover:bg-primary-dark text-parchment-100 flex items-center justify-center transition-all shadow-lg active:scale-90">
+                        <span class="material-symbols-outlined text-xl">send</span>
                     </button>
                 </div>
             </div>
-        </aside>
+        </div>
     </div>
 
     <!-- AUDIO ESCRITURA -->
     <audio id="scribble-sound" src="https://assets.mixkit.co/active_storage/sfx/1071/1071-preview.mp3" loop></audio>
 
+    <!-- FIREBASE & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = 'mila-universe'; 
-        let db, currentUser = localStorage.getItem('mila_pergamino_user');
+        let db;
+        let currentUser = localStorage.getItem('mila_pergamino_user') || 'Miguelo';
         let chapters = [];
         let activeChapterId = null;
         let saveTimeout;
+        const scribbleAudio = document.getElementById('scribble-sound');
 
         async function setupFirebase() {
             try {
-                // Validación de conexión
-                const response = await fetch('/api/firebase-config').catch(err => {
-                   console.warn("API config no alcanzable, usando local.");
-                   return null;
-                });
-                
-                if (!response || !response.ok) throw new Error("Config not available");
+                const response = await fetch('/api/firebase-config').catch(() => null);
+                if (!response || !response.ok) throw new Error("Config local fallback");
                 
                 const config = await response.json();
                 const app = initializeApp(config);
@@ -569,6 +427,11 @@
                         const data = snap.data();
                         const photo = data[currentUser];
                         if (photo) document.getElementById('user-avatar').style.backgroundImage = `url("${photo}")`;
+                        else {
+                           // Fallback local
+                           const localPhotos = JSON.parse(localStorage.getItem('mila_profile_photos') || '{}');
+                           if (localPhotos[currentUser]) document.getElementById('user-avatar').style.backgroundImage = `url("${localPhotos[currentUser]}")`;
+                        }
                     }
                 });
 
@@ -583,93 +446,47 @@
                     snap.forEach(d => list.push({ id: d.id, ...d.data() }));
                     chapters = list;
                     renderIndex();
+                    
+                    // Si no hay ninguno activo y hay lista, seleccionar el primero
+                    if (!activeChapterId && chapters.length > 0) {
+                        selectChapter(chapters[0].id);
+                    }
                 });
             } catch (e) {
-                console.error("Firebase Fallback:", e);
+                console.error("Firebase Sync Error:", e);
                 loadLocalChapters();
             }
         }
+
+        // --- FUNCIONES GLOBALES ---
+        window.toggleSidebar = () => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const isHidden = sidebar.classList.contains('-translate-x-full');
+            
+            if (isHidden) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        };
+
+        window.toggleMusa = () => {
+            const sheet = document.getElementById('musaSheet');
+            const isOffscreen = sheet.classList.contains('translate-y-full');
+            sheet.classList.toggle('translate-y-full');
+        };
 
         window.toggleTheme = () => {
             const html = document.documentElement;
             const target = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', target);
-            const iconName = target === 'dark' ? 'light_mode' : 'dark_mode';
-            document.getElementById('theme-icon').innerText = iconName;
-            const mobileIcon = document.getElementById('theme-icon-mobile');
-            if (mobileIcon) mobileIcon.innerText = iconName;
+            document.getElementById('theme-icon').innerText = target === 'dark' ? 'light_mode' : 'dark_mode';
             localStorage.setItem('mila_emily_theme', target);
-        };
-
-        function renderIndex() {
-            const container = document.getElementById('index-list');
-            container.innerHTML = '';
-            
-            chapters.forEach(ch => {
-                const div = document.createElement('div');
-                div.className = `chapter-card ${activeChapterId === ch.id ? 'active' : ''}`;
-                div.onclick = () => selectChapter(ch.id);
-                
-                const timeStr = ch.updatedAt?.seconds ? new Date(ch.updatedAt.seconds * 1000).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Hoy';
-                
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-display text-xs tracking-widest text-gold-400 truncate uppercase w-40">${ch.title || 'Manuscrito'}</h4>
-                        <span class="text-[8px] opacity-40 font-bold uppercase">${timeStr}</span>
-                    </div>
-                    <p class="text-[10px] text-gold-600/60 line-clamp-1 italic">${ch.content ? ch.content.substring(0, 30) + '...' : 'Página en blanco'}</p>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        window.createNewChapter = async () => {
-            const newChapter = {
-                title: 'Nuevo Susurro',
-                content: '',
-                author: currentUser,
-                createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp()
-            };
-
-            if (db) {
-                const docRef = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'emily_books'), newChapter);
-                selectChapter(docRef.id);
-            } else {
-                const id = 'local-' + Date.now();
-                chapters.unshift({ id, ...newChapter });
-                selectChapter(id);
-                saveLocalChapters();
-            }
-        };
-
-        function selectChapter(id) {
-            activeChapterId = id;
-            const chapter = chapters.find(c => c.id === id);
-            if (!chapter) return;
-
-            document.getElementById('chapter-title').value = chapter.title;
-            document.getElementById('editor-field').value = chapter.content;
-            
-            // Aplicar fuente guardada
-            const savedFont = chapter.fontFamily || 'font-lora';
-            changeFont(savedFont, false);
-            document.getElementById('font-selector').value = savedFont;
-
-            document.getElementById('save-status').innerText = 'Sincronizado';
-            
-            // Cerrar portada si estaba abierta
-            document.getElementById('book-cover-overlay').classList.remove('active');
-            
-            renderIndex();
-        }
-
-        window.changeFont = (fontClass, triggerSaveAction = true) => {
-            const field = document.getElementById('editor-field');
-            // Remover fuentes anteriores
-            field.classList.remove('font-lora', 'font-garamond', 'font-dancing', 'font-cinzel', 'font-pinyon', 'font-inter', 'font-plus', 'font-playfair', 'font-vibes');
-            field.classList.add(fontClass);
-            if (triggerSaveAction) triggerSave();
         };
 
         window.toggleCover = () => {
@@ -677,28 +494,82 @@
             const isActive = overlay.classList.toggle('active');
             
             if (isActive) {
-                // Actualizar datos de la portada
-                document.getElementById('cover-title').innerText = document.getElementById('chapter-title').value || 'Sin Título';
+                document.getElementById('cover-title').innerText = document.getElementById('chapter-title').innerText.trim() || 'Sin Título';
                 document.getElementById('cover-author').innerText = currentUser || 'Mila Universe';
-                
-                // Efecto sonoro de cerrar libro
-                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/1473/1473-preview.mp3');
-                audio.volume = 0.3;
-                audio.play().catch(()=>{});
+                new Audio('https://assets.mixkit.co/active_storage/sfx/1473/1473-preview.mp3').play().catch(()=>{});
             }
         };
 
+        window.changeFont = (fontClass, triggerSaveAction = true) => {
+            const canvas = document.getElementById('editor-canvas');
+            const fonts = ['font-lora', 'font-garamond', 'font-dancing', 'font-cinzel', 'font-pinyon', 'font-inter', 'font-plus', 'font-playfair', 'font-vibes'];
+            fonts.forEach(f => canvas.classList.remove(f));
+            canvas.classList.add(fontClass);
+            if (triggerSaveAction) triggerSave();
+        };
+
+        window.createNewChapter = async () => {
+            const newChapter = {
+                title: 'Nuevo Susurro',
+                content: '<p>Empieza a escribir aquí...</p>',
+                author: currentUser,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+                fontFamily: 'font-lora'
+            };
+
+            if (db) {
+                const docRef = await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'emily_books'), newChapter);
+                selectChapter(docRef.id);
+            } else {
+                const id = 'local-' + Date.now();
+                chapters.unshift({ id, ...newChapter, updatedAt: { seconds: Date.now()/1000 } });
+                selectChapter(id);
+                saveLocalChapters();
+            }
+        };
+
+        async function selectChapter(id) {
+            activeChapterId = id;
+            const ch = chapters.find(c => c.id === id);
+            if (!ch) return;
+
+            document.getElementById('chapter-title').innerText = ch.title || 'Sin Título';
+            document.getElementById('editor-canvas').innerHTML = ch.content || '<p></p>';
+            document.getElementById('sidebar-current-title').innerText = ch.title || 'Manuscrito';
+            
+            const savedFont = ch.fontFamily || 'font-lora';
+            changeFont(savedFont, false);
+            document.getElementById('font-selector').value = savedFont;
+            
+            document.getElementById('save-status').innerText = 'Sincronizado';
+            renderIndex();
+        }
+
+        window.deleteChapter = async () => {
+            if (!activeChapterId || !confirm("¿Borrar este rastro del alma?")) return;
+            if (db && !activeChapterId.startsWith('local')) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'emily_books', activeChapterId));
+            } else {
+                chapters = chapters.filter(c => c.id !== activeChapterId);
+                saveLocalChapters();
+            }
+            activeChapterId = null;
+            document.getElementById('chapter-title').innerText = 'Nuevo Susurro';
+            document.getElementById('editor-canvas').innerHTML = '<p></p>';
+            renderIndex();
+        };
+
         function triggerSave() {
-            document.getElementById('save-status').innerText = 'Guardando en la nube...';
-            document.getElementById('sync-text').innerText = 'Escribiendo...';
+            document.getElementById('save-status').innerText = 'Escribiendo...';
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(saveCurrentChapter, 1500);
+            saveTimeout = setTimeout(saveCurrentChapter, 2000);
         }
 
         async function saveCurrentChapter() {
             if (!activeChapterId) return;
-            const title = document.getElementById('chapter-title').value;
-            const content = document.getElementById('editor-field').value;
+            const title = document.getElementById('chapter-title').innerText.trim();
+            const content = document.getElementById('editor-canvas').innerHTML;
             const fontFamily = document.getElementById('font-selector').value;
 
             if (db && !activeChapterId.startsWith('local')) {
@@ -712,37 +583,42 @@
                     saveLocalChapters();
                 }
             }
-            document.getElementById('save-status').innerText = 'Perservado';
-            document.getElementById('sync-text').innerText = 'Sincronizado';
+            document.getElementById('save-status').innerText = 'Sincronizado';
         }
 
-        window.deleteChapter = async () => {
-            if (!activeChapterId || !confirm("¿Borrar este rastro del alma?")) return;
-            if (db && !activeChapterId.startsWith('local')) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'emily_books', activeChapterId));
-            } else {
-                chapters = chapters.filter(c => c.id !== activeChapterId);
-                saveLocalChapters();
-            }
-            activeChapterId = null;
-            document.getElementById('chapter-title').value = '';
-            document.getElementById('editor-field').value = '';
-            renderIndex();
-        };
+        function renderIndex() {
+            const container = document.getElementById('index-list');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            chapters.forEach(ch => {
+                const a = document.createElement('a');
+                const isActive = activeChapterId === ch.id;
+                a.className = `flex flex-col px-4 py-3 border-l-2 transition-all cursor-pointer ${isActive ? 'border-gold-400 bg-gold-400/10 text-gold-400' : 'border-transparent text-parchment-400 hover:text-parchment-100'}`;
+                a.onclick = () => { selectChapter(ch.id); if(window.innerWidth < 768) toggleSidebar(); };
+                
+                const title = ch.title || 'Manuscrito';
+                const preview = ch.content ? ch.content.replace(/<[^>]*>/g, '').substring(0, 35) + '...' : 'Página en blanco';
+                
+                a.innerHTML = `
+                    <span class="font-display text-sm tracking-widest truncate">${title}</span>
+                    <span class="text-[9px] opacity-40 italic truncate">${preview}</span>
+                `;
+                container.appendChild(a);
+            });
+        }
 
-        // INTEGRACIÓN IA (LA MUSA)
+        // --- MUSA IA ---
         window.getInspiration = async () => {
             const input = document.getElementById('musa-input');
             const userMsg = input.value.trim();
-            const currentContent = document.getElementById('editor-field').value;
-            
+            const currentContent = document.getElementById('editor-canvas').innerText;
             const museContainer = document.getElementById('musa-responses');
             
-            // UI Feedback
             if(userMsg) {
                 museContainer.innerHTML += `
-                    <div class="flex flex-col items-end mt-6">
-                        <div class="bg-gold-400/10 border border-gold-600/10 rounded-2xl px-5 py-3 text-xs italic text-parchment-900 shadow-sm max-w-[80%]">
+                    <div class="flex flex-col items-end mt-4 fade-in">
+                        <div class="bg-gold-600/10 border border-gold-600/20 rounded-2xl rounded-tr-none px-4 py-3 max-w-[85%] text-xs italic text-parchment-200">
                             ${userMsg}
                         </div>
                     </div>
@@ -756,12 +632,13 @@
                     <div class="musa-bubble"><p class="text-xs">Invocando el saber...</p></div>
                 </div>
             `;
-            museContainer.scrollTop = museContainer.scrollHeight;
+            const chatBox = document.getElementById('musa-chat');
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-            const prompt = `Actúa como la esencia literaria de Emily Brontë. Mila está escribiendo su diario sagrado. 
-            Contenido actual: "${currentContent || '(Libro en blanco)'}". 
-            Solicitud específica de Mila: "${userMsg || 'Dame inspiración pura.'}".
-            Responde con un tono profundamente poético, gótico, romántico y antiguo. Corto, pero que impacte el alma. Solo el texto de respuesta, sin meta-diálogo.`;
+            const prompt = `Actúa como la esencia literaria de Emily Brontë. Mila está escribiendo su estudio creativo. 
+            Contenido actual: "${currentContent.substring(0, 1000)}". 
+            Solicitud específica: "${userMsg || 'Dame inspiración pura.'}".
+            Responde con un tono poético, gótico y romántico. Corto.`;
 
             try {
                 const response = await fetch('/api/generate', {
@@ -770,93 +647,92 @@
                     body: JSON.stringify({ prompt })
                 });
                 const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio es la respuesta más profunda...";
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio es la respuesta...";
                 
                 document.getElementById(loadingId).remove();
                 
                 museContainer.innerHTML += `
                     <div class="flex flex-col items-start mt-6 fade-in">
                         <div class="musa-bubble">
-                            <p class="leading-relaxed italic">${reply.replace(/\*/g, '')}</p>
-                            <button onclick="applyInspiration('${reply.replace(/'/g, "\\'").replace(/\n/g, ' ')}')" class="mt-4 text-[9px] font-display font-bold text-primary uppercase tracking-widest hover:underline">Tejer en el lienzo</button>
+                            <p class="leading-relaxed font-lora">${reply.replace(/\*/g, '')}</p>
+                            <button onclick="applyInspiration('${reply.replace(/'/g, "\\'").replace(/\n/g, ' ')}')" class="mt-4 text-[9px] font-display font-bold text-primary hover:text-gold-400 uppercase tracking-widest transition-colors flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">history_edu</span> Tejer en el lienzo
+                            </button>
                         </div>
                         <span class="text-[8px] text-gold-600/40 mt-2 ml-2 font-display uppercase tracking-widest">Emily • Ahora</span>
                     </div>
                 `;
-                museContainer.scrollTop = museContainer.scrollHeight;
+                chatBox.scrollTop = chatBox.scrollHeight;
             } catch (e) {
                 document.getElementById(loadingId).innerHTML = '<div class="musa-bubble text-primary opacity-50">La conexión es débil...</div>';
             }
         };
 
         window.applyInspiration = (text) => {
-            const field = document.getElementById('editor-field');
-            field.value += "\n\n" + text;
+            const canvas = document.getElementById('editor-canvas');
+            const p = document.createElement('p');
+            p.className = "italic text-primary/80 my-4";
+            p.innerText = text;
+            canvas.appendChild(p);
+            
+            // Forzar focus y scroll
+            canvas.focus();
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.selectNodeContents(canvas);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            
             triggerSave();
-            field.scrollTop = field.scrollHeight;
+            const main = document.querySelector('main');
+            main.scrollTop = main.scrollHeight;
         };
 
-        // AUDIO Y EVENTOS
-        const audio = document.getElementById('scribble-sound');
-        document.getElementById('editor-field').addEventListener('input', () => {
-            triggerSave();
-            if (audio.paused) { audio.volume = 0.15; audio.play().catch(()=>{}); }
-            clearTimeout(window.audioT);
-            window.audioT = setTimeout(() => { audio.pause(); audio.currentTime = 0; }, 800);
-        });
+        window.musaQuickTag = (tag) => {
+            const msgs = {
+                rimas: "Necesito rimas sutiles para este sentimiento.",
+                metaforas: "Dame una metáfora literaria sobre este momento."
+            };
+            document.getElementById('musa-input').value = msgs[tag] || "";
+            getInspiration();
+        };
 
-        document.getElementById('chapter-title').addEventListener('input', triggerSave);
+        // --- EDITOR EVENTS ---
+        document.getElementById('editor-canvas').addEventListener('input', () => {
+            triggerSave();
+            // Efecto de sonido
+            if (scribbleAudio.paused) { scribbleAudio.volume = 0.1; scribbleAudio.play().catch(()=>{}); }
+            clearTimeout(window.audioT);
+            window.audioT = setTimeout(() => { scribbleAudio.pause(); scribbleAudio.currentTime = 0; }, 800);
+        });
         
+        document.getElementById('chapter-title').addEventListener('input', triggerSave);
+
+        // --- LOCAL FALLBACKS ---
         function saveLocalChapters() { localStorage.setItem('mila_emily_local', JSON.stringify(chapters)); }
         function loadLocalChapters() { 
             const s = localStorage.getItem('mila_emily_local'); 
             if(s) { chapters = JSON.parse(s); renderIndex(); }
         }
 
-        window.openMobileDrawer = () => {
-            const drawer = document.getElementById('mobile-chapter-drawer');
-            drawer.classList.remove('hidden');
-            renderMobileIndex();
-        };
-
-        window.closeMobileDrawer = () => {
-            document.getElementById('mobile-chapter-drawer').classList.add('hidden');
-        };
-
-        function renderMobileIndex() {
-            const container = document.getElementById('mobile-index-list');
-            if (!container) return;
-            if (!chapters.length) {
-                container.innerHTML = '<div class="text-center py-10 opacity-20 italic text-sm text-parchment-200">Sin escritos aún...</div>';
-                return;
-            }
-            container.innerHTML = '';
-            chapters.forEach(ch => {
-                const div = document.createElement('div');
-                div.className = 'chapter-card rounded-xl ' + (ch.id === activeChapterId ? 'active' : '');
-                div.onclick = () => { selectChapter(ch.id); closeMobileDrawer(); };
-                const timeStr = ch.updatedAt?.seconds ? new Date(ch.updatedAt.seconds * 1000).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Hoy';
-                div.innerHTML = `
-                    <h4 class="font-display text-xs tracking-widest text-gold-400 truncate uppercase">${ch.title || 'Manuscrito'}</h4>
-                    <p class="text-[10px] text-gold-600/60 line-clamp-1 italic mt-1">${ch.content ? ch.content.substring(0, 40) + '...' : 'Página en blanco'}</p>
-                    <span class="text-[8px] opacity-40 font-bold uppercase">${timeStr}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
-
+        // --- INIT ---
         async function init() {
             const t = localStorage.getItem('mila_emily_theme') || 'light';
             document.documentElement.setAttribute('data-theme', t);
             document.getElementById('theme-icon').innerText = t === 'dark' ? 'light_mode' : 'dark_mode';
-            const mobileThemeIcon = document.getElementById('theme-icon-mobile');
-            if (mobileThemeIcon) mobileThemeIcon.innerText = t === 'dark' ? 'light_mode' : 'dark_mode';
             
-            // Cargar avatar local inmediato si existe
             const localPhotos = JSON.parse(localStorage.getItem('mila_profile_photos') || '{}');
             if (localPhotos[currentUser]) {
                 document.getElementById('user-avatar').style.backgroundImage = `url("${localPhotos[currentUser]}")`;
             }
+
+            // Aura de Cursor
+            const aura = document.getElementById('cursor-aura');
+            document.addEventListener('mousemove', (e) => {
+                aura.style.left = e.clientX + 'px';
+                aura.style.top = e.clientY + 'px';
+            });
 
             await setupFirebase();
         }
