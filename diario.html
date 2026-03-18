@@ -412,6 +412,11 @@
             setMode('moon');
             updateRecordCount();
             updateProfileUI();
+            MilApp.sync.setLocal({
+                module: 'diario',
+                toastMessage: 'La Bitácora sigue en modo local y privado en este dispositivo.',
+                title: 'Bitácora'
+            });
         }
 
         function updateProfileUI() {
@@ -814,7 +819,7 @@
         }
 
         async function callGemini(prompt) {
-            return Universo.callGemini(prompt);
+            return MilApp.ai.generate(prompt, { title: 'Bitácora' });
         }
 
         // Initialize on load

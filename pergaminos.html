@@ -1766,37 +1766,36 @@
         }
 
         function showToast(message, durationMs = 4000) {
-            const t = document.createElement('div');
-            t.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(20,15,10,0.92);border:1px solid rgba(139,90,43,0.4);color:#c5b49a;font-family:Cinzel,serif;font-size:11px;letter-spacing:0.08em;padding:10px 18px;border-radius:12px;z-index:9999;text-align:center;max-width:90vw;pointer-events:none;';
-            t.innerText = message;
-            document.body.appendChild(t);
-            setTimeout(() => { if (t.parentNode) t.parentNode.removeChild(t); }, durationMs);
+            MilApp.toast(message, 'warning', 'Pergaminos');
         }
 
         function showFirebaseOfflineNotice() {
-            const existing = document.getElementById('firebase-offline-notice');
-            if (existing) return;
-            const notice = document.createElement('div');
-            notice.id = 'firebase-offline-notice';
-            notice.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(20,15,10,0.92);border:1px solid rgba(139,90,43,0.4);color:#c5b49a;font-family:Cinzel,serif;font-size:11px;letter-spacing:0.08em;padding:10px 18px;border-radius:12px;z-index:9999;text-align:center;max-width:90vw;pointer-events:none;';
-            notice.innerText = 'El canal de correspondencia requiere configuración — por ahora tus cartas se guardan localmente';
-            document.body.appendChild(notice);
-            setTimeout(() => { if (notice.parentNode) notice.parentNode.removeChild(notice); }, 6000);
+            MilApp.sync.setLocal({
+                module: 'pergaminos',
+                noticeSelector: '#chat-local-notice',
+                noticeText: 'El canal de correspondencia requiere configuración — por ahora tus cartas se guardan localmente',
+                toastMessage: 'El canal de correspondencia entra en modo local hasta que vuelva la sincronía.',
+                title: 'Pergaminos'
+            });
         }
 
         async function setupFirebase() {
-            const cfg = (window.__firebase_config) || (window.__firebaseConfig) || {};
+            const serverCfg = await MilApp.firebase.getConfig();
+            const cfg = serverCfg.apiKey ? serverCfg : ((window.__firebase_config) || (window.__firebaseConfig) || {});
             const hasCredentials = cfg.apiKey && cfg.apiKey.length > 0 && cfg.projectId && cfg.projectId.length > 0;
             if (!hasCredentials) {
                 showFirebaseOfflineNotice();
-                const localNotice = document.getElementById('chat-local-notice');
-                if (localNotice) localNotice.classList.remove('hidden');
                 return;
             }
             try {
                 const app = initializeApp(cfg);
                 auth = getAuth(app);
                 db = getFirestore(app);
+                MilApp.sync.setCloud({
+                    module: 'pergaminos',
+                    noticeSelector: '#chat-local-notice',
+                    title: 'Pergaminos'
+                });
 
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -1873,8 +1872,6 @@
                 console.error("Error Firebase Global:", e);
                 db = null; auth = null;
                 showFirebaseOfflineNotice();
-                const localNotice = document.getElementById('chat-local-notice');
-                if (localNotice) localNotice.classList.remove('hidden');
             }
         }
 
@@ -2573,13 +2570,8 @@
             const prompt = `Actúa como un escriba experto. Tu tarea es reescribir/traducir el siguiente texto. ${context} Texto: "${text}"`;
 
             try {
-                const response = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
-                });
-                const data = await response.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/\*/g, '').replace(/"/g, '') || text;
+                const result = await MilApp.ai.generate(prompt, { quiet: true, title: 'Pergaminos' });
+                return result?.replace(/\*/g, '').replace(/"/g, '') || text;
             } catch (e) {
                 console.error("Error IA", e);
                 return text;
@@ -2912,13 +2904,7 @@
             const prompt = `${context} Usuario dice: "${msg}". Responde corto, profundo y con el corazón.`;
 
             try {
-                const response = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
-                });
-                const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio responde...";
+                const reply = await MilApp.ai.generate(prompt, { quiet: true, title: 'Pergaminos' }) || "El silencio responde...";
                 chatHistory.innerHTML += `<div class="chat-msg guide">${reply}</div>`;
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch (e) {

@@ -786,6 +786,12 @@
         function uploadUniverse(i) { const f = i.files[0]; if (!f) return; const r = new FileReader(); r.onload = (e) => { try { const d = JSON.parse(e.target.result); if (confirm("¿Restaurar?")) { if (d.profiles) localStorage.setItem('mila_profiles', JSON.stringify(d.profiles)); if (d.dreams) localStorage.setItem('mila_dreams', JSON.stringify(d.dreams)); if (d.wiki) localStorage.setItem('mila_wiki', JSON.stringify(d.wiki)); location.reload(); } } catch { alert("Error"); } }; r.readAsText(f); }
         function openHelp() { alert("Bienvenido a la Bóveda. Gestiona tu sabiduría."); }
 
+        MilApp.sync.setLocal({
+            module: 'biblioteca',
+            toastMessage: 'La Bóveda trabaja en modo local: tu archivo permanece en este dispositivo.',
+            title: 'La Bóveda'
+        });
+
         init();
     </script>
 </body>

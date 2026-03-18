@@ -4,6 +4,7 @@
     installPrompt: null,
     firebaseConfigPromise: null,
     listenersAttached: false,
+    syncModes: {},
   };
 
   function ensureContainer(className) {
@@ -186,6 +187,50 @@
     return state.firebaseConfigPromise;
   }
 
+  function setSyncMode({
+    module,
+    mode,
+    badgeSelector,
+    badgeText,
+    noticeSelector,
+    noticeText,
+    toastMessage,
+    title = "Sincronía",
+  }) {
+    if (!module) return;
+
+    state.syncModes[module] = mode;
+
+    if (badgeSelector) {
+      const badge = document.querySelector(badgeSelector);
+      if (badge) {
+        badge.classList.add("milapp-sync-badge");
+        badge.dataset.mode = mode;
+        if (badgeText) badge.innerText = badgeText;
+      }
+    }
+
+    if (noticeSelector) {
+      const notice = document.querySelector(noticeSelector);
+      if (notice) {
+        notice.dataset.mode = mode;
+        if (noticeText) {
+          const textTarget = notice.querySelector("[data-sync-text]") || notice;
+          textTarget.textContent = noticeText;
+        }
+        notice.classList.toggle("hidden", mode !== "local");
+      }
+    }
+
+    if (toastMessage) {
+      const toastKey = `milapp_sync_notice_${module}_${mode}`;
+      if (!sessionStorage.getItem(toastKey)) {
+        sessionStorage.setItem(toastKey, "true");
+        toast(toastMessage, mode === "local" ? "warning" : "success", title);
+      }
+    }
+  }
+
   async function generate(prompt, { quiet = false } = {}) {
     try {
       if (window.Universo?.callGemini) {
@@ -270,5 +315,10 @@
     guide: { open: openGuide },
     ai: { generate },
     firebase: { getConfig: fetchFirebaseConfig },
+    sync: {
+      setLocal: (options = {}) => setSyncMode({ ...options, mode: "local" }),
+      setCloud: (options = {}) => setSyncMode({ ...options, mode: "cloud" }),
+      getMode: (module) => state.syncModes[module] || null,
+    },
   };
 })();

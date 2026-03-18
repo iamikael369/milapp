@@ -214,6 +214,14 @@
   color: var(--milapp-shell-gold);
 }
 
+.milapp-sync-badge[data-mode="cloud"] {
+  color: var(--milapp-shell-success) !important;
+}
+
+.milapp-sync-badge[data-mode="local"] {
+  color: var(--milapp-shell-warning) !important;
+}
+
 body.milapp-shell-ready {
   --milapp-safe-bottom: max(16px, env(safe-area-inset-bottom, 0px));
 }

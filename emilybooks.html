@@ -422,12 +422,39 @@
         let saveTimeout;
         const scribbleAudio = document.getElementById('scribble-sound');
 
+        function updateSyncStatus(mode, isSaving = false) {
+            const isCloud = mode === 'cloud';
+            if (isSaving) {
+                const badge = document.getElementById('save-status');
+                if (badge) badge.innerText = isCloud ? 'Sincronizando...' : 'Guardando local...';
+                return;
+            }
+
+            if (isCloud) {
+                MilApp.sync.setCloud({
+                    module: 'emilybooks',
+                    badgeSelector: '#save-status',
+                    badgeText: 'En la nube',
+                    title: 'Emily Books'
+                });
+            } else {
+                MilApp.sync.setLocal({
+                    module: 'emilybooks',
+                    badgeSelector: '#save-status',
+                    badgeText: 'Modo local',
+                    toastMessage: 'Sin sincronía en la nube — Emily Books seguirá guardando en modo local.',
+                    title: 'Emily Books'
+                });
+            }
+        }
+
         async function setupFirebase() {
             try {
                 const config = await MilApp.firebase.getConfig();
                 if (!config.apiKey || !config.projectId) throw new Error("Config local fallback");
                 const app = initializeApp(config);
                 db = getFirestore(app);
+                updateSyncStatus('cloud');
 
                 // Escuchar perfiles para avatar
                 const profilesRef = doc(db, 'artifacts', appId, 'public', 'config', 'profiles');
@@ -463,7 +490,7 @@
                 });
             } catch (e) {
                 console.error("Firebase Sync Error:", e);
-                MilApp.toast("Sin sincronía en la nube — Emily Books seguirá guardando en modo local.", "warning", "Emily Books");
+                updateSyncStatus('local');
                 loadLocalChapters();
             }
         }
@@ -552,7 +579,7 @@
             changeFont(savedFont, false);
             document.getElementById('font-selector').value = savedFont;
             
-            document.getElementById('save-status').innerText = 'Sincronizado';
+            updateSyncStatus(db && !String(activeChapterId || '').startsWith('local') ? 'cloud' : 'local');
             renderIndex();
         }
 
@@ -571,7 +598,7 @@
         };
 
         function triggerSave() {
-            document.getElementById('save-status').innerText = 'Escribiendo...';
+            updateSyncStatus(db && !String(activeChapterId || '').startsWith('local') ? 'cloud' : 'local', true);
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(saveCurrentChapter, 2000);
         }
@@ -593,7 +620,7 @@
                     saveLocalChapters();
                 }
             }
-            document.getElementById('save-status').innerText = 'Sincronizado';
+            updateSyncStatus(db && !String(activeChapterId || '').startsWith('local') ? 'cloud' : 'local');
         }
 
         function renderIndex() {
@@ -651,13 +678,7 @@
             Responde con un tono poético, gótico y romántico. Corto.`;
 
             try {
-                const response = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt })
-                });
-                const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio es la respuesta...";
+                const reply = await MilApp.ai.generate(prompt, { quiet: true, title: 'Emily Books' }) || "El silencio es la respuesta...";
                 
                 document.getElementById(loadingId).remove();
                 
