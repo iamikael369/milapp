@@ -1402,7 +1402,7 @@
 
                     <!-- Aviso modo local -->
                     <div id="chat-local-notice" class="hidden px-4 py-2 bg-parchment-dark/60 dark:bg-black/30 border-b border-gold/20 text-center">
-                        <p class="text-[11px] font-cinzel text-ink/50 dark:text-parchment/40 tracking-widest uppercase">✦ Tus mensajes viven en este dispositivo · La sincronía sagrada activa con Firebase ✦</p>
+                        <p data-sync-text class="text-[11px] font-cinzel text-ink/50 dark:text-parchment/40 tracking-widest uppercase">✦ Tus mensajes viven en este dispositivo · La sincronía sagrada activa con Firebase ✦</p>
                     </div>
 
                     <!-- Messages Area -->
@@ -1708,6 +1708,7 @@
                 document.getElementById('profile-modal').style.display = 'none';
                 setupFirebase();
             }
+            updateChatPresence();
             updateEra();
             
             // Asegurar que el trato y firma se carguen si ya existe un usuario
@@ -1849,8 +1850,9 @@
                             data.firebaseId = docSnap.id;
                             cloudMsgs.push(data);
                         });
-                        messages = cloudMsgs;
+                        messages = mergeChatMessages(cloudMsgs);
                         saveLocalMessages();
+                        updateChatPresence();
                         if (chatMode) renderChatMessages();
                     });
                 } catch (e) { console.error('Error chat snapshot:', e); }
@@ -1872,6 +1874,7 @@
                 console.error("Error Firebase Global:", e);
                 db = null; auth = null;
                 showFirebaseOfflineNotice();
+                updateChatPresence();
             }
         }
 
@@ -2034,6 +2037,7 @@
             document.getElementById('profile-modal').style.display = 'none';
             updateSignatureDefault();
             updateSalutations();
+            updateChatPresence();
             setupFirebase();
             window.checkTutorial();
         };
@@ -2273,8 +2277,90 @@
         function loadLocalMessages() {
             try {
                 const stored = localStorage.getItem('mila_pergaminos_chat');
-                if (stored) messages = JSON.parse(stored);
+                if (stored) messages = JSON.parse(stored).map(m => normalizeChatMessage(m, 'local'));
             } catch (e) { }
+        }
+
+        function getChatPartner() {
+            return currentUser === 'Mila' ? 'Miguelo' : 'Mila';
+        }
+
+        function normalizeChatTimestamp(value, fallback = Date.now()) {
+            if (!value) return fallback;
+            if (typeof value === 'number') return value;
+            if (typeof value?.toMillis === 'function') return value.toMillis();
+            if (typeof value === 'string') {
+                const parsed = Date.parse(value);
+                return Number.isNaN(parsed) ? fallback : parsed;
+            }
+            if (typeof value?.seconds === 'number') return value.seconds * 1000;
+            return fallback;
+        }
+
+        function normalizeChatMessage(raw, source = 'local') {
+            const fallbackTs = raw?.localTimestamp || Date.now();
+            const timestamp = normalizeChatTimestamp(raw?.timestamp, fallbackTs);
+            const text = typeof raw?.text === 'string' ? raw.text : '';
+            const clientId = raw?.clientId || raw?.firebaseId || `legacy-${raw?.sender || 'anon'}-${timestamp}-${text.slice(0, 18)}`;
+            const image = raw?.image && raw.image.startsWith('data:') ? raw.image : '';
+            const normalized = {
+                clientId,
+                firebaseId: raw?.firebaseId || null,
+                sender: raw?.sender || currentUser || 'Anónimo',
+                receiver: raw?.receiver || (raw?.sender === 'Mila' ? 'Miguelo' : 'Mila'),
+                text,
+                image,
+                imageLocal: Boolean(raw?.imageLocal || image),
+                type: raw?.type || (raw?.audioData ? 'audio' : 'text'),
+                audioData: raw?.audioData || '',
+                timestamp,
+                localTimestamp: raw?.localTimestamp || timestamp,
+                date: raw?.date || new Date(timestamp).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }),
+                fontFamily: raw?.fontFamily || document.getElementById('font-select')?.value || 'font-dancing',
+                status: raw?.status || (source === 'cloud' ? 'synced' : 'local'),
+            };
+
+            if (!normalized.image && raw?.image === '[imagen adjunta]') {
+                normalized.image = '';
+            }
+
+            return normalized;
+        }
+
+        function mergeChatMessages(cloudMessages) {
+            const merged = new Map();
+            messages.map(m => normalizeChatMessage(m, 'local')).forEach((msg) => {
+                merged.set(msg.clientId, msg);
+            });
+
+            cloudMessages.map(m => normalizeChatMessage(m, 'cloud')).forEach((cloudMsg) => {
+                const existing = merged.get(cloudMsg.clientId);
+                const preservedImage = existing?.image && existing.image.startsWith('data:') ? existing.image : '';
+                merged.set(cloudMsg.clientId, {
+                    ...existing,
+                    ...cloudMsg,
+                    image: preservedImage || cloudMsg.image,
+                    imageLocal: Boolean(preservedImage || cloudMsg.imageLocal),
+                    status: 'synced',
+                });
+            });
+
+            return Array.from(merged.values())
+                .sort((a, b) => a.timestamp - b.timestamp)
+                .slice(-200);
+        }
+
+        function updateChatPresence() {
+            const statusEl = document.getElementById('chat-status');
+            if (!statusEl) return;
+            if (!currentUser) {
+                statusEl.innerText = 'Esperando identidad sagrada';
+                return;
+            }
+            const partner = getChatPartner();
+            statusEl.innerText = db
+                ? `Sincronía viva con ${partner}`
+                : `Modo local íntimo con ${partner}`;
         }
 
         window.applyMode = function() {
@@ -2304,6 +2390,7 @@
                     if (partnerName) partnerName.innerText = "Mila & Miguel";
                 }
 
+                updateChatPresence();
                 renderChatMessages();
                 setupChatListeners();
             } else {
@@ -2333,6 +2420,7 @@
             if (!container) return;
             const isMe = msg.sender === currentUser;
             const div = document.createElement('div');
+            const deliveryIcon = msg.status === 'sending' ? 'schedule' : (msg.status === 'local' ? 'cloud_off' : 'done_all');
             
             const timeStr = new Date(msg.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
             
@@ -2352,7 +2440,7 @@
                             </div>
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
-                                <span class="material-symbols-rounded text-[16px] text-gold">done_all</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold">${deliveryIcon}</span>
                             </div>
                         `;
                     } else if (msg.image && msg.image.startsWith('data:')) {
@@ -2360,7 +2448,7 @@
                             <img src="${msg.image}" alt="imagen adjunta" class="rounded-2xl rounded-br-none max-w-[260px] max-h-[300px] object-cover shadow-elegant border border-gold/40" />
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
-                                <span class="material-symbols-rounded text-[16px] text-gold">done_all</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold">${deliveryIcon}</span>
                             </div>
                         `;
                     } else {
@@ -2368,7 +2456,7 @@
                             <p class="text-white text-[15px] font-normal leading-relaxed rounded-2xl rounded-br-none px-5 py-3 bg-gradient-to-br from-[#2c1810] to-ink shadow-elegant border border-gold/40 chat-font">${msg.text}</p>
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
-                                <span class="material-symbols-rounded text-[16px] text-gold">done_all</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold">${deliveryIcon}</span>
                             </div>
                         `;
                     }
@@ -2431,14 +2519,21 @@
             if (!text && !imageBase64) return;
             const now = new Date();
             const dateStr = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
-            const msg = {
+            const msg = normalizeChatMessage({
+                clientId: `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
                 sender: currentUser || 'Anónimo',
+                receiver: getChatPartner(),
                 text: text,
                 date: dateStr,
                 timestamp: Date.now(),
+                localTimestamp: Date.now(),
+                status: db ? 'sending' : 'local',
                 fontFamily: document.getElementById('font-select')?.value || 'font-dancing'
-            };
-            if (imageBase64) msg.image = imageBase64;
+            }, 'local');
+            if (imageBase64) {
+                msg.image = imageBase64;
+                msg.imageLocal = true;
+            }
             messages.push(msg);
             renderChatMessage(msg);
             if (input && !overrideText) {
@@ -2453,7 +2548,15 @@
                     // Don't store large base64 images in Firebase — store a flag
                     if (imageBase64) { msgToSend.image = '[imagen adjunta]'; msgToSend.imageLocal = true; }
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'), msgToSend);
-                } catch (e) { console.error('Error enviando chat:', e); }
+                    msg.status = 'synced';
+                    saveLocalMessages();
+                    if (chatMode) renderChatMessages();
+                } catch (e) {
+                    console.error('Error enviando chat:', e);
+                    msg.status = 'local';
+                    saveLocalMessages();
+                    if (chatMode) renderChatMessages();
+                }
             }
         };
 
