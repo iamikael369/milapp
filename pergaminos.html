@@ -1670,7 +1670,7 @@
             document.getElementById('theme-icon').innerText = savedTheme === 'dark' ? 'light_mode' : 'dark_mode';
 
             // Cargar contenido Emily Book
-            document.getElementById('emily-book-content').value = localStorage.getItem('mila_emily_book_content') || '';
+            const el = document.getElementById('emily-book-content'); if (el) el.value = localStorage.getItem('mila_emily_book_content') || '';
 
             // Cargar fotos guardadas
             window.updateAvatars();

@@ -12,30 +12,63 @@ API_KEY_FILE = "API.md"
 import re
 
 def get_api_key():
-    """Lee la API Key desde el archivo usando Regex para mayor robustez."""
+    """Lee la API Key desde GEMINI_API_KEY env var; fallback a API.md (deprecado)."""
+    env_key = os.environ.get('GEMINI_API_KEY')
+    if env_key:
+        print(f"🔑 API Key desde entorno: {env_key[:5]}...{env_key[-3:]}")
+        return env_key
+
+    print("⚠️  DEPRECADO: GEMINI_API_KEY no encontrada en variables de entorno. Intentando API.md como respaldo...")
     if not os.path.exists(API_KEY_FILE):
-        print(f"❌ Error: No se encuentra {API_KEY_FILE}")
+        print(f"❌ Error: No se encuentra {API_KEY_FILE} ni GEMINI_API_KEY en entorno.")
         return None
     try:
         with open(API_KEY_FILE, "r", encoding="utf-8") as f:
             content = f.read()
-            
-        # Busca un patrón que parezca una API Key de Google (AIza...)
-        # Soporta: "API: AIza...", "AIza...", o simplemente la llave en el texto
+
         match = re.search(r'(AIza[0-9A-Za-z-_]{35})', content)
-        
+
         if match:
             key = match.group(1)
-            print(f"🔑 API Key detectada: {key[:5]}...{key[-3:]} (Longitud: {len(key)})")
+            print(f"🔑 API Key desde API.md (DEPRECADO): {key[:5]}...{key[-3:]} (Longitud: {len(key)})")
             return key
-            
+
         print("❌ Error: No se detectó patrón 'AIza...' en API.md")
         return None
     except Exception as e:
         print(f"❌ Error leyendo API Key: {e}")
         return None
 
+FIREBASE_KEYS = [
+    'FIREBASE_API_KEY',
+    'FIREBASE_AUTH_DOMAIN',
+    'FIREBASE_PROJECT_ID',
+    'FIREBASE_STORAGE_BUCKET',
+    'FIREBASE_MESSAGING_SENDER_ID',
+    'FIREBASE_APP_ID',
+]
+
+def get_firebase_config():
+    """Ensambla config de Firebase desde variables de entorno."""
+    config = {
+        'apiKey': os.environ.get('FIREBASE_API_KEY'),
+        'authDomain': os.environ.get('FIREBASE_AUTH_DOMAIN'),
+        'projectId': os.environ.get('FIREBASE_PROJECT_ID'),
+        'storageBucket': os.environ.get('FIREBASE_STORAGE_BUCKET'),
+        'messagingSenderId': os.environ.get('FIREBASE_MESSAGING_SENDER_ID'),
+        'appId': os.environ.get('FIREBASE_APP_ID'),
+    }
+    if any(v is None for v in config.values()):
+        return {}
+    return config
+
 class MilaHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/api/firebase-config':
+            self.respond_json(get_firebase_config())
+        else:
+            super().do_GET()
+
     def do_POST(self):
         if self.path == '/api/generate':
             self.handle_gemini()
@@ -43,21 +76,15 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "Endpoint not found")
 
     def handle_gemini(self):
-        # 1. Leer API Key
         api_key = get_api_key()
         if not api_key:
-            self.respond_json({'error': 'No API Key found in API.md'}, 500)
+            self.respond_json({'error': 'No API Key configured. Set the GEMINI_API_KEY environment variable.'}, 500)
             return
 
-        # 2. Leer Body del Request (Prompt del usuario)
         content_len = int(self.headers.get('Content-Length', 0))
         post_body = self.rfile.read(content_len)
         try:
             data = json.loads(post_body)
-            # Esperamos { "contents": ... } o { "prompt": "..." }
-            # Para compatibilidad con codigo existente, si recibimos 'contents' lo pasamos tal cual
-            # Si recibimos 'prompt', lo envolvemos
-            
             payload = {}
             if 'contents' in data:
                 payload = data
@@ -68,22 +95,20 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
                     }]
                 }
             else:
-                 self.respond_json({'error': 'Invalid request format'}, 400)
-                 return
+                self.respond_json({'error': 'Invalid request format'}, 400)
+                return
 
         except json.JSONDecodeError:
             self.respond_json({'error': 'Invalid JSON'}, 400)
             return
 
-        # 3. Llamar a Google Gemini
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={api_key}"
         headers = {'Content-Type': 'application/json'}
-        
+
         try:
             req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
             with urllib.request.urlopen(req) as response:
                 result = response.read()
-                # Devolver respuesta cruda de Gemini al frontend
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
@@ -115,7 +140,6 @@ print(f"🌌 Templo de Mila Iniciado en http://localhost:{PORT}")
 print(f"🔮 Servidor de IA Activo")
 print(f"--------------------------------------------------")
 
-# Asegurar que estamos en el directorio correcto (donde reside este script)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 class ReusableTCPServer(socketserver.TCPServer):
