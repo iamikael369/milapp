@@ -173,12 +173,29 @@
             border: none;
             outline: none;
             resize: none;
-            padding: 5rem 6rem;
-            font-size: 1.25rem;
+            padding: 1.5rem 1.25rem;
+            font-size: 1rem;
             line-height: 2.2;
             color: var(--ink-color);
             font-family: 'Lora', serif;
             text-align: justify;
+        }
+        @media (max-width: 767px) {
+            .editor-field {
+                padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + 70px);
+            }
+        }
+        @media (min-width: 768px) {
+            .editor-field {
+                padding: 4rem 5rem;
+                font-size: 1.15rem;
+            }
+        }
+        @media (min-width: 1100px) {
+            .editor-field {
+                padding: 5rem 6rem;
+                font-size: 1.25rem;
+            }
         }
 
         .floating-toolbar {
@@ -373,10 +390,10 @@
             </div>
 
             <!-- Header de Documento -->
-            <nav class="shrink-0 flex items-center justify-between p-10 pb-0 relative z-20">
+            <nav class="shrink-0 flex items-center justify-between p-4 md:p-10 pb-0 relative z-20">
                 <div class="flex-1 group">
                     <input id="chapter-title" type="text" placeholder="Título del Escrito..." 
-                        class="w-full bg-transparent border-none text-4xl font-display tracking-widest text-parchment-900 focus:ring-0 placeholder:opacity-20 transition-all font-bold">
+                        class="w-full bg-transparent border-none text-xl md:text-4xl font-display tracking-widest text-parchment-900 focus:ring-0 placeholder:opacity-20 transition-all font-bold">
                     <div id="save-status" class="text-[9px] uppercase tracking-[0.3em] text-gold-500 font-bold ml-1 opacity-0 group-hover:opacity-100 transition-opacity">Historial Preservado</div>
                 </div>
                 
@@ -430,6 +447,51 @@
                 </div>
             </div>
         </main>
+
+        <!-- MOBILE CHAPTER DRAWER (shown on mobile when toggled) -->
+        <div id="mobile-chapter-drawer" class="fixed inset-0 z-50 md:hidden hidden">
+            <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeMobileDrawer()"></div>
+            <div class="absolute left-0 top-0 bottom-0 w-72 bg-parchment-900 border-r border-gold-600/20 flex flex-col p-6 overflow-y-auto shadow-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="font-display text-sm tracking-[0.2em] text-gold-400 uppercase">Mis Escritos</h2>
+                    <button onclick="closeMobileDrawer()" class="text-gold-600/60 hover:text-gold-400">
+                        <span class="material-symbols-rounded">close</span>
+                    </button>
+                </div>
+                <button onclick="createNewChapter(); closeMobileDrawer()" class="w-full flex items-center justify-center gap-3 border border-gold-600/40 rounded-lg py-3 mb-6 hover:bg-gold-400/10 transition-all group">
+                    <span class="material-symbols-rounded text-gold-400 text-lg">post_add</span>
+                    <span class="font-display text-xs font-bold tracking-[0.2em] text-gold-400 uppercase">Nuevo Escrito</span>
+                </button>
+                <div id="mobile-index-list" class="flex-1 space-y-2">
+                    <div class="text-center py-10 opacity-20 italic text-sm text-parchment-200">Cargando...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE BOTTOM BAR (shown on mobile only) -->
+        <nav class="fixed bottom-0 left-0 right-0 md:hidden bg-parchment-900/95 backdrop-blur-xl border-t border-gold-600/20 flex items-center justify-around px-4 z-40" style="padding-bottom: env(safe-area-inset-bottom, 12px); padding-top: 12px;">
+            <button onclick="window.location.href='pergaminos.html'" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
+                <span class="material-symbols-rounded text-xl">history_edu</span>
+                <span class="text-[8px] font-display uppercase tracking-wider">Volver</span>
+            </button>
+            <button onclick="openMobileDrawer()" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
+                <span class="material-symbols-rounded text-xl">menu_book</span>
+                <span class="text-[8px] font-display uppercase tracking-wider">Capítulos</span>
+            </button>
+            <button onclick="createNewChapter()" class="flex flex-col items-center gap-1">
+                <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                    <span class="material-symbols-rounded text-parchment-100 text-xl">post_add</span>
+                </div>
+            </button>
+            <button onclick="getInspiration()" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
+                <span class="material-symbols-rounded text-xl">auto_fix_high</span>
+                <span class="text-[8px] font-display uppercase tracking-wider">Musa</span>
+            </button>
+            <button onclick="toggleTheme()" class="flex flex-col items-center gap-1 text-gold-600/60 hover:text-gold-400 transition-colors">
+                <span class="material-symbols-rounded text-xl" id="theme-icon-mobile">dark_mode</span>
+                <span class="text-[8px] font-display uppercase tracking-wider">Tema</span>
+            </button>
+        </nav>
 
         <!-- LA MUSA (DERECHA) -->
         <aside class="sidebar-right overflow-hidden flex flex-col">
@@ -532,7 +594,10 @@
             const html = document.documentElement;
             const target = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', target);
-            document.getElementById('theme-icon').innerText = target === 'dark' ? 'light_mode' : 'dark_mode';
+            const iconName = target === 'dark' ? 'light_mode' : 'dark_mode';
+            document.getElementById('theme-icon').innerText = iconName;
+            const mobileIcon = document.getElementById('theme-icon-mobile');
+            if (mobileIcon) mobileIcon.innerText = iconName;
             localStorage.setItem('mila_emily_theme', target);
         };
 
@@ -748,10 +813,44 @@
             if(s) { chapters = JSON.parse(s); renderIndex(); }
         }
 
+        window.openMobileDrawer = () => {
+            const drawer = document.getElementById('mobile-chapter-drawer');
+            drawer.classList.remove('hidden');
+            renderMobileIndex();
+        };
+
+        window.closeMobileDrawer = () => {
+            document.getElementById('mobile-chapter-drawer').classList.add('hidden');
+        };
+
+        function renderMobileIndex() {
+            const container = document.getElementById('mobile-index-list');
+            if (!container) return;
+            if (!chapters.length) {
+                container.innerHTML = '<div class="text-center py-10 opacity-20 italic text-sm text-parchment-200">Sin escritos aún...</div>';
+                return;
+            }
+            container.innerHTML = '';
+            chapters.forEach(ch => {
+                const div = document.createElement('div');
+                div.className = 'chapter-card rounded-xl ' + (ch.id === activeChapterId ? 'active' : '');
+                div.onclick = () => { selectChapter(ch.id); closeMobileDrawer(); };
+                const timeStr = ch.updatedAt?.seconds ? new Date(ch.updatedAt.seconds * 1000).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Hoy';
+                div.innerHTML = `
+                    <h4 class="font-display text-xs tracking-widest text-gold-400 truncate uppercase">${ch.title || 'Manuscrito'}</h4>
+                    <p class="text-[10px] text-gold-600/60 line-clamp-1 italic mt-1">${ch.content ? ch.content.substring(0, 40) + '...' : 'Página en blanco'}</p>
+                    <span class="text-[8px] opacity-40 font-bold uppercase">${timeStr}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         async function init() {
             const t = localStorage.getItem('mila_emily_theme') || 'light';
             document.documentElement.setAttribute('data-theme', t);
             document.getElementById('theme-icon').innerText = t === 'dark' ? 'light_mode' : 'dark_mode';
+            const mobileThemeIcon = document.getElementById('theme-icon-mobile');
+            if (mobileThemeIcon) mobileThemeIcon.innerText = t === 'dark' ? 'light_mode' : 'dark_mode';
             
             // Cargar avatar local inmediato si existe
             const localPhotos = JSON.parse(localStorage.getItem('mila_profile_photos') || '{}');

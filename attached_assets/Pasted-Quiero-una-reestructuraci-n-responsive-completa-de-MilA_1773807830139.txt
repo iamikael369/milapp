@@ -1,0 +1,120 @@
+Quiero una reestructuración responsive completa de MilApp, enfocada en teléfono primero, pero también compatible con tablet y desktop.
+
+Contexto:
+MilApp es una app íntima, espiritual, histórica y visualmente cuidada para Mila y Miguelo. No es una app comercial ni una red social. Debes conservar su identidad visual, su atmósfera ritual y su elegancia. Pero ahora mismo muchos módulos se ven mal en teléfonos: botones demasiado grandes, tarjetas gigantes, scroll incómodo, overlays rotos, inputs tapados, jerarquía visual desbalanceada y módulos poco prácticos en móvil.
+
+Objetivo:
+Haz una revisión completa de TODOS los módulos y ejecuta los ajustes necesarios para que MilApp funcione y se vea muy bien en:
+- teléfono
+- tablet
+- desktop
+
+Prioridad absoluta:
+MÓVIL PRIMERO.
+
+Reglas no negociables:
+- No reescribas el proyecto desde cero.
+- No cambies la identidad estética ni la atmósfera.
+- No conviertas la app en una UI moderna genérica tipo SaaS o red social.
+- No uses frameworks.
+- Mantén HTML, Tailwind por CDN y JavaScript vanilla.
+- No rompas lógica ya funcional.
+- Todo cambio debe ser incremental, reversible y compatible con el sistema actual.
+
+Quiero que revises y ajustes TODOS estos módulos:
+- index.html
+- pergaminos.html
+- emilybooks.html
+- billetera.html
+- mapadesuenos.html
+- numerologia.html
+- astrologia.html
+- diario.html
+- biblioteca.html
+- hipnosis.html
+- cualquier otro módulo del proyecto
+
+Qué debes revisar en cada módulo:
+1. Layout general
+- si el contenido cabe correctamente en móvil
+- si hay elementos demasiado grandes
+- si hay márgenes o paddings excesivos
+- si la jerarquía visual está desbalanceada
+- si los headers ocupan demasiado espacio
+- si las tarjetas deberían compactarse en teléfono
+
+2. Botones y áreas táctiles
+- botones deben ser cómodos de tocar
+- pero no gigantes e invasivos
+- objetivo: equilibrio entre accesibilidad y elegancia
+- mínimo táctil razonable, sin destruir el diseño
+
+3. Tipografía
+- revisa tamaños de títulos, subtítulos y textos en móvil
+- evita que todo se vea enorme o demasiado pequeño
+- conserva la estética pero mejora lectura real
+
+4. Scroll y viewport
+- corrige cualquier módulo donde el teclado tape inputs
+- corrige overlays/modales que queden fuera de pantalla
+- revisa contenedores con overflow
+- revisa altura de pantalla en móviles modernos
+- usa una estrategia robusta para viewport móvil
+
+5. Tarjetas, grids y módulos
+- en index.html quiero que las tarjetas de módulos sean más compactas en móvil
+- deben caber mejor en pantalla sin perder elegancia
+- quiero más información visible sin tener que hacer tanto scroll vertical
+- revisa el grid completo del home
+
+6. Inputs, formularios y editores
+- revisa todos los textareas, formularios y editores
+- deben ser cómodos en teléfono
+- no deben romper layout
+- no deben quedar ocultos al escribir
+
+7. Modales y tutoriales
+- revisa todos los modales, overlays y pantallas de onboarding
+- deben abrir y cerrarse bien en móvil
+- deben ser legibles y cómodos
+
+8. Performance visual
+- si hay efectos muy pesados en móvil, ajústalos con elegancia
+- conserva magia, pero evita saturación o lentitud
+
+Quiero especialmente que mejores:
+A. index.html
+- los botones/tarjetas del home están demasiado grandes en teléfono
+- quiero una versión más compacta, refinada y usable
+- debe verse premium y práctica
+- debe aprovechar mejor el alto de pantalla
+
+B. pergaminos.html
+- revisa redacción, cartas, chat, modales, botones, tutoriales y acciones
+- todo debe sentirse bien en teléfono
+
+C. emilybooks.html
+- revisa lectura, escritura, padding, tipografía y experiencia táctil
+
+D. numerologia.html y astrologia.html
+- son densos y largos
+- quiero que sean legibles, respirables y utilizables en móvil real
+
+E. billetera.html y mapadesuenos.html
+- revisa paneles, formularios, visualización y distribución vertical
+
+Forma de trabajo:
+1. Primero haz una auditoría responsive real de todos los módulos.
+2. Identifica problemas concretos por archivo.
+3. Luego ejecuta los cambios.
+4. Mantén una lógica mobile-first.
+5. Si detectas patrones repetidos, unifica ajustes de responsive donde sea seguro.
+
+Antes de implementar, quiero que me indiques:
+- qué archivos vas a tocar
+- qué problemas detectaste en cada uno
+- qué tipo de ajustes harás
+- qué ajustes serán compartidos
+- cómo evitarás romper el diseño original
+
+Después de eso, procede con la implementación completa.

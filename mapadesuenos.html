@@ -166,8 +166,8 @@
 
         /* Floating Menu */
         .floating-menu {
-            position: fixed; bottom: 30px; right: 30px;
-            display: flex; flex-direction: column; gap: 15px; z-index: 100;
+            position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); right: 20px;
+            display: flex; flex-direction: column; gap: 12px; z-index: 100;
         }
 
         .action-btn {
@@ -208,7 +208,7 @@
 
     <main class="min-h-screen flex flex-col items-center p-4 md:p-8 relative">
         <!-- HEADER -->
-        <header class="w-full max-w-6xl flex justify-between items-center mb-16">
+        <header class="w-full max-w-6xl flex justify-between items-center mb-8 sm:mb-16">
             <div class="flex items-center gap-6">
                 <button onclick="goHome()" class="p-4 border border-white/10 rounded-full hover:bg-white/5 transition-all group">
                     <span class="material-symbols-outlined text-white/60 group-hover:text-white">home</span>
@@ -230,16 +230,16 @@
         </header>
 
         <!-- MAIN ACTION AREA (GENERATE) -->
-        <section class="w-full max-w-4xl mb-20 text-center">
-            <div class="glass-panel p-10 md:p-16 relative border-dashed border-2 border-white/5">
+        <section class="w-full max-w-4xl mb-10 sm:mb-20 text-center">
+            <div class="glass-panel p-5 sm:p-10 md:p-16 relative border-dashed border-2 border-white/5">
                 <h2 class="text-2xl md:text-3xl font-cinzel tracking-widest text-white mb-8">¿Qué deseas materializar hoy?</h2>
                 <div class="relative max-w-2xl mx-auto mb-10">
                     <textarea id="dream-prompt" placeholder="Visualiza con detalles... una casa frente al mar, un viaje a Japón, nuestra abundancia infinita..." 
-                        class="w-full bg-white/5 border border-white/10 rounded-3xl p-8 font-garamond text-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-mystic-gold focus:border-transparent outline-none transition-all min-h-[120px] custom-scrollbar text-center"></textarea>
+                        class="w-full bg-white/5 border border-white/10 rounded-3xl p-4 sm:p-8 font-garamond text-base sm:text-2xl text-white placeholder:text-white/20 focus:ring-2 focus:ring-mystic-gold focus:border-transparent outline-none transition-all min-h-[100px] sm:min-h-[120px] custom-scrollbar text-center"></textarea>
                 </div>
 
                 <!-- Advanced Alchemical Panel -->
-                <div class="mb-10 bg-white/5 p-8 rounded-[2rem] border border-white/10">
+                <div class="mb-6 bg-white/5 p-4 sm:p-8 rounded-[2rem] border border-white/10">
                     <h3 class="font-cinzel text-xs tracking-[0.3em] text-temple-gold/60 mb-6 uppercase">Configuración de Alquimia Avanzada</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -295,7 +295,7 @@
         </section>
 
         <!-- GALLERY -->
-        <section class="w-full max-w-6xl mb-32">
+        <section class="w-full max-w-6xl mb-16 sm:mb-32">
             <div class="flex justify-between items-center mb-10 px-4">
                 <h3 class="font-cinzel text-xs tracking-[0.4em] text-white/40 uppercase font-bold">El Telar de Realidades</h3>
                 <div class="h-[1px] flex-1 mx-8 bg-white/5"></div>

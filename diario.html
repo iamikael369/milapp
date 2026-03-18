@@ -177,7 +177,7 @@
 
     <main class="min-h-screen flex flex-col items-center p-4 md:p-8 relative">
         <!-- HEADER PREMIUM -->
-        <header class="w-full max-w-5xl flex justify-between items-center mb-12">
+        <header class="w-full max-w-5xl flex justify-between items-center mb-6 sm:mb-12">
             <div class="flex items-center gap-4">
                 <button onclick="goHome()" class="p-3 border border-white/20 rounded-full cursor-pointer hover:bg-white/10 transition-colors">
                     <span class="material-symbols-outlined text-white">home</span>
@@ -199,14 +199,14 @@
         </header>
 
         <!-- MODE SWITCHER -->
-        <nav class="mb-10 p-1 bg-black/40 rounded-full border border-white/10 flex items-center gap-1 shadow-2xl">
-            <button onclick="setMode('moon')" id="btnLuna" class="flex items-center gap-2 px-8 py-3 rounded-full font-cinzel text-xs tracking-widest transition-all duration-500 bg-mystic-violet text-white shadow-lg">
+        <nav class="mb-5 sm:mb-10 p-1 bg-black/40 rounded-full border border-white/10 flex items-center gap-1 shadow-2xl">
+            <button onclick="setMode('moon')" id="btnLuna" class="flex items-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 rounded-full font-cinzel text-xs tracking-widest transition-all duration-500 bg-mystic-violet text-white shadow-lg">
                 <span class="material-symbols-outlined text-[18px]">bedtime</span>
-                SUEÑOS
+                <span class="hidden sm:inline">SUEÑOS</span><span class="sm:hidden">Sueños</span>
             </button>
-            <button onclick="setMode('sun')" id="btnSol" class="flex items-center gap-2 px-8 py-3 rounded-full font-cinzel text-xs tracking-widest transition-all duration-500 text-white/50 hover:text-white">
+            <button onclick="setMode('sun')" id="btnSol" class="flex items-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 rounded-full font-cinzel text-xs tracking-widest transition-all duration-500 text-white/50 hover:text-white">
                 <span class="material-symbols-outlined text-[18px]">light_mode</span>
-                METAS DE MANIFESTACIÓN
+                <span class="hidden sm:inline">METAS DE MANIFESTACIÓN</span><span class="sm:hidden">Metas</span>
             </button>
         </nav>
 
@@ -214,11 +214,11 @@
         <section class="w-full max-w-4xl flex flex-col items-center">
             
             <!-- EDITOR CENTRAL (Always Visible Version for Immersive Experience) -->
-            <div class="w-full glass-panel p-8 md:p-12 mb-12 relative border-dashed border-2 border-white/10 glow-border" id="editor-main-container">
+            <div class="w-full glass-panel p-4 sm:p-8 md:p-12 mb-6 sm:mb-12 relative border-dashed border-2 border-white/10 glow-border" id="editor-main-container">
                 <div class="flex flex-col items-center gap-6 mb-8">
-                    <div class="p-6 rounded-full bg-white/5 border border-white/10" id="modeIcon">
-                        <span class="material-symbols-outlined text-5xl text-mystic-violet" id="svgLuna">auto_awesome</span>
-                        <span class="material-symbols-outlined text-5xl text-mystic-amber hidden" id="svgSol">diamond</span>
+                    <div class="p-4 sm:p-6 rounded-full bg-white/5 border border-white/10" id="modeIcon">
+                        <span class="material-symbols-outlined text-3xl sm:text-5xl text-mystic-violet" id="svgLuna">auto_awesome</span>
+                        <span class="material-symbols-outlined text-3xl sm:text-5xl text-mystic-amber hidden" id="svgSol">diamond</span>
                     </div>
                     <h2 class="text-xl md:text-2xl font-cinzel tracking-[0.2em] uppercase text-center text-white" id="modeTitle">
                         El silencio de la noche espera tus sueños
@@ -290,7 +290,7 @@
             </div>
 
             <!-- BUSCADOR -->
-            <div class="w-full max-w-3xl mb-12 flex items-center gap-4 bg-white/5 border border-white/10 rounded-full px-6 py-3 focus-within:border-temple-gold transition-all">
+            <div class="w-full max-w-3xl mb-6 sm:mb-12 flex items-center gap-4 bg-white/5 border border-white/10 rounded-full px-6 py-3 focus-within:border-temple-gold transition-all">
                 <span class="material-symbols-outlined text-slate-500">search</span>
                 <input type="text" id="search-input" placeholder="Buscar en mis memorias..." 
                     class="bg-transparent border-none text-sm text-white w-full outline-none placeholder-slate-700" oninput="filterEntries()">
@@ -304,7 +304,7 @@
         </section>
 
         <!-- ALCHEMICAL SEAL BUTTON -->
-        <button onclick="toggleSpecModal()" class="alchemical-seal-btn fixed bottom-10 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-black border border-white/20 flex items-center justify-center text-2xl z-20 shadow-2xl">
+        <button onclick="toggleSpecModal()" class="alchemical-seal-btn fixed left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-black border border-white/20 flex items-center justify-center text-2xl z-20 shadow-2xl" style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px))">
             ✨
         </button>
 

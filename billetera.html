@@ -179,9 +179,9 @@
     <!-- Ambient Backdrop -->
     <div class="cosmic-bg" id="star-field"></div>
     
-    <div class="max-w-xl mx-auto px-6 pt-12">
+    <div class="max-w-xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
         <!-- Header -->
-        <header class="flex justify-between items-start mb-10">
+        <header class="flex justify-between items-start mb-8 sm:mb-10">
             <div>
                 <h1 class="font-cinzel text-2xl tracking-[0.2em] text-white uppercase">Billetera de Luz</h1>
                 <p class="font-playfair italic text-slate-400 text-sm mt-1">Tu flujo de abundancia infinita</p>
@@ -197,7 +197,7 @@
         </header>
 
         <!-- Balance Card -->
-        <div class="balance-card rounded-[2.5rem] p-8 mb-10 relative overflow-hidden group">
+        <div class="balance-card rounded-[2.5rem] p-5 sm:p-8 mb-6 sm:mb-10 relative overflow-hidden group">
             <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-wealth-green/5 blur-3xl rounded-full"></div>
             <div class="relative z-10">
                 <div class="flex justify-between items-center mb-6">
@@ -224,7 +224,7 @@
         </div>
 
         <!-- Navigation -->
-        <div class="flex gap-2 mb-8 bg-white/5 p-1.5 rounded-full border border-white/5">
+        <div class="flex gap-2 mb-5 sm:mb-8 bg-white/5 p-1.5 rounded-full border border-white/5">
             <button id="tab-wallet" onclick="switchTab('wallet')" class="nav-pill active flex-1 py-2.5">Billetera</button>
             <button id="tab-checks" onclick="switchTab('checks')" class="nav-pill flex-1 py-2.5">Cheques de Poder</button>
             <button id="tab-guide" onclick="switchTab('guide')" class="nav-pill flex-1 py-2.5">Guía Alquimia</button>
@@ -272,7 +272,7 @@
 
         <!-- View: Alquimia Guide -->
         <div id="view-guide" class="hidden space-y-8 animate-fade-in">
-            <div class="glass-panel rounded-[2rem] p-10 text-center border-t-4 border-temple-gold/40">
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-10 text-center border-t-4 border-temple-gold/40">
                 <div class="w-20 h-20 rounded-full bg-temple-gold/10 flex items-center justify-center text-temple-gold mx-auto mb-6">
                     <span class="material-symbols-rounded text-4xl">lightbulb</span>
                 </div>
@@ -291,7 +291,7 @@
 
     <!-- MODAL TRANSACCIÓN -->
     <div id="tx-modal" class="modal-overlay">
-        <div class="glass-panel p-8 rounded-[2.5rem] w-full max-w-sm m-4 border-t-2 border-t-wealth-green/20">
+        <div class="glass-panel p-5 sm:p-8 rounded-[2.5rem] w-full max-w-sm m-4 border-t-2 border-t-wealth-green/20">
             <div class="flex justify-between items-center mb-8">
                 <h3 class="font-cinzel text-lg text-white" id="tx-title">Registrar</h3>
                 <button onclick="closeTxModal()" class="text-slate-500 hover:text-white"><span class="material-symbols-rounded">close</span></button>
