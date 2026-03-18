@@ -1404,6 +1404,9 @@
                     <div id="chat-local-notice" class="hidden px-4 py-2 bg-parchment-dark/60 dark:bg-black/30 border-b border-gold/20 text-center">
                         <p data-sync-text class="text-[11px] font-cinzel text-ink/50 dark:text-parchment/40 tracking-widest uppercase">✦ Tus mensajes viven en este dispositivo · La sincronía sagrada activa con Firebase ✦</p>
                     </div>
+                    <div class="px-4 md:px-8 py-3 border-b border-gold/15 bg-white/35 dark:bg-black/15 backdrop-blur-sm">
+                        <p id="chat-thread-bridge" class="text-[11px] md:text-xs text-ink/60 dark:text-parchment/60 font-cinzel tracking-[0.18em] uppercase text-center">El mismo vínculo respira entre pergaminos, chat y botellas del destino.</p>
+                    </div>
 
                     <!-- Messages Area -->
                     <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 z-10 custom-scrollbar relative">
@@ -1679,7 +1682,11 @@
         let chatMode = localStorage.getItem('mila_pergaminos_mode') === 'chat';
         // Arreglo de mensajes del modo chat
         let messages = [];
+        let soulMessages = [];
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'mila-universe';
+        const CHAT_THREAD_ID = 'mila-miguelo-thread';
+        const SOUL_CHAT_STORAGE_KEY = 'mila_pergaminos_soul_chat';
+        const SOUL_CHAT_LIMIT = 60;
 
         // --- ICONOS ZODIACALES SVG ---
         const SVG_TAURUS = `<svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>`;
@@ -1701,6 +1708,8 @@
             loadLocalState();
             // Cargar mensajes de chat locales
             loadLocalMessages();
+            loadSoulMessages();
+            renderSoulChatHistory();
 
             if (!currentUser) {
                 document.getElementById('profile-modal').style.display = 'flex';
@@ -1721,6 +1730,7 @@
             if (letters.length > 0 && !chatMode) {
                 renderAllLetters();
             }
+            updateConversationBridge();
 
             // Aplicar modo (clásico o chat) según configuración
             window.applyMode();
@@ -1849,6 +1859,21 @@
                             const data = docSnap.data();
                             data.firebaseId = docSnap.id;
                             cloudMsgs.push(data);
+
+                            if (data.receiver === currentUser) {
+                                const updates = {};
+                                if (!data.deliveredTo || !data.deliveredTo[currentUser]) {
+                                    updates[`deliveredTo.${currentUser}`] = true;
+                                    updates.deliveredAt = serverTimestamp();
+                                }
+                                if (!data.readBy || !data.readBy[currentUser]) {
+                                    updates[`readBy.${currentUser}`] = true;
+                                }
+                                if (Object.keys(updates).length) {
+                                    const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat', docSnap.id);
+                                    updateDoc(chatRef, updates).catch((err) => console.error('Error actualizando entrega/lectura:', err));
+                                }
+                            }
                         });
                         messages = mergeChatMessages(cloudMsgs);
                         saveLocalMessages();
@@ -2087,6 +2112,7 @@
             
             if (letters.length === 0) {
                 container.innerHTML = '<div class="text-center py-40 opacity-20"><p class="font-dancing text-4xl">La historia espera ser escrita...</p></div>';
+                updateConversationBridge();
                 return;
             }
 
@@ -2109,6 +2135,7 @@
                     if (last) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
                 }, 300);
             }
+            updateConversationBridge();
         }
 
         window.toggleLetterRoll = (id) => {
@@ -2281,6 +2308,74 @@
             } catch (e) { }
         }
 
+        function saveSoulMessages() {
+            try {
+                localStorage.setItem(SOUL_CHAT_STORAGE_KEY, JSON.stringify(soulMessages.slice(-SOUL_CHAT_LIMIT)));
+            } catch (e) { }
+        }
+
+        function loadSoulMessages() {
+            try {
+                const stored = localStorage.getItem(SOUL_CHAT_STORAGE_KEY);
+                if (!stored) return;
+                const parsed = JSON.parse(stored);
+                soulMessages = Array.isArray(parsed) ? parsed.slice(-SOUL_CHAT_LIMIT) : [];
+            } catch (e) {
+                soulMessages = [];
+            }
+        }
+
+        function escapeHtml(value = '') {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function buildSoulMessageNode(entry) {
+            const safeRole = entry?.role === 'user' ? 'user' : 'guide';
+            const safeText = escapeHtml(entry?.text || '').replace(/\n/g, '<br>');
+            return `<div class="chat-msg ${safeRole}">${safeText}</div>`;
+        }
+
+        function renderSoulChatHistory() {
+            const chatHistory = document.getElementById('soul-chat-history');
+            if (!chatHistory) return;
+            const intro = `
+                <div class="chat-msg guide">
+                    Saludos, alma viajera... 🌌<br><br>
+                    Este es un espacio etéreo donde puedes hablar con el espíritu del otro,
+                    incluso si no está presente en este plano.
+                </div>`;
+            const persisted = soulMessages.map(buildSoulMessageNode).join('');
+            chatHistory.innerHTML = intro + persisted;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function appendSoulChatMessage(role, text, persist = true) {
+            const entry = {
+                role: role === 'user' ? 'user' : 'guide',
+                text: String(text || '').trim(),
+                timestamp: Date.now(),
+                channel: 'soul',
+                bondThread: CHAT_THREAD_ID
+            };
+            if (!entry.text) return;
+            if (persist) {
+                soulMessages.push(entry);
+                soulMessages = soulMessages.slice(-SOUL_CHAT_LIMIT);
+                saveSoulMessages();
+            }
+            const chatHistory = document.getElementById('soul-chat-history');
+            if (chatHistory) {
+                chatHistory.insertAdjacentHTML('beforeend', buildSoulMessageNode(entry));
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+            updateConversationBridge();
+        }
+
         function getChatPartner() {
             return currentUser === 'Mila' ? 'Miguelo' : 'Mila';
         }
@@ -2295,6 +2390,26 @@
             }
             if (typeof value?.seconds === 'number') return value.seconds * 1000;
             return fallback;
+        }
+
+        function deriveChatStatus(msg) {
+            if (msg?.status === 'sending') return 'sending';
+            const receiver = msg?.receiver || getChatPartner();
+            const wasRead = Boolean(msg?.readBy?.[receiver]);
+            if (wasRead) return 'read';
+            const wasDelivered = Boolean(msg?.deliveredTo?.[receiver] || msg?.deliveredAt || (msg?.firebaseId && msg?.status !== 'local'));
+            if (wasDelivered) return 'delivered';
+            if (msg?.firebaseId || msg?.status === 'synced') return 'sent';
+            return msg?.status || 'local';
+        }
+
+        function getChatStatusMeta(status) {
+            if (status === 'sending') return { icon: 'schedule', label: 'Enviando al cielo' };
+            if (status === 'local') return { icon: 'cloud_off', label: 'Guardado en este dispositivo' };
+            if (status === 'sent') return { icon: 'done', label: 'Enviado a la nube' };
+            if (status === 'delivered') return { icon: 'done_all', label: 'Entregado al otro corazón' };
+            if (status === 'read') return { icon: 'visibility', label: 'Leído con el alma abierta' };
+            return { icon: 'schedule', label: 'En tránsito' };
         }
 
         function normalizeChatMessage(raw, source = 'local') {
@@ -2317,6 +2432,11 @@
                 localTimestamp: raw?.localTimestamp || timestamp,
                 date: raw?.date || new Date(timestamp).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }),
                 fontFamily: raw?.fontFamily || document.getElementById('font-select')?.value || 'font-dancing',
+                deliveredAt: normalizeChatTimestamp(raw?.deliveredAt, null),
+                deliveredTo: raw?.deliveredTo && typeof raw.deliveredTo === 'object' ? raw.deliveredTo : {},
+                readBy: raw?.readBy && typeof raw.readBy === 'object' ? raw.readBy : {},
+                channel: raw?.channel || 'chat',
+                bondThread: raw?.bondThread || CHAT_THREAD_ID,
                 status: raw?.status || (source === 'cloud' ? 'synced' : 'local'),
             };
 
@@ -2324,6 +2444,7 @@
                 normalized.image = '';
             }
 
+            normalized.status = deriveChatStatus(normalized);
             return normalized;
         }
 
@@ -2336,18 +2457,43 @@
             cloudMessages.map(m => normalizeChatMessage(m, 'cloud')).forEach((cloudMsg) => {
                 const existing = merged.get(cloudMsg.clientId);
                 const preservedImage = existing?.image && existing.image.startsWith('data:') ? existing.image : '';
-                merged.set(cloudMsg.clientId, {
+                const mergedMsg = {
                     ...existing,
                     ...cloudMsg,
                     image: preservedImage || cloudMsg.image,
                     imageLocal: Boolean(preservedImage || cloudMsg.imageLocal),
-                    status: 'synced',
-                });
+                };
+                mergedMsg.status = deriveChatStatus(mergedMsg);
+                merged.set(cloudMsg.clientId, mergedMsg);
             });
 
             return Array.from(merged.values())
                 .sort((a, b) => a.timestamp - b.timestamp)
                 .slice(-200);
+        }
+
+        function getConversationBridgeText() {
+            const unreadLetters = letters.filter(letter => letter.receiver === currentUser && !letter.readBy?.[currentUser]).length;
+            const pendingBottles = letters.filter(letter => letter.isBottle && letter.sender === currentUser && new Date(letter.bottleDelivery || 0) > new Date()).length;
+            const unreadChat = messages.filter(msg => msg.receiver === currentUser && !msg.readBy?.[currentUser]).length;
+            const soulCount = soulMessages.length;
+            const fragments = [];
+
+            if (pendingBottles) fragments.push(`${pendingBottles} botella${pendingBottles === 1 ? '' : 's'} navegando`);
+            if (unreadLetters) fragments.push(`${unreadLetters} pergamino${unreadLetters === 1 ? '' : 's'} aguardando lectura`);
+            if (unreadChat) fragments.push(`${unreadChat} pulso${unreadChat === 1 ? '' : 's'} del chat por abrir`);
+            if (soulCount) fragments.push(`${soulCount} eco${soulCount === 1 ? '' : 's'} guardado${soulCount === 1 ? '' : 's'} en el vínculo espiritual`);
+
+            if (!fragments.length) {
+                return 'El mismo vínculo respira entre pergaminos, chat y botellas del destino.';
+            }
+
+            return `Un solo hilo amoroso sostiene ${fragments.join(' · ')}.`;
+        }
+
+        function updateConversationBridge() {
+            const bridge = document.getElementById('chat-thread-bridge');
+            if (bridge) bridge.innerText = getConversationBridgeText();
         }
 
         function updateChatPresence() {
@@ -2358,9 +2504,13 @@
                 return;
             }
             const partner = getChatPartner();
-            statusEl.innerText = db
+            const lastOutgoing = [...messages].reverse().find(msg => msg.sender === currentUser);
+            const statusMeta = lastOutgoing ? getChatStatusMeta(lastOutgoing.status) : null;
+            const baseStatus = db
                 ? `Sincronía viva con ${partner}`
                 : `Modo local íntimo con ${partner}`;
+            statusEl.innerText = statusMeta ? `${baseStatus} · ${statusMeta.label}` : baseStatus;
+            updateConversationBridge();
         }
 
         window.applyMode = function() {
@@ -2411,16 +2561,19 @@
             if (!container) return;
             container.innerHTML = '';
             messages.forEach(m => {
-                renderChatMessage(m);
+                renderChatMessage(m, false);
             });
+            container.scrollTop = container.scrollHeight;
         }
 
-        function renderChatMessage(msg) {
+        function renderChatMessage(msg, shouldScroll = true) {
             const container = document.getElementById('chat-messages');
             if (!container) return;
             const isMe = msg.sender === currentUser;
             const div = document.createElement('div');
-            const deliveryIcon = msg.status === 'sending' ? 'schedule' : (msg.status === 'local' ? 'cloud_off' : 'done_all');
+            const statusMeta = getChatStatusMeta(msg.status);
+            const deliveryIcon = statusMeta.icon;
+            const statusLabel = statusMeta.label;
             
             const timeStr = new Date(msg.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
             
@@ -2440,7 +2593,7 @@
                             </div>
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
-                                <span class="material-symbols-rounded text-[16px] text-gold">${deliveryIcon}</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold" title="${statusLabel}">${deliveryIcon}</span>
                             </div>
                         `;
                     } else if (msg.image && msg.image.startsWith('data:')) {
@@ -2448,7 +2601,7 @@
                             <img src="${msg.image}" alt="imagen adjunta" class="rounded-2xl rounded-br-none max-w-[260px] max-h-[300px] object-cover shadow-elegant border border-gold/40" />
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
-                                <span class="material-symbols-rounded text-[16px] text-gold">${deliveryIcon}</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold" title="${statusLabel}">${deliveryIcon}</span>
                             </div>
                         `;
                     } else {
@@ -2456,7 +2609,7 @@
                             <p class="text-white text-[15px] font-normal leading-relaxed rounded-2xl rounded-br-none px-5 py-3 bg-gradient-to-br from-[#2c1810] to-ink shadow-elegant border border-gold/40 chat-font">${msg.text}</p>
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
-                                <span class="material-symbols-rounded text-[16px] text-gold">${deliveryIcon}</span>
+                                <span class="material-symbols-rounded text-[16px] text-gold" title="${statusLabel}">${deliveryIcon}</span>
                             </div>
                         `;
                     }
@@ -2502,7 +2655,7 @@
                 }
                 
                 container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
+                if (shouldScroll) container.scrollTop = container.scrollHeight;
             }
 
             window.playChatAudio = (btn, base64) => {
@@ -2528,6 +2681,10 @@
                 timestamp: Date.now(),
                 localTimestamp: Date.now(),
                 status: db ? 'sending' : 'local',
+                channel: 'chat',
+                bondThread: CHAT_THREAD_ID,
+                deliveredTo: {},
+                readBy: { [currentUser || 'Anónimo']: true },
                 fontFamily: document.getElementById('font-select')?.value || 'font-dancing'
             }, 'local');
             if (imageBase64) {
@@ -2544,11 +2701,11 @@
             saveLocalMessages();
             if (db) {
                 try {
-                    const msgToSend = { ...msg, timestamp: serverTimestamp() };
+                    const msgToSend = { ...msg, timestamp: serverTimestamp(), deliveredAt: null };
                     // Don't store large base64 images in Firebase — store a flag
                     if (imageBase64) { msgToSend.image = '[imagen adjunta]'; msgToSend.imageLocal = true; }
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'), msgToSend);
-                    msg.status = 'synced';
+                    msg.status = 'sent';
                     saveLocalMessages();
                     if (chatMode) renderChatMessages();
                 } catch (e) {
@@ -2811,6 +2968,8 @@
 
             const letter = { ...pendingBottleLetter,
                 isBottle: true,
+                channel: 'bottle',
+                bondThread: CHAT_THREAD_ID,
                 bottleDelivery: pendingBottleDate.toISOString(),
                 timestamp: serverTimestamp(),
                 readBy: { [currentUser]: true }
@@ -2847,6 +3006,7 @@
             renderLetter(localLetter);
             // Persistir estado local
             saveLocalState();
+            updateConversationBridge();
             // Desplazar al final para mostrar la nueva carta
             setTimeout(() => {
                 const container = document.getElementById('scroll-container');
@@ -2895,7 +3055,9 @@
                 fontFamily: document.getElementById('font-select').value,
                 salutation: document.getElementById('header-format').value,
                 customSignature: document.getElementById('signature-input').value,
-                isBottle: false
+                isBottle: false,
+                channel: 'classic',
+                bondThread: CHAT_THREAD_ID
             };
 
             if (bottleMode) {
@@ -2946,6 +3108,7 @@
             renderLetter(localLetter);
             // Persistir estado local
             saveLocalState();
+            updateConversationBridge();
             // Desplazar al final para mostrar la nueva carta
             setTimeout(() => {
                 const container = document.getElementById('scroll-container');
@@ -2983,7 +3146,10 @@
         };
 
         // --- CONEXIÓN ÁLMICA (CHAT) ---
-        window.openSoulChat = () => document.getElementById('soul-chat-modal').style.display = 'flex';
+        window.openSoulChat = () => {
+            document.getElementById('soul-chat-modal').style.display = 'flex';
+            renderSoulChatHistory();
+        };
         window.closeSoulChat = () => document.getElementById('soul-chat-modal').style.display = 'none';
 
         window.sendSoulMessage = async () => {
@@ -2991,10 +3157,9 @@
             const msg = input.value;
             if (!msg.trim()) return;
 
-            const chatHistory = document.getElementById('soul-chat-history');
-            chatHistory.innerHTML += `<div class="chat-msg user">${msg}</div>`;
+            appendSoulChatMessage('user', msg);
             input.value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            input.style.height = 'auto';
 
             // CONTEXTO DINÁMICO SEGÚN QUIÉN ESCRIBE
             let context = "";
@@ -3004,14 +3169,14 @@
                 context = `Eres un guía espiritual para almas gemelas: Miguelo (Tauro) y Mila (Sagitario). Habla con tono antiguo, místico y poético. El usuario actual es ${currentUser}.`;
             }
 
-            const prompt = `${context} Usuario dice: "${msg}". Responde corto, profundo y con el corazón.`;
+            const memory = soulMessages.slice(-6).map(entry => `${entry.role === 'user' ? 'Alma' : 'Guía'}: ${entry.text}`).join('\n');
+            const prompt = `${context}\nMemoria reciente del vínculo:\n${memory}\nUsuario dice: "${msg}". Responde corto, profundo y con el corazón.`;
 
             try {
                 const reply = await MilApp.ai.generate(prompt, { quiet: true, title: 'Pergaminos' }) || "El silencio responde...";
-                chatHistory.innerHTML += `<div class="chat-msg guide">${reply}</div>`;
-                chatHistory.scrollTop = chatHistory.scrollHeight;
+                appendSoulChatMessage('guide', reply);
             } catch (e) {
-                chatHistory.innerHTML += `<div class="chat-msg guide">La conexión es débil... intenta luego.</div>`;
+                appendSoulChatMessage('guide', 'La conexión es débil... intenta luego.');
             }
         };
 
