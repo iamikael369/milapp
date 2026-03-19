@@ -4,10 +4,10 @@
 Aplicación web privada y espiritual/romántica para Mila y Miguelo. Funciona como PWA instalable en móvil. Construida con HTML/CSS/JS vanilla + servidor Python HTTP.
 
 ## Arquitectura
-- **Backend:** `server.py` — Python `http.server` con proxy seguro para Gemini AI y Firebase config
+- **Backend:** `server.py` — Python `http.server` con proxy seguro para OpenRouter AI y Firebase config
 - **Frontend:** HTML/JS/CSS vanilla, Tailwind CDN, sin build step
 - **Base de datos:** Firebase Firestore (con fallback a localStorage)
-- **AI:** Gemini AI via proxy en `/api/generate`
+- **AI:** OpenRouter AI via proxy en `/api/generate` (respuestas traducidas a formato Gemini para compatibilidad frontend)
 - **Estilo:** Tailwind CSS + fuentes premium (Cinzel, Playfair, EB Garamond, etc.)
 
 ## Módulos
@@ -23,7 +23,8 @@ Aplicación web privada y espiritual/romántica para Mila y Miguelo. Funciona co
 - `hipnosis.html` — Sesión de hipnosis
 
 ## Configuración Requerida
-- `GEMINI_API_KEY` en Replit Secrets (obligatorio para IA)
+- `OPENROUTER_API_KEY` en Replit Secrets (obligatorio para IA)
+- `OPENROUTER_MODEL` en Replit Secrets (opcional, default: `mistralai/mistral-7b-instruct:free`)
 - Firebase config opcionales (app degrada a localStorage con aviso espiritual)
 
 ## Archivos Clave
