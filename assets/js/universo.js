@@ -123,14 +123,15 @@ const Universo = {
   // --- IA (Gemini - Local Server) ---
   _aiAvailable: null,
 
-  callGemini: async (prompt) => {
-    const FALLBACK =
-      "\u2726 El oráculo descansa en este momento — su silencio también es sabiduría. Intenta más tarde cuando el servidor esté disponible. \u2726";
+  callGemini: async (prompt, system) => {
+    const FALLBACK = "✦ El oráculo descansa en este momento — su silencio también es sabiduría. Intenta más tarde. ✦";
     try {
+      const body = { prompt: prompt };
+      if (system) body.system = system;
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: prompt }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -142,10 +143,7 @@ const Universo = {
       if (data.error) throw new Error(data.details || data.error);
 
       Universo._aiAvailable = true;
-      return (
-        data.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "El universo guarda silencio..."
-      );
+      return data.text || "El universo guarda silencio...";
     } catch (e) {
       Universo._aiAvailable = false;
       Universo._disableAIButtons();

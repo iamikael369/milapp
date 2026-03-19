@@ -647,7 +647,7 @@
                     body: JSON.stringify({ prompt })
                 });
                 const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio es la respuesta...";
+                const reply = data.text || "El silencio es la respuesta...";
                 
                 document.getElementById(loadingId).remove();
                 

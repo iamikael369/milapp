@@ -5,37 +5,19 @@ import os
 import urllib.request
 import urllib.error
 
-# Configuración
 PORT = 5000
-API_KEY_FILE = "API.md"
-
-import re
 
 def get_api_key():
-    """Lee la API Key desde GEMINI_API_KEY env var; fallback a API.md (deprecado)."""
-    env_key = os.environ.get('GEMINI_API_KEY')
+    """Lee la API Key desde OPENROUTER_API_KEY env var."""
+    env_key = os.environ.get('OPENROUTER_API_KEY')
     if env_key:
         return env_key
+    print("❌ Error: OPENROUTER_API_KEY no encontrada en variables de entorno.")
+    return None
 
-    print("⚠️  DEPRECADO: GEMINI_API_KEY no encontrada en variables de entorno. Intentando API.md como respaldo...")
-    if not os.path.exists(API_KEY_FILE):
-        print(f"❌ Error: No se encuentra {API_KEY_FILE} ni GEMINI_API_KEY en entorno.")
-        return None
-    try:
-        with open(API_KEY_FILE, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        match = re.search(r'(AIza[0-9A-Za-z-_]{35})', content)
-
-        if match:
-            key = match.group(1)
-            return key
-
-        print("❌ Error: No se detectó patrón 'AIza...' en API.md")
-        return None
-    except Exception as e:
-        print(f"❌ Error leyendo API Key: {e}")
-        return None
+def get_openrouter_model():
+    """Modelo a usar. Default: openrouter/free (mejora automáticamente al mejor gratuito disponible)."""
+    return os.environ.get('OPENROUTER_MODEL', 'openrouter/free')
 
 FIREBASE_KEYS = [
     'FIREBASE_API_KEY',
@@ -65,7 +47,8 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
         if self.path == '/api/health':
             self.respond_json({
                 'status': 'ok',
-                'geminiConfigured': bool(os.environ.get('GEMINI_API_KEY')),
+                'openrouterConfigured': bool(os.environ.get('OPENROUTER_API_KEY')),
+                'openrouterModel': get_openrouter_model(),
                 'firebaseConfigured': bool(get_firebase_config()),
             })
         elif self.path == '/api/firebase-config':
@@ -75,54 +58,70 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         if self.path == '/api/generate':
-            self.handle_gemini()
+            self.handle_generate()
         else:
             self.send_error(404, "Endpoint not found")
 
-    def handle_gemini(self):
+    def handle_generate(self):
         api_key = get_api_key()
         if not api_key:
-            self.respond_json({'error': 'No API Key configured. Set the GEMINI_API_KEY environment variable.'}, 500)
+            self.respond_json({'error': 'No API Key configured. Set the OPENROUTER_API_KEY environment variable.'}, 500)
             return
 
         content_len = int(self.headers.get('Content-Length', 0))
         post_body = self.rfile.read(content_len)
         try:
             data = json.loads(post_body)
-            payload = {}
-            if 'contents' in data:
-                payload = data
-            elif 'prompt' in data:
-                payload = {
-                    "contents": [{
-                        "parts": [{"text": data['prompt']}]
-                    }]
-                }
-            else:
-                self.respond_json({'error': 'Invalid request format'}, 400)
-                return
-
         except json.JSONDecodeError:
             self.respond_json({'error': 'Invalid JSON'}, 400)
             return
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={api_key}"
-        headers = {'Content-Type': 'application/json'}
+        prompt = data.get('prompt', '')
+        system = data.get('system', '')
+        model = data.get('model', get_openrouter_model())
+        temperature = float(data.get('temperature', 0.7))
+        max_tokens = int(data.get('max_tokens', 1000))
+
+        messages = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+
+        payload = {
+            "model": model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {api_key}',
+            'HTTP-Referer': 'https://milapp.local',
+            'X-Title': 'MilApp',
+        }
 
         try:
             req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers=headers, method='POST')
-            with urllib.request.urlopen(req, timeout=20) as response:
-                result = response.read()
-                self.send_response(200)
-                self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.send_header('Cache-Control', 'no-store')
-                self.end_headers()
-                self.wfile.write(result)
+            with urllib.request.urlopen(req, timeout=30) as response:
+                result = json.loads(response.read().decode('utf-8'))
+
+                if 'choices' in result and len(result['choices']) > 0:
+                    text = result['choices'][0]['message']['content']
+                    self.respond_json({'text': text, 'model': model, 'usage': result.get('usage', {})})
+                else:
+                    self.respond_json({'error': 'No response from model', 'raw': result}, 500)
+
         except urllib.error.HTTPError as e:
-            err_msg = e.read().decode('utf-8')
-            print(f"Gemini API Error: {err_msg}")
-            self.respond_json({'error': f"Gemini Error: {e.code}", 'details': err_msg}, e.code)
+            err_body = e.read().decode('utf-8')
+            try:
+                err_data = json.loads(err_body)
+                err_msg = err_data.get('error', {}).get('message', err_body)
+            except:
+                err_msg = err_body
+            print(f"OpenRouter API Error ({e.code}): {err_msg}")
+            self.respond_json({'error': f"OpenRouter Error {e.code}", 'details': err_msg}, e.code)
         except Exception as e:
             print(f"Server Error: {e}")
             self.respond_json({'error': str(e)}, 500)
@@ -143,7 +142,8 @@ class MilaHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
 print(f"🌌 Templo de Mila Iniciado en http://localhost:{PORT}")
-print(f"🔮 Servidor de IA Activo")
+print(f"🔮 OpenRouter IA Activo")
+print(f"📡 Modelo: {get_openrouter_model()}")
 print(f"--------------------------------------------------")
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

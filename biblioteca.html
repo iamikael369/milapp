@@ -699,7 +699,7 @@
             try {
                 const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt }) });
                 const d = await res.json();
-                return d.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/\*/g, '')?.trim() || "El archivo está en silencio...";
+                return d.text?.replace(/\*/g, '')?.trim() || "El archivo está en silencio...";
             } catch { return "Error conexión con el oráculo."; }
         }
 

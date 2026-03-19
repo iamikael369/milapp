@@ -3012,7 +3012,7 @@
                     body: JSON.stringify({ prompt: prompt })
                 });
                 const data = await response.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/\*/g, '').replace(/"/g, '') || text;
+                return data.text?.replace(/\*/g, '').replace(/"/g, '') || text;
             } catch (e) {
                 console.error("Error IA", e);
                 return text;
@@ -3351,7 +3351,7 @@
                     body: JSON.stringify({ prompt: prompt })
                 });
                 const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "El silencio responde...";
+                const reply = data.text || "El silencio responde...";
                 chatHistory.innerHTML += `<div class="chat-msg guide">${reply}</div>`;
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch (e) {
