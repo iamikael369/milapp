@@ -648,15 +648,33 @@
             clearTimeout(hypnoTimer);
         }
 
-        function openImageFullscreen(url) {
-            // Podríamos implementar un visor simple aquí también
-        }
-
         function goHome() {
             window.location.href = 'index.html';
         }
 
+        // Lightbox para imágenes
+        window.openImageFullscreen = function(url) {
+            const lb = document.getElementById('img-lightbox');
+            const img = document.getElementById('img-lightbox-img');
+            if (!lb || !img) return;
+            img.src = url;
+            lb.style.display = 'flex';
+        };
+
+        window.closeImageFullscreen = function() {
+            const lb = document.getElementById('img-lightbox');
+            if (lb) lb.style.display = 'none';
+        };
+
         window.onload = init;
     </script>
+
+    <!-- Image Lightbox -->
+    <div id="img-lightbox" onclick="closeImageFullscreen()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);align-items:center;justify-content:center;cursor:pointer;">
+        <button onclick="event.stopPropagation();closeImageFullscreen()" style="position:absolute;top:16px;right:16px;size:40px;background:rgba(255,255,255,0.1);border:none;border-radius:50%;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-rounded" style="font-size:24px">close</span>
+        </button>
+        <img id="img-lightbox-img" src="" alt="imagen" style="max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px;">
+    </div>
 </body>
 </html>

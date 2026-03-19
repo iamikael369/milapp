@@ -764,6 +764,62 @@
             margin-left: auto;
         }
 
+        /* Chat Scroll FAB */
+        #chat-scroll-bottom {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Chat Messages Area */
+        .chat-messages-area {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        /* iOS safe area for notch devices */
+        .ios-fix {
+            padding-top: env(safe-area-inset-top);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        .safe-bottom {
+            padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+        }
+
+        /* Hide scrollbar on input but allow scrolling */
+        #chat-input::-webkit-scrollbar {
+            display: none;
+        }
+        #chat-input {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Message animations */
+        @keyframes msgSlideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #chat-messages [data-msg-id] {
+            animation: msgSlideIn 0.2s ease-out;
+        }
+
+        /* Date separator styling */
+        .chat-date-sep {
+            text-align: center;
+            color: rgba(62, 39, 35, 0.4);
+            font-size: 11px;
+            padding: 8px 0;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .dark .chat-date-sep {
+            color: rgba(244, 236, 216, 0.4);
+        }
+
         /* ACCIONES DE CARTA */
 
         /* ACCIONES DE CARTA */
@@ -1362,79 +1418,96 @@
     <!-- AUDIO PARA EFECTO DE ESCRITURA -->
 
     <!-- MODERN CHAT CONTAINER -->
-    <div id="modern-chat-container" class="relative z-10 flex h-screen w-full flex-col group/design-root overflow-hidden">
+    <div id="modern-chat-container" class="relative z-10 flex h-screen w-full flex-col group/design-root overflow-hidden ios-fix">
         <div class="layout-container flex h-full grow flex-col">
             <div class="flex flex-1 justify-center">
                 <div class="layout-content-container flex flex-col w-full flex-1 max-w-5xl mx-auto border-x border-gold/20 shadow-2xl bg-parchment/40 dark:bg-black/20 backdrop-blur-sm">
                     <!-- Chat Header -->
-                    <div class="flex items-center justify-between p-4 px-8 border-b border-solid border-gold/30 bg-parchment-dark/60 dark:bg-black/40 backdrop-blur-md z-10 shrink-0 shadow-sm">
-                        <div class="flex items-center gap-5">
-                            <div class="relative flex -space-x-4">
-                                <div id="chat-avatar-other" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-gold shadow-md z-10" style='background-image: url("assets/images/icons/Mila.jpg");'></div>
-                                <div id="chat-avatar-me" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-gold shadow-md" style='background-image: url("assets/images/icons/Miguelo.jpg");'></div>
-                                <span class="absolute bottom-0 left-8 size-3 bg-green-600 border-2 border-parchment rounded-full z-20"></span>
+                    <div class="flex items-center justify-between p-3 px-4 border-b border-solid border-gold/30 bg-parchment-dark/60 dark:bg-black/40 backdrop-blur-md z-10 shrink-0 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <button onclick="toggleChatMode()" class="flex items-center justify-center size-9 rounded-full hover:bg-gold/10 text-ink/70 dark:text-parchment/80 transition-all lg:hidden" title="Volver">
+                                <span class="material-symbols-rounded text-xl">arrow_back</span>
+                            </button>
+                            <div class="relative flex -space-x-3">
+                                <div id="chat-avatar-other" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-11 border-2 border-gold shadow-md z-10" style='background-image: url("assets/images/icons/Mila.jpg");'></div>
+                                <div id="chat-avatar-me" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-11 border-2 border-gold shadow-md" style='background-image: url("assets/images/icons/Miguelo.jpg");'></div>
+                                <span class="absolute bottom-0 left-7 size-2.5 bg-green-500 border-2 border-parchment rounded-full z-20"></span>
                             </div>
                             <div class="flex flex-col justify-center gap-0">
-                                <p class="text-ink dark:text-parchment text-lg font-bold leading-tight tracking-wide serif-font" id="chat-partner-name">Mila & Miguelo</p>
-                                <p class="text-primary/80 dark:text-candlelight text-xs font-medium leading-normal italic" id="chat-status">En línea</p>
+                                <p class="text-ink dark:text-parchment text-base font-bold leading-tight tracking-wide serif-font" id="chat-partner-name">Mila & Miguelo</p>
+                                <p class="text-primary/80 dark:text-candlelight text-[11px] font-medium leading-normal italic" id="chat-status">En línea</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <button class="flex items-center justify-center size-10 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 dark:hover:bg-white/10 text-ink/70 dark:text-parchment/80 transition-all shadow-sm">
-                                <span class="material-symbols-rounded text-[22px]">search</span>
+                        <div class="flex items-center gap-1 sm:gap-2">
+                            <button onclick="toggleChatSearch()" class="flex items-center justify-center size-9 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 dark:hover:bg-white/10 text-ink/70 dark:text-parchment/80 transition-all shadow-sm" title="Buscar">
+                                <span class="material-symbols-rounded text-xl">search</span>
                             </button>
-                            <div class="w-px h-8 bg-gold/30 mx-2"></div>
-                            <button onclick="startCall('voice')" class="flex items-center justify-center gap-2 rounded-full h-11 px-5 bg-parchment/80 border border-gold/50 hover:bg-gold/10 dark:bg-white/5 text-ink dark:text-parchment text-sm font-semibold transition-all shadow-sm chat-font tracking-wide">
-                                <span class="material-symbols-rounded text-[20px] text-gold">call</span>
-                                <span class="hidden sm:inline">VOICE</span>
+                            <button onclick="openChatGallery()" class="flex items-center justify-center size-9 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 dark:hover:bg-white/10 text-ink/70 dark:text-parchment/80 transition-all shadow-sm" title="Medios">
+                                <span class="material-symbols-rounded text-xl">perm_media</span>
                             </button>
-                            <button onclick="startCall('video')" class="flex items-center justify-center gap-2 rounded-full h-11 px-5 bg-gradient-to-r from-primary to-primary-light text-white text-sm font-semibold shadow-elegant hover:opacity-90 transition-all border border-primary-light chat-font tracking-wide">
-                                <span class="material-symbols-rounded text-[20px]">videocam</span>
-                                <span class="hidden sm:inline">VISION</span>
+                            <button onclick="startCall('voice')" class="flex items-center justify-center size-9 rounded-full bg-parchment/80 border border-gold/50 hover:bg-gold/10 dark:bg-white/5 text-ink dark:text-parchment transition-all shadow-sm">
+                                <span class="material-symbols-rounded text-xl text-gold">call</span>
                             </button>
-                            <div class="w-px h-8 bg-gold/30 mx-2"></div>
-                            <button onclick="toggleChatMode()" class="flex items-center justify-center size-10 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 text-ink/70 dark:text-parchment/80 transition-all shadow-sm" title="Volver a Pergaminos">
-                                <span class="material-symbols-rounded text-[22px]">history_edu</span>
+                            <button onclick="startCall('video')" class="flex items-center justify-center size-9 rounded-full bg-gradient-to-r from-primary to-primary-light text-white shadow-sm hover:opacity-90 transition-all border border-primary-light">
+                                <span class="material-symbols-rounded text-xl">videocam</span>
+                            </button>
+                            <button onclick="toggleChatMode()" class="hidden lg:flex items-center justify-center size-9 rounded-full bg-parchment/50 border border-gold/30 hover:bg-gold/10 dark:bg-white/5 text-ink/70 dark:text-parchment/80 transition-all shadow-sm" title="Volver a Pergaminos">
+                                <span class="material-symbols-rounded text-xl">history_edu</span>
                             </button>
                         </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div id="chat-search-bar" class="hidden px-4 py-2 bg-parchment-dark/80 dark:bg-black/60 border-b border-gold/30 flex items-center gap-2 z-10">
+                        <button onclick="toggleChatSearch()" class="size-8 flex items-center justify-center text-ink/50 dark:text-parchment/50">
+                            <span class="material-symbols-rounded text-xl">arrow_back</span>
+                        </button>
+                        <input type="text" id="chat-search-input" class="flex-1 bg-transparent border-none outline-none text-ink dark:text-parchment placeholder:text-ink/40 dark:placeholder:text-parchment/40 text-sm" placeholder="Buscar mensajes..." oninput="handleChatSearch(this.value)">
+                        <span id="chat-search-count" class="text-[10px] text-ink/40 dark:text-parchment/40 font-cinzel hidden"></span>
                     </div>
 
                     <!-- Aviso modo local -->
-                    <div id="chat-local-notice" class="hidden px-4 py-2 bg-parchment-dark/60 dark:bg-black/30 border-b border-gold/20 text-center">
-                        <p class="text-[11px] font-cinzel text-ink/50 dark:text-parchment/40 tracking-widest uppercase">✦ Tus mensajes viven en este dispositivo · La sincronía sagrada activa con Firebase ✦</p>
+                    <div id="chat-local-notice" class="hidden px-4 py-1.5 bg-parchment-dark/60 dark:bg-black/30 border-b border-gold/20 text-center">
+                        <p class="text-[10px] font-cinzel text-ink/50 dark:text-parchment/40 tracking-widest uppercase">✦ Mensajes locales · Firebase activa sincronía ✦</p>
                     </div>
 
                     <!-- Messages Area -->
-                    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-4 z-10 custom-scrollbar relative">
-                        <!-- Los mensajes se cargarán dinámicamente -->
+                    <div id="chat-messages-wrapper" class="flex-1 relative min-h-0">
+                        <div id="chat-messages" class="absolute inset-0 overflow-y-auto overflow-x-hidden p-3 sm:p-4 z-10 custom-scrollbar chat-messages-area">
+                            <!-- Los mensajes se cargarán dinámicamente -->
+                        </div>
+                        <!-- Scroll to Bottom FAB -->
+                        <button id="chat-scroll-bottom" onclick="scrollChatToBottom()" class="absolute right-3 sm:right-4 bottom-2 size-10 sm:size-11 rounded-full bg-gold shadow-lg flex items-center justify-center text-ink opacity-0 pointer-events-none transition-all duration-300 z-20 hover:scale-110 active:scale-95" title="Ir al final">
+                            <span class="material-symbols-rounded text-xl sm:text-2xl">keyboard_arrow_down</span>
+                            <span id="chat-unread-badge" class="absolute -top-1 -right-1 size-5 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Typing Indicator -->
+                    <div id="chat-typing" class="hidden px-4 py-1.5 flex items-center gap-2 bg-parchment-dark/40 dark:bg-black/20 border-t border-gold/10">
+                        <div class="size-6 rounded-full bg-gold/30 animate-pulse"></div>
+                        <span class="text-[11px] text-ink/50 dark:text-parchment/50 italic font-dancing">escribiendo...</span>
                     </div>
 
                     <!-- Modern Composer -->
-                    <div class="p-4 md:p-6 bg-parchment-dark/80 dark:bg-black/60 backdrop-blur-md border-t border-solid border-gold/30 z-10 shrink-0 shadow-[0_-4px_15px_rgba(184,134,11,0.05)]">
-                        <div class="flex items-end gap-3 max-w-4xl mx-auto">
-                            <input type="file" id="chat-image-input" class="hidden" accept="image/*">
-                            <div class="flex items-center gap-2 pb-1.5">
-                                <button onclick="attachChatImage()" class="flex items-center justify-center size-11 rounded-full bg-parchment/60 border border-gold/30 hover:bg-gold/10 text-ink/70 dark:text-parchment transition-all shadow-sm" title="Adjuntar imagen">
-                                    <span class="material-symbols-rounded text-[24px]">attach_file</span>
+                    <div id="chat-composer" class="p-2 sm:p-3 bg-parchment-dark/80 dark:bg-black/60 backdrop-blur-md border-t border-solid border-gold/30 z-10 shrink-0 safe-bottom">
+                        <div class="flex items-end gap-1 sm:gap-2 max-w-4xl mx-auto">
+                            <input type="file" id="chat-image-input" class="hidden" accept="image/*,application/pdf,.doc,.docx,.txt,.mp3,.mp4,.wav">
+                            <button onclick="document.getElementById('chat-image-input').click()" class="flex items-center justify-center size-10 sm:size-11 rounded-full bg-parchment/60 border border-gold/30 hover:bg-gold/10 text-ink/70 dark:text-parchment transition-all shadow-sm flex-shrink-0" title="Adjuntar">
+                                <span class="material-symbols-rounded text-xl sm:text-2xl">attach_file</span>
+                            </button>
+                            <div class="flex-1 bg-parchment/80 dark:bg-[#2a1a14] border border-gold/40 rounded-2xl sm:rounded-3xl flex items-center min-h-[44px] sm:min-h-[48px] px-2 sm:px-3 py-1 relative shadow-inner-elegant focus-within:border-gold focus-within:ring-1 focus-within:ring-gold/30 transition-all">
+                                <button onclick="toggleEmojiPicker()" class="flex items-center justify-center size-8 sm:size-9 rounded-full hover:bg-gold/10 text-ink/60 dark:text-parchment/60 transition-colors shrink-0">
+                                    <span class="material-symbols-rounded text-xl sm:text-2xl">sentiment_satisfied</span>
                                 </button>
-                                <button class="flex items-center justify-center size-11 rounded-full bg-parchment/60 border border-gold/30 hover:bg-gold/10 text-ink/70 dark:text-parchment transition-all shadow-sm hidden sm:flex">
-                                    <span class="material-symbols-rounded text-[24px]">workspace_premium</span>
-                                </button>
+                                <textarea id="chat-input" class="flex-1 bg-transparent border-none focus:ring-0 text-ink dark:text-parchment placeholder:text-ink/40 dark:placeholder:text-parchment/40 text-sm sm:text-[15px] leading-tight resize-none max-h-24 sm:max-h-28 py-2 px-2 chat-font" placeholder="Escribe algo..." rows="1" style="scrollbar-width:none;-ms-overflow-style:none;"></textarea>
                             </div>
-                            <div class="flex-1 bg-parchment/80 dark:bg-[#2a1a14] border border-gold/40 rounded-3xl flex items-center min-h-[56px] px-3 py-1.5 relative shadow-inner-elegant focus-within:border-gold focus-within:ring-1 focus-within:ring-gold/30 transition-all">
-                                <button onclick="toggleEmojiPicker()" class="flex items-center justify-center size-10 rounded-full hover:bg-gold/10 text-ink/60 dark:text-parchment/60 transition-colors shrink-0">
-                                    <span class="material-symbols-rounded text-[24px]">sentiment_satisfied</span>
-                                </button>
-                                <textarea id="chat-input" class="flex-1 bg-transparent border-none focus:ring-0 text-ink dark:text-parchment placeholder:text-ink/40 dark:placeholder:text-parchment/40 resize-none max-h-32 py-3.5 px-3 text-[15px] leading-tight custom-scrollbar chat-font" placeholder="Escribe lo que dicta el corazón..." rows="1"></textarea>
-                            </div>
-                            <div class="flex items-center gap-3 pb-1.5">
-                                <button id="voice-rec-btn" onmousedown="startVoiceRecord()" onmouseup="stopVoiceRecord()" ontouchstart="startVoiceRecord()" ontouchend="stopVoiceRecord()" class="flex items-center justify-center size-14 rounded-full bg-gradient-to-br from-primary to-primary-light text-white shadow-elegant hover:scale-105 active:scale-95 shrink-0 border border-gold/30 transition-all">
-                                    <span class="material-symbols-rounded text-[28px]">mic</span>
-                                </button>
-                                <button id="send-chat-btn" onclick="sendChatMessage()" class="flex items-center justify-center size-14 rounded-full bg-gradient-to-br from-gold to-gold-light text-ink shadow-elegant hover:scale-105 active:scale-95 shrink-0 border border-parchment hidden">
-                                    <span class="material-symbols-rounded text-[28px]">send</span>
-                                </button>
-                            </div>
+                            <button id="voice-rec-btn" onmousedown="startVoiceRecord()" onmouseup="stopVoiceRecord()" ontouchstart="startVoiceRecord()" ontouchend="stopVoiceRecord()" class="flex items-center justify-center size-10 sm:size-11 rounded-full bg-gradient-to-br from-primary to-primary-light text-white shadow-sm hover:scale-105 active:scale-95 shrink-0 border border-gold/20 transition-all">
+                                <span class="material-symbols-rounded text-xl sm:text-2xl">mic</span>
+                            </button>
+                            <button id="send-chat-btn" onclick="sendChatMessage()" class="flex items-center justify-center size-10 sm:size-11 rounded-full bg-gradient-to-br from-gold to-gold-light text-ink shadow-sm hover:scale-105 active:scale-95 shrink-0 border border-parchment hidden">
+                                <span class="material-symbols-rounded text-xl sm:text-2xl">send</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1445,6 +1518,59 @@
 
     <audio id="scribble-sound"
         src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_07659d575d.mp3?filename=writing-on-paper-6988.mp3"></audio>
+
+    <!-- Message Context Menu -->
+    <div id="chat-msg-context" class="hidden fixed z-[200] bg-parchment-dark/95 dark:bg-black/95 border border-gold/40 rounded-2xl shadow-2xl p-2 min-w-[180px] backdrop-blur-md">
+        <button onclick="ctxReply()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gold/10 text-ink dark:text-parchment text-[13px] transition-colors">
+            <span class="material-symbols-rounded text-lg text-gold">reply</span> Responder
+        </button>
+        <button onclick="ctxCopy()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gold/10 text-ink dark:text-parchment text-[13px] transition-colors">
+            <span class="material-symbols-rounded text-lg text-gold">content_copy</span> Copiar
+        </button>
+        <div class="h-px bg-gold/20 my-1"></div>
+        <div class="px-3 py-2 flex items-center gap-2">
+            <span class="text-[11px] text-ink/50 dark:text-parchment/50 font-cinzel uppercase tracking-wider">Reacciones</span>
+        </div>
+        <div class="flex gap-1 px-3 pb-2 flex-wrap">
+            <button onclick="ctxReact('❤️')" class="size-8 rounded-full hover:bg-gold/10 flex items-center justify-center text-xl transition-transform hover:scale-125">❤️</button>
+            <button onclick="ctxReact('✨')" class="size-8 rounded-full hover:bg-gold/10 flex items-center justify-center text-xl transition-transform hover:scale-125">✨</button>
+            <button onclick="ctxReact('🔥')" class="size-8 rounded-full hover:bg-gold/10 flex items-center justify-center text-xl transition-transform hover:scale-125">🔥</button>
+            <button onclick="ctxReact('🌹')" class="size-8 rounded-full hover:bg-gold/10 flex items-center justify-center text-xl transition-transform hover:scale-125">🌹</button>
+            <button onclick="ctxReact('🕊️')" class="size-8 rounded-full hover:bg-gold/10 flex items-center justify-center text-xl transition-transform hover:scale-125">🕊️</button>
+            <button onclick="ctxReact('💋')" class="size-8 rounded-full hover:bg-gold/10 flex items-center justify-center text-xl transition-transform hover:scale-125">💋</button>
+        </div>
+        <div class="h-px bg-gold/20 my-1"></div>
+        <button onclick="ctxDelete()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-500/10 text-red-700 dark:text-red-400 text-[13px] transition-colors">
+            <span class="material-symbols-rounded text-lg">delete</span> Eliminar
+        </button>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="chat-lightbox" class="fixed inset-0 z-[250] bg-black/95 hidden items-center justify-center cursor-pointer" onclick="closeChatLightbox()">
+        <button onclick="closeChatLightbox()" class="absolute top-4 right-4 size-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
+            <span class="material-symbols-rounded text-2xl">close</span>
+        </button>
+        <img id="chat-lightbox-img" src="" alt="imagen" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl">
+    </div>
+
+    <!-- Chat Gallery Modal -->
+    <div id="chat-gallery-modal" class="fixed inset-0 z-[300] bg-black/95 hidden flex-col items-center justify-center safe-area-inset">
+        <div class="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
+            <button onclick="closeChatGallery()" class="size-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
+                <span class="material-symbols-rounded text-2xl">close</span>
+            </button>
+            <span id="gallery-counter" class="text-white/70 text-sm font-cinzel">1 / 1</span>
+            <div class="flex items-center gap-2">
+                <button onclick="prevGalleryItem()" class="size-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
+                    <span class="material-symbols-rounded text-2xl">chevron_left</span>
+                </button>
+                <button onclick="nextGalleryItem()" class="size-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
+                    <span class="material-symbols-rounded text-2xl">chevron_right</span>
+                </button>
+            </div>
+        </div>
+        <div id="gallery-content" class="w-full h-full flex items-center justify-center p-4"></div>
+    </div>
 
     <!-- OVERLAY MODO BOTELLA (confirmación de envío diferido) -->
     <div id="bottle-overlay" style="position:fixed;inset:0;z-index:900;background:rgba(5,15,30,0.92);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px;">
@@ -1742,8 +1868,8 @@
                 const file = e.target.files[0];
                 e.target.value = '';
                 if (!file) return;
-                if (file.size > 500 * 1024) {
-                    showToast('La imagen es demasiado grande — elige una imagen de menos de 500 KB');
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('El archivo es demasiado grande (máx 10 MB)');
                     return;
                 }
                 const reader = new FileReader();
@@ -2002,8 +2128,14 @@
             if (db) {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'pergaminos_chat'), { ...msg, timestamp: serverTimestamp() });
             } else {
+                const container = document.getElementById('chat-messages');
+                const lastMsg = messages[messages.length - 1];
+                if (lastMsg && getChatDateKey(lastMsg.timestamp) !== getChatDateKey(msg.timestamp)) {
+                    appendChatDateSeparator(container, msg.timestamp);
+                }
                 messages.push(msg);
                 renderChatMessage(msg);
+                scrollChatToBottom();
             }
         }
 
@@ -2311,13 +2443,82 @@
             window.applyMode();
         }
 
+        function getChatDateKey(ts) {
+            const d = new Date(ts);
+            return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
+        }
+
+        function getChatRelativeTime(ts) {
+            const now = Date.now();
+            const diff = now - ts;
+            const mins = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            if (mins < 1) return 'ahora';
+            if (mins < 60) return 'hace ' + mins + 'm';
+            if (hours < 24) return 'hace ' + hours + 'h';
+            if (days === 1) return 'ayer';
+            if (days < 7) return 'hace ' + days + ' días';
+            return new Date(ts).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+        }
+
+        function appendChatDateSeparator(container, ts) {
+            const sep = document.createElement('div');
+            sep.className = 'chat-date-sep';
+            const d = new Date(ts);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            let label;
+            if (getChatDateKey(ts) === getChatDateKey(today.getTime())) label = 'Hoy';
+            else if (getChatDateKey(ts) === getChatDateKey(yesterday.getTime())) label = 'Ayer';
+            else label = d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+            sep.textContent = label;
+            container.appendChild(sep);
+        }
+
+        function updateChatScrollFAB() {
+            const container = document.getElementById('chat-messages');
+            const fab = document.getElementById('chat-scroll-bottom');
+            if (!container || !fab) return;
+            const dist = container.scrollHeight - container.scrollTop - container.clientHeight;
+            if (dist > 100) {
+                fab.classList.remove('opacity-0', 'pointer-events-none');
+                fab.classList.add('opacity-100');
+            } else {
+                fab.classList.add('opacity-0', 'pointer-events-none');
+                fab.classList.remove('opacity-100');
+                const badge = document.getElementById('chat-unread-badge');
+                if (badge) badge.classList.add('hidden');
+            }
+        }
+
+        window.scrollChatToBottom = function(smooth) {
+            const container = document.getElementById('chat-messages');
+            if (container) {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: smooth ? 'smooth' : 'instant'
+                });
+            }
+            const badge = document.getElementById('chat-unread-badge');
+            if (badge) badge.classList.add('hidden');
+        };
+
         function renderChatMessages() {
             const container = document.getElementById('chat-messages');
             if (!container) return;
             container.innerHTML = '';
-            messages.forEach(m => {
+            let lastDate = '';
+            messages.forEach(function(m) {
+                const msgDate = getChatDateKey(m.timestamp);
+                if (msgDate !== lastDate) {
+                    appendChatDateSeparator(container, m.timestamp);
+                    lastDate = msgDate;
+                }
                 renderChatMessage(m);
             });
+            setTimeout(function() { scrollChatToBottom(); }, 50);
         }
 
         function renderChatMessage(msg) {
@@ -2325,8 +2526,9 @@
             if (!container) return;
             const isMe = msg.sender === currentUser;
             const div = document.createElement('div');
-            
-            const timeStr = new Date(msg.timestamp).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            div.dataset.msgId = messages.indexOf(msg);
+
+            const timeStr = getChatRelativeTime(msg.timestamp);
             
                 if (isMe) {
                     div.className = "flex flex-col gap-1 items-end max-w-[85%] self-end";
@@ -2348,8 +2550,9 @@
                             </div>
                         `;
                     } else if (msg.image && msg.image.startsWith('data:')) {
+                        var imgSafe = msg.image.replace(/'/g, "\\'");
                         div.innerHTML = `
-                            <img src="${msg.image}" alt="imagen adjunta" class="rounded-2xl rounded-br-none max-w-[260px] max-h-[300px] object-cover shadow-elegant border border-gold/40" />
+                            <img src="${imgSafe}" alt="imagen adjunta" onclick="openChatLightbox('${imgSafe}')" class="rounded-2xl rounded-br-none max-w-[260px] max-h-[300px] object-cover shadow-elegant border border-gold/40 cursor-pointer hover:opacity-90 transition-opacity" />
                             <div class="flex items-center gap-1.5 mr-2 mt-1">
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium">${timeStr}</span>
                                 <span class="material-symbols-rounded text-[16px] text-gold">done_all</span>
@@ -2387,10 +2590,11 @@
                             </div>
                         `;
                     } else if (msg.image && msg.image.startsWith('data:')) {
+                        var imgSafe2 = msg.image.replace(/'/g, "\\'");
                         div.innerHTML = `
                             <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 shrink-0 mb-1 border-2 border-gold/50 shadow-sm" style='background-image: url("${otherImg}");'></div>
                             <div class="flex flex-col gap-1 items-start">
-                                <img src="${msg.image}" alt="imagen adjunta" class="rounded-2xl rounded-bl-none max-w-[260px] max-h-[300px] object-cover shadow-elegant border border-gold/30" />
+                                <img src="${imgSafe2}" alt="imagen adjunta" onclick="openChatLightbox('${imgSafe2}')" class="rounded-2xl rounded-bl-none max-w-[260px] max-h-[300px] object-cover shadow-elegant border border-gold/30 cursor-pointer hover:opacity-90 transition-opacity" />
                                 <span class="text-ink/50 dark:text-parchment/50 text-[11px] font-medium ml-2 mt-1">${timeStr}</span>
                             </div>
                         `;
@@ -2404,9 +2608,38 @@
                         `;
                     }
                 }
-                
+
+                var msgIdx = messages.indexOf(msg);
+                var reactions = msg.reactions || {};
+                var reactionsHtml = '';
+                if (Object.keys(reactions).length > 0) {
+                    var parts = [];
+                    for (var r in reactions) {
+                        parts.push('<span class="text-[14px] bg-gold/10 rounded-full px-1.5 py-0.5 mr-1">' + r + ' <span class="text-[10px] font-bold text-ink/60">' + reactions[r] + '</span></span>');
+                    }
+                    reactionsHtml = '<div class="flex items-center gap-1 flex-wrap ' + (isMe ? 'mr-2' : 'ml-2') + ' mt-0.5">' + parts.join('') + '</div>';
+                }
+                div.innerHTML = div.innerHTML + reactionsHtml;
+                div.oncontextmenu = function(e) { e.preventDefault(); showChatContextMenu(e, msgIdx); };
+                div.onclick = function(e) {
+                    if (e.target.closest('#chat-msg-context') || e.target.closest('button') || e.target.closest('img') || e.target.closest('a')) return;
+                    hideChatContextMenu();
+                };
                 container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
+                const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 200;
+                if (isAtBottom) {
+                    setTimeout(function() {
+                        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+                    }, 50);
+                } else {
+                    const badge = document.getElementById('chat-unread-badge');
+                    const count = badge ? parseInt(badge.textContent) || 0 : 0;
+                    if (badge) {
+                        badge.textContent = count + 1;
+                        badge.classList.remove('hidden');
+                    }
+                }
+                updateChatScrollFAB();
             }
 
             window.playChatAudio = (btn, base64) => {
@@ -2431,8 +2664,14 @@
                 fontFamily: document.getElementById('font-select')?.value || 'font-dancing'
             };
             if (imageBase64) msg.image = imageBase64;
+            const container = document.getElementById('chat-messages');
+            const lastMsg = messages[messages.length - 1];
+            if (lastMsg && getChatDateKey(lastMsg.timestamp) !== getChatDateKey(msg.timestamp)) {
+                appendChatDateSeparator(container, msg.timestamp);
+            }
             messages.push(msg);
             renderChatMessage(msg);
+            scrollChatToBottom();
             if (input && !overrideText) {
                 input.value = '';
                 input.style.height = 'auto';
@@ -2451,11 +2690,12 @@
 
         function setupChatListeners() {
             const input = document.getElementById('chat-input');
+            const chatContainer = document.getElementById('chat-messages');
             if (!input) return;
             if (!input.dataset.listenerAdded) {
                 input.addEventListener('input', function () {
                     this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
+                    this.style.height = Math.min(this.scrollHeight, 112) + 'px';
                     updateComposerButtons();
                 });
                 input.addEventListener('keydown', function (e) {
@@ -2464,9 +2704,213 @@
                         window.sendChatMessage();
                     }
                 });
+                input.addEventListener('focus', function() {
+                    setTimeout(function() { scrollChatToBottom(true); }, 300);
+                });
                 input.dataset.listenerAdded = 'true';
             }
+            if (chatContainer && !chatContainer.dataset.scrollListener) {
+                chatContainer.addEventListener('scroll', function() {
+                    updateChatScrollFAB();
+                });
+                chatContainer.dataset.scrollListener = 'true';
+            }
         }
+
+        window.selectedMsgIdx = null;
+
+        window.showChatContextMenu = function(e, idx) {
+            window.selectedMsgIdx = idx;
+            const menu = document.getElementById('chat-msg-context');
+            const rect = e.target.closest('[data-msg-id]').getBoundingClientRect();
+            let left = rect.right - 180;
+            if (left < 10) left = rect.left;
+            let top = rect.top;
+            if (top + 200 > window.innerHeight) top = window.innerHeight - 220;
+            menu.style.left = Math.max(10, left) + 'px';
+            menu.style.top = Math.max(10, top) + 'px';
+            menu.classList.remove('hidden');
+        };
+
+        window.hideChatContextMenu = function() {
+            document.getElementById('chat-msg-context').classList.add('hidden');
+            window.selectedMsgIdx = null;
+        };
+
+        window.ctxReply = function() {
+            var idx = window.selectedMsgIdx;
+            if (idx === null) return;
+            var msg = messages[idx];
+            var input = document.getElementById('chat-input');
+            if (input && msg && msg.text) {
+                input.value = '↳ ' + msg.text.substring(0, 60) + (msg.text.length > 60 ? '...' : '') + '\n';
+                input.focus();
+                input.style.height = 'auto';
+                input.style.height = Math.min(input.scrollHeight, 128) + 'px';
+            }
+            hideChatContextMenu();
+        };
+
+        window.ctxCopy = function() {
+            var idx = window.selectedMsgIdx;
+            if (idx === null) return;
+            var msg = messages[idx];
+            if (msg && msg.text) {
+                navigator.clipboard.writeText(msg.text).then(function() {
+                    var t = document.createElement('div');
+                    t.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(20,15,10,0.92);border:1px solid rgba(139,90,43,0.4);color:#c5b49a;font-family:Cinzel,serif;font-size:11px;letter-spacing:0.08em;padding:10px 18px;border-radius:12px;z-index:9999';
+                    t.textContent = 'Mensaje copiado';
+                    document.body.appendChild(t);
+                    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 2000);
+                });
+            }
+            hideChatContextMenu();
+        };
+
+        window.ctxReact = function(emoji) {
+            var idx = window.selectedMsgIdx;
+            if (idx === null) return;
+            if (!messages[idx].reactions) messages[idx].reactions = {};
+            messages[idx].reactions[emoji] = (messages[idx].reactions[emoji] || 0) + 1;
+            saveLocalMessages();
+            hideChatContextMenu();
+            var container = document.getElementById('chat-messages');
+            var existing = container.querySelector('[data-msg-id="' + idx + '"]');
+            if (existing) {
+                var next = existing.nextSibling;
+                existing.style.opacity = '0';
+                setTimeout(function() {
+                    existing.parentNode.removeChild(existing);
+                    renderChatMessage(messages[idx]);
+                }, 200);
+            }
+        };
+
+        window.ctxDelete = function() {
+            var idx = window.selectedMsgIdx;
+            if (idx === null) return;
+            if (!confirm('Eliminar este mensaje?')) return;
+            var el = document.getElementById('chat-messages').querySelector('[data-msg-id="' + idx + '"]');
+            if (el) { el.style.transition = 'all 0.3s'; el.style.opacity = '0'; el.style.transform = 'scale(0.8)'; setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 300); }
+            messages.splice(idx, 1);
+            saveLocalMessages();
+            hideChatContextMenu();
+        };
+
+        window.openChatLightbox = function(src) {
+            var lb = document.getElementById('chat-lightbox');
+            var img = document.getElementById('chat-lightbox-img');
+            img.src = src;
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+        };
+
+        window.closeChatLightbox = function() {
+            var lb = document.getElementById('chat-lightbox');
+            lb.classList.add('hidden');
+            lb.classList.remove('flex');
+        };
+
+        window.galleryItems = [];
+        window.galleryIndex = 0;
+
+        window.openChatGallery = function() {
+            window.galleryItems = messages.filter(function(m) { return m.image || (m.type === 'file' && m.fileData); });
+            if (window.galleryItems.length === 0) {
+                var t = document.createElement('div');
+                t.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(20,15,10,0.92);border:1px solid rgba(139,90,43,0.4);color:#c5b49a;font-family:Cinzel,serif;font-size:11px;letter-spacing:0.08em;padding:10px 18px;border-radius:12px;z-index:9999';
+                t.textContent = 'No hay medios compartidos';
+                document.body.appendChild(t);
+                setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 2000);
+                return;
+            }
+            window.galleryIndex = 0;
+            renderGalleryItem();
+            document.getElementById('chat-gallery-modal').classList.remove('hidden');
+            document.getElementById('chat-gallery-modal').classList.add('flex');
+        };
+
+        window.renderGalleryItem = function() {
+            var item = window.galleryItems[window.galleryIndex];
+            var content = document.getElementById('gallery-content');
+            var counter = document.getElementById('gallery-counter');
+            counter.textContent = (window.galleryIndex + 1) + ' / ' + window.galleryItems.length;
+            if (item.image) {
+                content.innerHTML = '<img src="' + item.image + '" alt="media" class="max-w-[85vw] max-h-[75vh] object-contain rounded-xl shadow-2xl cursor-pointer" onclick="openChatLightbox(\'' + item.image.replace(/'/g, "\\'") + '\')">';
+            } else {
+                content.innerHTML = '<div class="flex flex-col items-center gap-4 text-white/50"><span class="material-symbols-rounded text-[80px]">description</span><p class="font-cinzel text-sm tracking-wider">' + (item.fileName || 'Archivo') + '</p></div>';
+            }
+        };
+
+        window.prevGalleryItem = function() {
+            if (window.galleryIndex > 0) { window.galleryIndex--; renderGalleryItem(); }
+        };
+
+        window.nextGalleryItem = function() {
+            if (window.galleryIndex < window.galleryItems.length - 1) { window.galleryIndex++; renderGalleryItem(); }
+        };
+
+        window.closeChatGallery = function() {
+            document.getElementById('chat-gallery-modal').classList.add('hidden');
+            document.getElementById('chat-gallery-modal').classList.remove('flex');
+        };
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#chat-msg-context')) hideChatContextMenu();
+        });
+
+        window.toggleChatSearch = function() {
+            var bar = document.getElementById('chat-search-bar');
+            var btn = document.getElementById('chat-search-btn');
+            bar.classList.toggle('hidden');
+            if (!bar.classList.contains('hidden')) {
+                document.getElementById('chat-search-input').focus();
+                btn.classList.add('bg-gold/20', 'border-gold/50');
+            } else {
+                clearChatSearch();
+                btn.classList.remove('bg-gold/20', 'border-gold/50');
+            }
+        };
+
+        window.clearChatSearch = function() {
+            var input = document.getElementById('chat-search-input');
+            if (input) input.value = '';
+            handleChatSearch('');
+        };
+
+        window.handleChatSearch = function(query) {
+            var count = document.getElementById('chat-search-count');
+            if (!query.trim()) {
+                if (count) { count.textContent = ''; count.classList.add('hidden'); }
+                var msgs = document.querySelectorAll('#chat-messages [data-msg-id]');
+                msgs.forEach(function(el) { el.style.outline = ''; });
+                return;
+            }
+            var ql = query.toLowerCase();
+            var matchCount = 0;
+            var firstMatch = null;
+            messages.forEach(function(m, i) {
+                var el = document.getElementById('chat-messages') && document.getElementById('chat-messages').querySelector('[data-msg-id="' + i + '"]');
+                if (!el) return;
+                var text = (m.text || '').toLowerCase();
+                if (text.includes(ql)) {
+                    matchCount++;
+                    el.style.outline = '2px solid rgba(184,134,11,0.5)';
+                    el.style.outlineOffset = '2px';
+                    el.style.borderRadius = '12px';
+                    if (!firstMatch) firstMatch = el;
+                } else {
+                    el.style.outline = '';
+                }
+            });
+            if (count) {
+                count.textContent = matchCount + ' resultado' + (matchCount !== 1 ? 's' : '');
+                count.classList.remove('hidden');
+            }
+            if (firstMatch) {
+                firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
 
         function triggerOpeningRitual(epistle, sealContent) {
             const overlay = document.getElementById('opening-ritual');
