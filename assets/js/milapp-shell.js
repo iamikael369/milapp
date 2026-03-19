@@ -351,7 +351,7 @@
           }),
       });
 
-      if (!localStorage.getItem(tutorialKey(moduleId))) {
+      if (options.autoOpenTutorial !== false && !localStorage.getItem(tutorialKey(moduleId))) {
         window.setTimeout(() => {
           openGuide({
             moduleId,

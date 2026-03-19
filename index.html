@@ -507,7 +507,7 @@
     </div>
 
     <!-- BOTÓN AJUSTES ANCLADO -->
-    <button onclick="openSettings()" class="fixed right-6 w-12 h-12 bg-white/5 backdrop-blur-lg border border-white/10 rounded-full flex items-center justify-center text-slate-400 hover:text-temple-gold hover:border-temple-gold/50 transition-all z-[100] shadow-xl" style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px))">
+    <button id="settings-trigger" onclick="openSettings()" class="fixed right-6 w-12 h-12 bg-white/5 backdrop-blur-lg border border-white/10 rounded-full flex items-center justify-center text-slate-400 hover:text-temple-gold hover:border-temple-gold/50 transition-all z-[100] shadow-xl" style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px))">
         <span class="material-symbols-rounded">settings</span>
     </button>
 
@@ -530,7 +530,7 @@
                     <p>Espero que cada rincón de este espacio te brinde la calma y la magia que mereces.</p>
                 </div>
                 <div class="w-full">
-                    <button onclick="nextTutorialStep()" class="w-full py-4 rounded-full bg-temple-gold text-temple-dark font-cinzel tracking-widest uppercase text-sm hover:bg-white transition-all duration-500 shadow-lg shadow-temple-gold/20">
+                    <button id="welcome-primary-btn" onclick="nextTutorialStep()" class="w-full py-4 rounded-full bg-temple-gold text-temple-dark font-cinzel tracking-widest uppercase text-sm hover:bg-white transition-all duration-500 shadow-lg shadow-temple-gold/20">
                         Entrar al Templo ✨
                     </button>
                 </div>
@@ -709,6 +709,7 @@
         MilApp.bootstrap({
             module: 'index',
             title: 'Templo Central',
+            autoOpenTutorial: false,
             welcomeMessage: 'La arquitectura de MilApp empieza a unificarse sin perder su alma.',
             tutorial: [
                 'Explora el templo central como mapa vivo: cada portal conserva su personalidad, pero la base compartida empieza aquí.',
@@ -1124,9 +1125,32 @@
             forceShootingStar();
         };
 
-        window.nextTutorialStep = () => {
+        function openWelcomeIntro(identitySet) {
+            const welcomeModal = document.getElementById('welcome-modal');
+            const step1 = document.getElementById('welcome-step-1');
+            const step2 = document.getElementById('welcome-step-2');
+            const primaryBtn = document.getElementById('welcome-primary-btn');
+
+            welcomeModal.style.display = 'flex';
+            step1.classList.remove('hidden');
+            step2.classList.add('hidden');
+            primaryBtn.innerText = identitySet ? 'Entrar al Templo ✨' : 'Continuar ✨';
+        }
+
+        function openIdentityStep() {
+            const welcomeModal = document.getElementById('welcome-modal');
+            welcomeModal.style.display = 'flex';
             document.getElementById('welcome-step-1').classList.add('hidden');
             document.getElementById('welcome-step-2').classList.remove('hidden');
+        }
+
+        window.nextTutorialStep = () => {
+            const identitySet = localStorage.getItem('mila_active_identity_set');
+            if (identitySet) {
+                closeWelcome();
+                return;
+            }
+            openIdentityStep();
         };
 
         // ====== IDENTITY & RECOGNITION ======
@@ -1157,31 +1181,30 @@
             setInterval(showSubliminalRandom, 20000);
 
             const activeProfile = Universo.getActiveProfile();
-            const welcomeDone = localStorage.getItem('mila_welcome_done');
             const identitySet = localStorage.getItem('mila_active_identity_set');
+            const introSeen = sessionStorage.getItem('mila_intro_seen');
 
-            // Si no hay identidad, mostramos el ritual de bienvenida
-            if (!identitySet) {
-                const welcomeModal = document.getElementById('welcome-modal');
-                welcomeModal.style.display = 'flex';
-                
-                if (welcomeDone) {
-                    // Si ya marcó "no volver a mostrar", vamos directo a identidad pero en el nuevo modal
-                    document.getElementById('welcome-step-1').classList.add('hidden');
-                    document.getElementById('welcome-step-2').classList.remove('hidden');
-                } else {
-                    // Flujo completo: Mensaje -> Identidad
-                    document.getElementById('welcome-step-1').classList.remove('hidden');
-                    document.getElementById('welcome-step-2').classList.add('hidden');
-                }
-            } 
-            else {
-                // YA IDENTIFICADO
+            if (activeProfile) {
+                document.getElementById('user-name-display').innerText = activeProfile.name.toUpperCase();
+            }
+
+            if (!introSeen) {
+                sessionStorage.setItem('mila_intro_seen', 'true');
+                openWelcomeIntro(Boolean(identitySet));
+            } else if (!identitySet) {
+                openIdentityStep();
+            } else {
                 document.getElementById('user-name-display').innerText = activeProfile.name.toUpperCase();
             }
 
             const savedTheme = localStorage.getItem('mila_theme') || 'dark';
             setTheme(savedTheme);
+
+            const settingsTrigger = document.getElementById('settings-trigger');
+            if (settingsTrigger && !settingsTrigger.dataset.bound) {
+                settingsTrigger.addEventListener('click', window.openSettings);
+                settingsTrigger.dataset.bound = 'true';
+            }
 
             // Simulación de notificación de amor (Pergaminos)
             setTimeout(() => {
